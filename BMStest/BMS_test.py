@@ -22,8 +22,8 @@ class BMS_gui:
 
 class BMS_Slave:
     def __init__(self):
-        self.battery = [lionCell(4.2, 0.003), lionCell(4.2, 0.004), lionCell(4.2, 0.0025), lionCell(4.2, 0.0027), lionCell(4.2, 0.0033),
-                        lionCell(4.2, 0.0028), lionCell(4.2, 0.0037), lionCell(4.2, 0.0039), lionCell(4.2, 0.0045), lionCell(4.2, 0.0023)]
+        self.battery = [lionCell(3.25, 0.003), lionCell(3.25, 0.004), lionCell(3.25, 0.0025), lionCell(3.25, 0.0027), lionCell(3.25, 0.0033),
+                        lionCell(3.25, 0.0028), lionCell(3.25, 0.0037), lionCell(3.25, 0.0039), lionCell(3.25, 0.0045), lionCell(3.25, 0.0023)]
             
         self.BMSArray = []
 
@@ -43,14 +43,16 @@ class lionCell:
         self.CurrentVoltage = curVol
         self.gradient = grad
         self.state = 0
-        self.timeOn = 0
+        self.timeOn = 140
 
 
     def battCharge(self):
         if self.state == 1 and self.CurrentVoltage <= 4.2:
-            self.timeOn += 1
-            self.CurrentVoltage = 3.2 + self.gradient*self.timeOn
-
+            self.timeOn -= 1
+            self.CurrentVoltage = 4.2 - (2*10**-6)*self.timeOn**3 + (0.000416)*self.timeOn**2 - (0.0265)*self.timeOn
+        elif self.state == 0:
+            self.timeOn -= 1
+            self.CurrentVoltage = 0.9975*(4.2 - (2*10**-6)*self.timeOn**3 + (0.000416)*self.timeOn**2 - (0.0265)*self.timeOn)
         return self.CurrentVoltage
 
     def VoltageToAV(self):
@@ -71,12 +73,14 @@ def batteryThread():
         print("")
         x = 0
 
+        print(Slave1.battery[1].timeOn)
+
         values = bytes(Slave1.BMSArray)
         Slave1.BMSArray.clear()
 
 
 
-        bmsMaster.write(values)
+        #bmsMaster.write(values)
         time.sleep(1)
 
 def BalanceThread():
@@ -97,14 +101,14 @@ def BalanceThread():
         except Exception as e:
             print(e)
 
-def displayThread():
-    while True:
-        root = Tk()
-        bmsGUI = BMS_gui(root)
-        #root.after(100, displayThread)
+# def displayThread():
+#     while True:
+#         root = Tk()
+#         bmsGUI = BMS_gui(root)
+#         #root.after(100, displayThread)
 
 
-bmsMaster = serial.Serial('COM11', 115200)
+bmsMaster = serial.Serial('COM15', 115200)
 print("connected to: " + bmsMaster.portstr)
 
 Slave1 = BMS_Slave() 
@@ -113,7 +117,7 @@ slave_thread = threading.Thread(target=batteryThread, args = ())
 slave_thread.start()
 
 bal_thread = threading.Thread(target=BalanceThread, args = ())
-bal_thread.start()
+#bal_thread.start()
 
-gui_thread = threading.Thread(target=displayThread, args = ())
-gui_thread.start()
+#gui_thread = threading.Thread(target=displayThread, args = ())
+#gui_thread.start()
