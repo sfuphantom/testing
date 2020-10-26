@@ -8,13 +8,9 @@
 #ifndef PHANTOM_DRIVERS_INCLUDE_THERMISTOR_EXPANSION_H_
 #define PHANTOM_DRIVERS_INCLUDE_THERMISTOR_EXPANSION_H_
 
-typedef enum
-{
-    NORMAL_THERMISTOR_OPERATION,
-    TEMPERATURE_FAULT
-} ThermistorTestState_t;
+#include "stdint.h"
 
-void thermistor_process(ThermistorTestState_t state);
+void thermistor_process(uint8_t state);
 
 
 
