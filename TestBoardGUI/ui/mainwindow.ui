@@ -1,0 +1,951 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>2500</width>
+    <height>1800</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QFrame" name="centralframe">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QFrame" name="CheckIn">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="5">
+           <widget class="QLabel" name="TestIDLabel">
+            <property name="text">
+             <string>Test ID:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="Date"/>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLineEdit" name="Version"/>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLineEdit" name="BoardName"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="TeamMember"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="DateLabel">
+            <property name="text">
+             <string>Date:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <widget class="QLineEdit" name="TestID"/>
+          </item>
+          <item row="1" column="5">
+           <widget class="QLabel" name="DeviceLabel">
+            <property name="text">
+             <string>Device:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="TeamMemberLabel">
+            <property name="text">
+             <string>Team Member:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QComboBox" name="Device">
+            <property name="editable">
+             <bool>false</bool>
+            </property>
+            <property name="currentText">
+             <string>Select</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Select</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>VCU</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>BMS</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="BoardNameLabel">
+            <property name="text">
+             <string>Board Name:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="VersionLabel">
+            <property name="text">
+             <string>Version</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="SelectionGroupBox">
+         <property name="title">
+          <string>Test Selection</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QTabWidget" name="TestSelection">
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
+            <widget class="QWidget" name="VCUTab">
+             <attribute name="title">
+              <string>VCU</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_6">
+              <item row="0" column="0">
+               <widget class="QTreeWidget" name="VCUTree">
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::MultiSelection</enum>
+                </property>
+                <attribute name="headerMinimumSectionSize">
+                 <number>50</number>
+                </attribute>
+                <attribute name="headerDefaultSectionSize">
+                 <number>250</number>
+                </attribute>
+                <attribute name="headerHighlightSections">
+                 <bool>false</bool>
+                </attribute>
+                <column>
+                 <property name="text">
+                  <string>Test Case</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Repeat</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Description</string>
+                 </property>
+                </column>
+                <item>
+                 <property name="text">
+                  <string>LV Power Sensor</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Standard Operation (12V)</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>To check FW runs correctly in ideal conditions</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Power Rail Undervoltage</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check how FW reacts to recieving not enough voltage</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Power Rail Over Voltage</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check how FW reacts to recieving too much voltage</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Power Draw Test</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Read input current of VCU</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>High Current Signal</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check case for when devices being powered by the VCU shorts</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Sustained High Current</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check case when LV system draws an unexpected amout of power</string>
+                  </property>
+                 </item>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>APPS</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Normal Acceleration</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Ensure normal operation handled correctly</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>10% difference</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Implausibility condition - rules</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Open/Short Circuit</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Rules - check for condition of no response / sensors unplugged</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>25% pedal travel + brakes</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Rules - if brakes activated &amp; APPS shows more than 25% travel, must shut down ***must be demonstrated when motor controller is under load***</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Pedal &amp; Breaks (post shut down)</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Rules - after test 4, must remain off until  Apps signals less than 5% travel </string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Sweep Test</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check signals throughout range</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Integration Test</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Test if APPS signal aligns with VCU reading</string>
+                  </property>
+                 </item>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>BSE</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Normal Braking</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Ensure normal operation handled correctly</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Implausibility for more than 100ms</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Rules - check for values outside of normal range for 100ms </string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Open/Short Circuit</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Rules - check for condition of no response, sensor unplugged, etc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Sweep Test</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check signals throughout normal range</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Integration Test</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check if BSE signal measured by VCU matches</string>
+                  </property>
+                 </item>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>TSAL</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>&lt; 3.3 V Output</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>See how the VCU will interpret this less than expected signal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>&gt; 3.3 V Output</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>See how the VCU will interpret this greater than expected signal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>3.3V input with BMS</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Input the expected signal but with BMS faults</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Pulsing Input</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Find frequency where the VCU does not work properly at</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Test Accumulator Manage System</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>See if the AMS is active when the TSAL is active (EV.6.1.1). Input expected signal (3.3 V)</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>No TSAL, No Brakes</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>See if the VCU ever tells the brakes to go off while the TSAL is inactive (EV.8.2.9)</string>
+                  </property>
+                 </item>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>IMD Signal</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Generate various frequency outputs </string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>To test the IMD State recognition on the VCU</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Generate various duty cycle outputs</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>To test the Isolation State recognition on the VCU</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Send a random combination of frequencies and duty cycles</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>To test the IMD &amp; Isolation State recognition on the VCU</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Send 0Hz and 100Hz</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>To test how the VCU reacts to frequencies which are out of range</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Change duty cycle &amp; Frequency on the fly</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>To test if the VCU updates the IMD states on the fly</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Send 0% Duty Cycle and 100% Duty Cycle </string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Dont send anything</string>
+                  </property>
+                 </item>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>HV Current Sensor</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>CT signal at 0 amps (2.5V)</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>To check if VCU identifies the correct Current level and state</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>CT signal shorted to GND </string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>To check if VCU identifies the correct Current level and state</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>CT signal shorted to 5V</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>To check if VCU identifies the correct Current level and state</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>CT signal unplugged</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>CT signal at 50A, 100A, 150A, 200A, 250A, 350A (&amp; negative values)</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>CT signal at overcurrent for different amounts of time</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>CT signal at negative current, undercurrent faults</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Send positive current without throttling the APPS </string>
+                  </property>
+                 </item>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="BMSTab">
+             <attribute name="title">
+              <string>BMS</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="0" column="0">
+               <widget class="QTreeWidget" name="BMSTree">
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::MultiSelection</enum>
+                </property>
+                <attribute name="headerMinimumSectionSize">
+                 <number>50</number>
+                </attribute>
+                <attribute name="headerDefaultSectionSize">
+                 <number>250</number>
+                </attribute>
+                <column>
+                 <property name="text">
+                  <string>Test Case</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Repeat</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Description</string>
+                 </property>
+                </column>
+                <item>
+                 <property name="text">
+                  <string>BMS/VCU CAN</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Alive Signal</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Send an intermittent pulse (like a watchdog) to check that the device is functioning with the correct rate</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Dead Signal</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Send no signal or constant signal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alive at wrong rate</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Send an intermittent pulse to check that the device is functioning with the wrong rate</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>No Signal</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check how the communication works when other devices don't get a signal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Send Garbage</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Determine how the FW reacts when noise is sent</string>
+                  </property>
+                 </item>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Thermistor Expansion</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Configuration Test</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Verify Master(BMS as mibspi3)-Slave(ADC as mibspi1) communication established.</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Simulate and Send Test_Data_Set_1</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>-Verify Master's (BMS as mibspi3) receival of
+Slave's (ADC as mibspi1) Test_Data_Set_1
+-Verify Master's (BMS as mibspi3) response to 
+Slave's (ADC as mibspi1) Test_Data_Set_1</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Don't send anything</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Send Garbage</string>
+                  </property>
+                 </item>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>BMS Slave Voltage &amp; Temperature</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Minor Voltage Fault</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check BMS's response to a minor voltage fault</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Minor Temperature Fault</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check BMS's response to a minor temperature fault</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Major Voltage Fault</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check BMS's response to a major voltage fault</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Major Temperature Fault</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check BMS's response to a major temperature fault</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Weird Sensor Readings</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check BMS's response to gettings temperature or voltage readings that don't make sense </string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Communication Loss</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Check how the BMS reacts to messages timing out repeatedly</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Garbage over CLI UART</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>See how BMS reacts when its command line interface is overloaded with garbage</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Correct Message Overload on CLI UART</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>See how BMS reacts when it gets a lot of proper CLI commands in a short period of time</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Balance Test</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>See if BMS balancing algorithm balances the correct cells and also make sure BMS only balances during charging state</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>State of Charge test</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>See if BMS smoothly estimates the state of charge</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Blown Parralel Fuse test</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>See if BMS can detect that a fuse has blown in a parallel stack</string>
+                  </property>
+                 </item>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="ResultsGroupBox">
+         <property name="title">
+          <string>Test Results</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QTextEdit" name="ResultsTextEdit"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="Buttons">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QPushButton" name="CalibrationTest">
+            <property name="text">
+             <string>Calibration Test</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="Run">
+            <property name="text">
+             <string>Run</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="Cancel">
+            <property name="text">
+             <string>Cancel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="Save">
+            <property name="text">
+             <string>Save</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>2500</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
