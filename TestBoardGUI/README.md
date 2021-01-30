@@ -1,19 +1,31 @@
-Creating virtual environment in Bash:
+### Bash commands for setting up the project:
 
-~ python -m venv env
+```
+cd TestBoardGUI
+```
 
-Activating virtual environment in Bash:
+#### 1) Create virtual environment
 
-~ source env/Scripts/activate
+```
+python -m venv env
+```
+#### 2) Activate virtual environment
 
-Installing dependencies: 
+```
+source env/Scripts/activate
+```
+#### 3) Install dependencies
 
-~ pip install -r requirements.txt
+```
+pip install -r requirements.txt
+```
 
-Running the program:
+Steps 1) and 3) are only need to be done once.
 
-~ cd TestBoardGUI
+### To run the program:
 
-~ python ui/mainwindow.py
-
+```
+python ui/mainwindow.py
+```
+Make sure the virtual environment is activated.
 
