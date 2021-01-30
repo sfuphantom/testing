@@ -12,6 +12,8 @@ Installing dependencies:
 
 Running the program:
 
+~ cd TestBoardGUI
+
 ~ python ui/mainwindow.py
 
 
