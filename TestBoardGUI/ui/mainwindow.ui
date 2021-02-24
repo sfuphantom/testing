@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>822</width>
-    <height>600</height>
+    <width>1000</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -178,7 +178,7 @@
        <item>
         <widget class="QTabWidget" name="deviceTabWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="VCU">
           <attribute name="title">
@@ -190,6 +190,9 @@
              <property name="frameShadow">
               <enum>QFrame::Sunken</enum>
              </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOn</enum>
+             </property>
              <property name="editTriggers">
               <set>QAbstractItemView::NoEditTriggers</set>
              </property>
@@ -199,14 +202,17 @@
              <property name="selectionMode">
               <enum>QAbstractItemView::MultiSelection</enum>
              </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
              <attribute name="headerMinimumSectionSize">
-              <number>400</number>
+              <number>50</number>
              </attribute>
              <attribute name="headerDefaultSectionSize">
               <number>400</number>
              </attribute>
              <attribute name="headerStretchLastSection">
-              <bool>false</bool>
+              <bool>true</bool>
              </attribute>
              <column>
               <property name="text">
@@ -242,13 +248,13 @@
               <bool>false</bool>
              </property>
              <attribute name="headerMinimumSectionSize">
-              <number>400</number>
+              <number>50</number>
              </attribute>
              <attribute name="headerDefaultSectionSize">
               <number>400</number>
              </attribute>
              <attribute name="headerStretchLastSection">
-              <bool>false</bool>
+              <bool>true</bool>
              </attribute>
              <column>
               <property name="text">
@@ -281,7 +287,13 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QTableWidget" name="resultsTable">
+        <widget class="QTreeWidget" name="resultsTreeWidget">
+         <attribute name="headerMinimumSectionSize">
+          <number>200</number>
+         </attribute>
+         <attribute name="headerDefaultSectionSize">
+          <number>200</number>
+         </attribute>
          <column>
           <property name="text">
            <string>Test Case</string>
@@ -367,7 +379,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>822</width>
+     <width>1000</width>
      <height>26</height>
     </rect>
    </property>
