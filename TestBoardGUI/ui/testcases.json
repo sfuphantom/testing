@@ -1,0 +1,283 @@
+{
+    "VCU": [
+        {
+            "LV Power Sensor": [
+                {
+                    "Case": "Test 1: Standard Operation (12V)",
+                    "Description": "To check FW runs correctly in ideal conditions"
+                },
+                {
+                    "Case": "Test 2: Power Rail Undervoltage",
+                    "Description": "Check how FW reacts to receiving not enough voltage" 
+                },
+                {
+                    "Case": "Test 3:  Power Rail Overvoltage",
+                    "Description": "Check how FW reacts to receiving too much voltage" 
+                },
+                {
+                    "Case": "Test 4: Power Draw Test",
+                    "Description": "Read input current of VCU" 
+                },
+                {
+                    "Case": "Test 5: High Current Signal",
+                    "Description": "Check case for when devices being powered by the VCU shorts" 
+                },
+                {
+                    "Case": "Test 6: Sustained High Current",
+                    "Description": "Check case when LV system draws and unexpected amount of power" 
+                }
+            ]
+        },
+        {
+            "APPS": [
+                {
+                    "Case": "Test 1: Normal Acceleration",
+                    "Description": "Ensure normal operation handled correctly" 
+                },
+                {
+                    "Case": "Test 2: 10% Difference",
+                    "Description": "Implausibility condition" 
+                },
+                {
+                    "Case": "Test 3: Open/Short Circuit",
+                    "Description": "Check for condition of no response/sensors unplugged" 
+                },
+                {
+                    "Case": "Test 4: 25% Pedal Travel + Brakes",
+                    "Description": "If breaks activated & APPS shows more than 25% travel, must shut down ***must be demonstrated when motor controller is under load***" 
+                },
+                {
+                    "Case": "Test 5: Pedal & Breaks, Post Shutdown",
+                    "Description": "After test 4, must remain off until APPS signals less than 5% travel" 
+                },
+                {
+                    "Case": "Test 6: Sweep Test",
+                    "Description": "Check signals throughout range" 
+                },
+                {
+                    "Case": "Test 7: Integration Test",
+                    "Description": "If APPS signal aligns with VCU reading" 
+                }
+            ]
+        },
+        {
+            "BSE": [
+                {
+                    "Case": "Test 1: Normal Breaking",
+                    "Description": "Ensure normal operation handled correctly" 
+                },
+                {
+                    "Case": "Test 2: Implausibility for more than 100ms",
+                    "Description": "Check for values outside of normal range for 100ms" 
+                },
+                {
+                    "Case": "Test 3: Open/Short Circuit",
+                    "Description": "Check for condition of no response, sensor unplugged, etc." 
+                },
+                {
+                    "Case": "Test 4: Sweep Test",
+                    "Description": "Check signals throughout normal range" 
+                },
+                {
+                    "Case": "Test 5: Integration Test",
+                    "Description": "Check if BSE signal measured by VCU matches" 
+                }
+            ]
+        },
+        {
+            "TSAL": [
+                {
+                    "Case": "Test 1: <3.3 V Output",
+                    "Description": "See how the VCU will interpret this less than expected signal" 
+                },
+                {
+                    "Case": "Test 2: >3.3 V Output",
+                    "Description": "See how the VCU will interpret this greater than expected signal" 
+                },
+                {
+                    "Case": "Test 3: 3.3 V Input with BMS ",
+                    "Description": "Input the expected signal but with BMS faults" 
+                },
+                {
+                    "Case": "Test 4: Pulsing Input",
+                    "Description": "Find frequency where the VCU does not work properly" 
+                },
+                {
+                    "Case": "Test 5: Test Accumulator Manage System",
+                    "Description": "See if the AMS is active when the TSAL is active (EV.6.1.1). Input expected signal (3.3V)" 
+                },
+                {
+                    "Case": "Test 6: No TSAL, No Breaks",
+                    "Description": "See if the VCU ever tells the breaks to go off while the TSAL is inactive (EV.8.2.9)" 
+                }
+            ]
+        },
+        {
+            "IMD Signal": [
+                {
+                    "Case": "Test 1: Generate Various Frequency Outputs",
+                    "Description": "To test the IMD State recognition on the VCU" 
+                },
+                {
+                    "Case": "Test 2: Generate Various Duty Cycle Outputs",
+                    "Description": "To test the Isolation State recognition on the VCU" 
+                },
+                {
+                    "Case": "Test 3: Random Combinations of Frequencies and Duty Cycles",
+                    "Description": "Send a random combination of frequencies and duty cycles to test the IMD & Isolation State recognition on the VCU" 
+                },
+                {
+                    "Case": "Test 4: Send 0Hz and 100Hz",
+                    "Description": "To test how the VCU reacts to frequencies which are out of range" 
+                },
+                {
+                    "Case": "Test 5: Change Duty Cycles & Frequency on the Fly",
+                    "Description": "To test if the VCU updates the IMD states on the fly" 
+                },
+                {
+                    "Case": "Test 6: Send 0% Duty Cycle and 100% Duty Cycle",
+                    "Description": "" 
+                },
+                {
+                    "Case": "Test 7: Don't Send Anything ",
+                    "Description": "" 
+                }
+            ]
+        },
+        {
+            "HV Voltage Sensor": [
+
+            ]
+        },
+        {
+            "HV Current Sensor": [
+                {
+                    "Case": "Test 1: CT Signal at 0A (2.5V)",
+                    "Description": "To check if VCU identifies the correct current level and state" 
+                },
+                {
+                    "Case": "Test 2: CT Signal Shorted to GND",
+                    "Description": "To check if VCU identifies the correct current level and state" 
+                },
+                {
+                    "Case": "Test 3: CT Signal Shorted to 5V",
+                    "Description": "To check if VCU identifies the correct current level and state" 
+                },
+                {
+                    "Case": "Test 4: CT Signal Unplugged",
+                    "Description": "To check if VCU identifies the correct current level and state" 
+                },
+                {
+                    "Case": "Test 5: CT Signal at 50A, 100A, 150A, 200A (& negative values)",
+                    "Description": "" 
+                },
+                {
+                    "Case": "Test 6: CT Signal at Overcurrent for Different Amounts of Time",
+                    "Description": "" 
+                },
+                {
+                    "Case": "Test 7: CT Signal at Negative Current, Undercurrent Faults",
+                    "Description": "" 
+                },
+                {
+                    "Case": "Test 8: Send Positive Current without Throttling the APPS",
+                    "Description": "" 
+                }
+            ]
+        }
+    ],
+    "BMS": [
+        {
+            "BMS/VCU CAN": [
+                {
+                    "Case": "Test 1: Alive Signal",
+                    "Description": "Send an intermittent pulse (like a watchdog) to check that the device is functioning with the correct rate" 
+                },
+                {
+                    "Case": "Test 2: Dead Signal",
+                    "Description": "Send no signal or constant signal (depends on what is defined as dead signal)" 
+                },
+                {
+                    "Case": "Test 3: Alive at Wrong Rate",
+                    "Description": "Send an intermittent pulse to check that the device is functioning with the wrong rate" 
+                },
+                {
+                    "Case": "Test 4: No Signal",
+                    "Description": "Check how the communication works when other devices don't get a signal" 
+                },
+                {
+                    "Case": "Test 5: Send Garbage",
+                    "Description": "Determine how the FW reacts when noise is sent" 
+                }
+            ]
+        },
+        {
+            "Thermistor Expansion": [
+                {
+                    "Case": "Test 1: Configuration Test",
+                    "Description": "Verify Master (BMS as mibspi3)-Slave (ADC as mibspi1) communication is established." 
+                },
+                {
+                    "Case": "Test 2: Simulate and Send Test_Data_Set_1",
+                    "Description": "Verify Master's (BMS as mibspi3) receival and response of Slave's (ADC as mibspi1) Test_Data_Set_1" 
+                },
+                {
+                    "Case": "Test 3: Don't Send Anything",
+                    "Description": "" 
+                },
+                {
+                    "Case": "Test 4: Send Garbage",
+                    "Description": "" 
+                }
+            ]
+        },
+        {
+            "BMS Slave Voltages & Temperatures": [
+                {
+                    "Case": "Test 1: Minor Voltage Fault",
+                    "Description": "Check BMS's response to a minor voltage fault" 
+                },
+                {
+                    "Case": "Test 2: Minor Temperature Fault",
+                    "Description": "Check BMS's response to a minor temperature fault" 
+                },
+                {
+                    "Case": "Test 3: Major Voltage Fault",
+                    "Description": "Check BMS's response to a major voltage fault" 
+                },
+                {
+                    "Case": "Test 4: Major Temperature Fault",
+                    "Description": "Check BMS's response to a major temperature fault" 
+                },
+                {
+                    "Case": "Test 5: Weird Sensor Readings",
+                    "Description": "Check BMS's response to getting temperature or voltage readings that don't make sense" 
+                },
+                {
+                    "Case": "Test 6: Communication Loss",
+                    "Description": "Check how BMS reacts to messages timing out repeatedly" 
+                },
+                {
+                    "Case": "Test 7: Garbage over CLI UART",
+                    "Description": "See how BMS reacts when its command line interface is overloaded with garbage" 
+                },
+                {
+                    "Case": "Test 8: Correct Message Overload on CLI UART",
+                    "Description": "See how BMS reacts when it gets a lot of proper CLI commands in a short period of time" 
+                },
+                {
+                    "Case": "Test 9: Balance Test",
+                    "Description": "See if BMS balancing algorithm balances the correct cells and also make sure BMS only balances during charging state" 
+                },
+                {
+                    "Case": "Test 10: State of Charge Test",
+                    "Description": "See if BMS smoothly estimates the state of charge" 
+                },
+                {
+                    "Case": "Test 11: Blown Parallel Fuse Test",
+                    "Description": "See if BMS can detect that a fuse has blown in a parallel stack"
+                }
+            ]
+        }
+    ]
+}
