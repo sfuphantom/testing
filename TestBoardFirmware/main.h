@@ -14,12 +14,6 @@
 
 typedef enum
 {
-  SUCCESS,
-  FAIL
-} Result_t;
-
-typedef enum
-{
     IDLE,
     BMS_MODE,
     VCU_MODE
