@@ -6,6 +6,12 @@
  */
 
 #include "thermistor_expansion.h"
+#include "Phantom_sci.h"
+#include "common.h"
+#include "FreeRTOS.h"
+#include "FreeRTOSConfig.h"
+#include "os_task.h"
+#include "os_timer.h"
 
 enum
 {
@@ -16,7 +22,7 @@ enum
 // Static function prototypes
 static void normal_thermistor_operation();
 
-void thermistor_process(uint8_t state)
+Result_t thermistor_process(uint8_t state, TimerHandle_t *timerptr)
 {
     switch(state)
     {
@@ -24,11 +30,13 @@ void thermistor_process(uint8_t state)
             normal_thermistor_operation();
             break;
     }
+
+    return SUCCESS;
 }
 
 static void normal_thermistor_operation()
 {
-
+    UARTprintf("Normal Thermistor Operation\n\r");
 }
 
 
