@@ -9,13 +9,32 @@
 #implement tests as an integration test or test fully encompassing all vcu states to create a json
 
 import pytest
+import json
 
-normal_vcu = '{"Mode": "VCU", "APPS": NORMAL, "BSE": NORMAL, "IMD": NORMAL, "HV_VOLTAGE": NORMAL, "HV_CURRENT": NORMAL, "TSAL": NORMAL, "LOW_VOLTAGE": NORMAL, "COMMUNICATIONS": NORMAL, "REPEAT": 1}'
-#test_cases = 
+# dictionary object of VCU in default state (NORMAL enums, 1 repetition for all key-value pairs)
+normal_vcu = {
+    "Mode": "VCU",
+    "apps": "NORMAL",
+	"bse": "NORMAL",
+	"imd": "NORMAL",
+	"hvvoltage": "NORMAL",
+	"hvcurrent": "NORMAL",
+	"tsal": "NORMAL",
+	"lv": "NORMAL",
+	"communications": "NORMAL",
+	"repeat": 1
+
+}
 
 def build_json():
-    vcu_json= '{"Mode": "VCU", "APPS": NORMAL, "BSE": NORMAL, "IMD": NORMAL, "HV_VOLTAGE": NORMAL, "HV_CURRENT": NORMAL, "TSAL": NORMAL, "LOW_VOLTAGE": NORMAL, "COMMUNICATIONS": NORMAL, "REPEAT": 1}'
-    return vcu_json
+    return normal_vcu
 
 def test_vcu_json():
     assert normal_vcu == build_json()
+
+def test_appsval():
+    assert "NORMAL" == normal_vcu.get("apps")
+
+def test_apps_implausibility():
+    normal_vcu.update({"apps": "IMPLAUSIBILITY"})
+    assert "IMPLAUSIBILITY" == normal_vcu.get("apps")
