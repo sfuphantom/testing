@@ -11,32 +11,32 @@
 
 import pytest
 import json
+import copy
 
 # example list of what might be received from front end
 selectedTest_example = [{'Test Name': 'APPS', 'Test Case': 'Test 2: 10% Difference', 'Repeat': None, 'Test Index': None}, {'Test Name': 'BSE', 'Test Case': 'Test 3: Open/Short Circuit', 'Repeat': None, 'Test Index': None}]
 
-# dictionary object of VCU in default state (NORMAL enums, 1 repetition for all key-value pairs)
+# dictionary object of VCU in default state (NORMAL enums, 1 repetition for all key-value pairs) coordinate with tanya on keys or how to make it easy to build test json
 normal_vcu = {
     "Mode": "VCU",
-    "apps": "NORMAL",
-	"bse": "NORMAL",
-	"imd": "NORMAL",
-	"hvvoltage": "NORMAL",
-	"hvcurrent": "NORMAL",
-	"tsal": "NORMAL",
-	"lv": "NORMAL",
-	"communications": "NORMAL",
+    "APPS": "NORMAL",
+	"BSE": "NORMAL",
+	"IMD": "NORMAL",
+	"HV_VOLTAGE_SENSOR": "NORMAL",
+	"HV_CURRENT_SENSOR": "NORMAL",
+	"TSAL": "NORMAL",
+	"LV_POWER_SENSOR": "NORMAL",
+	"COMMUNICATIONS": "NORMAL",
 	"repeat": 1
 
 }
 
 def build_json():
-    #make DEEP copy of normal vsu json
-    selectedJson = normal_vcu
+    selectedJson = copy.deepcopy(normal_vcu)
 
-    # parse string to make changes
-    selectedJson.update({"apps": "IMPLAUSIBILITY"})
-
+    for x in selectedTest_example
+        selectedJson.update({selectedTest_example[x].get('Test Name'), "TEST_ENUM"})
+        
     # send UART
     # receive UART
     # interpret response from test board
