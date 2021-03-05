@@ -6,17 +6,32 @@ from datetime import date
 from PySide2.QtWidgets import (QApplication, QPushButton, QLineEdit,
                                QTabWidget, QTreeWidget, QComboBox, QTreeWidget,
                                QWidget, QTreeWidgetItem, QHeaderView)
-from PySide2.QtCore import (QFile, QObject, QDir, Signal, Slot, Qt)
+from PySide2.QtCore import (QFile, QObject, QDir, Signal, Slot, Qt,
+                            QAbstractProxyModel)
 from PySide2.QtUiTools import (QUiLoader)
+from PySide2.QtGui import (QBrush, QColor)
 
 
 # Set-up/Connect mainwindow
 class MainWindow(QObject):
+    # When run button is clicked, it sends a signal with
+    # the selected tests to be used by tests handler
+    runsignal = Signal(list)
 
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
 
-        # Check-In Information
+        # Instantiate required objects
+        # ResultWriter displays results on the gui
+        self.resultsWriter = ResultsWriter()
+        # Dummy test results generator. To be replaced by real tests handler.
+        self.testdummy = TestDummy()
+        # Connect signal emitted by run button to test handler.
+        self.runsignal.connect(self.testdummy.poppulate_results)
+        # Connect results signal from "dummy" test handler to ResultWriter
+        self.testdummy.results.connect(self.resultsWriter.test_function)
+
+        # Initialize Check-In Information dictionary to be filled
         self.checkin_info = {'device': '', 'board_name': '',
                              'board_version': '', 'testID': '',
                              'team_member': '', 'date': str(date.today())}
@@ -62,7 +77,8 @@ class MainWindow(QObject):
             QTreeWidget, 'resultsTreeWidget')
         self.VCUTree.itemClicked.connect(self._duplicate_selections)
         self.BMSTree.itemClicked.connect(self._duplicate_selections)
-
+        # Pass resultsTree to resultsWriter
+        self.resultsWriter.results_tree(self.resultsTree)
 
         # PushButtons
         self.calibrationTestButton = self.mainwindow.findChild(
@@ -110,15 +126,15 @@ class MainWindow(QObject):
                     parent.addChildren([children])
                     # Add check box to each test case
                     # children.setCheckState(0, Qt.Unchecked)
-    
-    # This function is buggy. WIP
+
+    # WIP: This function is buggy. 
     @Slot()
     def _duplicate_selections(self):
-        items = self.selectedTree.selectedItems()    
+        items = self.selectedTree.selectedItems()
         self.resultsTree.clear()
         for item in items:
-            index = items.index(item)
-
+            # why did i create this index smh not even using it
+            # index = items.index(item)
             parent = QTreeWidgetItem([item.parent().text(0)])
             self.resultsTree.addTopLevelItem(parent)
             child = QTreeWidgetItem([item.text(0)])
@@ -129,28 +145,28 @@ class MainWindow(QObject):
         # Retrieve all selected tests in -> list(QTreeWidgetItems)
         self._rawSelection = self.selectedTree.selectedItems()
 
-        test_item = {'Test Name': '', 'Test Case': '', 'Repeat': None, 'Test Index': None}
+        test_item = {'Test Name': '', 'Test Case': '', 'Repeat': None}
 
         self.selectedTests = list()
 
         for item in self._rawSelection:
             test_item = self._parse_tests(item)
             self.selectedTests.append(test_item)
-        
-    
+
     # Parse user test selection
     def _parse_tests(self, item):
         test_item = {}
-        # QModelIndex of selected test to be used for adding results to the table
-        index = self.selectedTree.indexFromItem(item)
         test_item['Test Name'] = item.parent().text(0)
         test_item['Test Case'] = item.text(0)
-        test_item['Test Index'] = index
-        return test_item
+        # WIP: repeat column doesn't exist in test selection yet
+        # test_item['Repeat'] = item.text(1)
+        test_item['Repeat'] = None
 
-    # Write results
-    def _write_results(self, test_index, status):
-        pass
+        # QModelIndex of selected test to be used for adding results to the table
+        # index = self.selectedTree.indexFromItem(item)
+        # This index is from test selection tree. Cannot be used with results tree.
+        # test_item['Test Index'] = index
+        return test_item
 
     # Retrieve checkin information
     def _get_checkin_info(self):
@@ -183,6 +199,8 @@ class MainWindow(QObject):
         print('run button is clicked')
         # for i in self.selectedTests:
         #     print(i)
+        # Emit selectedTests to runsignal
+        self.runsignal.emit(self.selectedTests)
 
     # Cancel tests
     @Slot()
@@ -200,8 +218,78 @@ class MainWindow(QObject):
         self._get_checkin_info()
         print('save button is clicked')
 
+    # Dont mind me. Just being tested.
+    def test_function(self):
+        print('Hi there! I am test_function. I belong in MainWindow. :)')
+
+
+# This class display results on the gui.
+class ResultsWriter(QObject):
+    def __init__(self):
+        super(ResultsWriter, self).__init__()
+
+    # Retreive results tree from MainWindow in order to edit.
+    def results_tree(self, tree):
+        self.results_tree = tree
+
+    # Display status as PASS/FAIL in green/red
+    def _fill_status(self, index, status: bool):
+        status = "PASS" if status else "FAIL"
+        colour = "#49E20E" if status else "#FF0000"
+        # Edit status column in results tree
+        self.results_tree.itemFromIndex(index).setText(2, status)
+        # Change colour of text
+        self.results_tree.itemFromIndex(index).setForeground(
+            2, QBrush(QColor(colour)))
+
+    # Display message in results tree
+    def _fill_message(self, tree, index, message: str):
+        self.results_tree.itemFromIndex(index).setText(3, message)
+
+    # Write status and message for each test item
+    @Slot(list)
+    def writeresults(self, results: list):
+        for test in results:
+            index = test['Test Index']
+            status = test['Test Status']
+            message = test['Test Message']
+            self._fill_status(index, status)
+            self._fill_message(index, message)
+
+    # Dont mind me. Just being tested.
+    @Slot(list)
+    def test_function(self, results):
+        print('hi there. I belong in results writer.')
+        for i in results:
+            print(i)
+
+
+# Dont mind me. Just a dummy test handler.
+# Used for generating fake results for testing ResultsWriter
+class TestDummy(QObject):
+    results = Signal(list)
+
+    def __init__(self):
+        super(TestDummy, self).__init__()
+
+    # Just fake test results.
+    @Slot(list)
+    def poppulate_results(self, tests):
+        # self.results.emit('testdummy')
+        num = 0
+        dummy_status = True
+        dummy_message = "Message"
+        for test in tests:
+            test['Status'] = dummy_status
+            test['Message'] = dummy_message + str(num)
+            test['Repeat'] = num
+            num += 1
+            dummy_status = not dummy_status
+        self.results.emit(tests)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     mainwindow = MainWindow()
+    results = ResultsWriter()
     sys.exit(app.exec_())
