@@ -34,6 +34,10 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+```
+pip install pyserial
+```
+
 Steps 1) and 3) are only need to be done once.
 
 ### To run the program:

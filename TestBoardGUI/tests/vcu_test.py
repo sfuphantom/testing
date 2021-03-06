@@ -12,11 +12,12 @@
 import pytest
 import json
 import copy
+import serial
 
 # example list of what might be received from front end
 selectedTest_example = [{'Test Name': 'APPS', 'Test Case': 'Test 2: 10% Difference', 'Repeat': None, 'Test Index': None}, {'Test Name': 'BSE', 'Test Case': 'Test 3: Open/Short Circuit', 'Repeat': None, 'Test Index': None}]
 
-# dictionary object of VCU in default state (NORMAL enums, 1 repetition for all key-value pairs) coordinate with tanya on keys or how to make it easy to build test json
+# dictionary object of VCU in default state (NORMAL enums, 1 repetition for all key-value pairs) 
 normal_vcu = {
     "Mode": "VCU",
     "APPS": "NORMAL",
@@ -38,6 +39,8 @@ def build_json():
         selectedJson.update({selectedTest_example[x].get('Test Name'), "TEST_ENUM"})
         
     # send UART
+    # serialPort = serial.Serial(port = 0, baudrate = 0, bytesize = 0, timeout = 0, stopbits = serial.STOPBITS_ONE)
+
     # receive UART
     # interpret response from test board
     # return result
