@@ -1,6 +1,8 @@
 //DAC init
 #include "MCP48FV_DAC_SPI.h"
+/* SET UP FOR TEST BOARD FILE
 #include "board_hardware.h"   // contains hardware defines for specific board used (i.e. VCU or launchpad)
+*/
 //#include "mibspi.h"
 
 #define DAC_LOWEST_VOLTAGE 0
@@ -18,28 +20,30 @@
 // init function, responsible for initializing MiBspi
 bool MCP48FV_Init(){
     mibspiInit();
-    MCP48FV_Set_Value(0);        //500 = 5.00V, 250 = 2.5V
+    MCP48FV_Set_Value(0);        //500 = 5.00V, 250 = 2.5V  Can set this value to any default
     return true;
 }
 
+
+// TO DO: CONFIGURE FOR DUAL VALUE ENTRY & DIFFERENT REGISTER SIZES
 /*Main DAC controller, configure to set the output voltage from 0-5VDC
  * use: targetVoltage= 500 = 5.00V, 251 = 2.51V
 */
 bool MCP48FV_Set_Value(uint16_t targetVoltage){
 
-   if(targetVoltage>496)
+   if(targetVoltage>496) // why this value? why not 500 (equivalent to 5V)?
    {
        targetVoltage = 496;
    }
-    uint32_t enableBitPrecent= ((targetVoltage+5)*1000)/(DAC_HIGHEST_VOLTAGE*100);
-    uint32_t dacRegister= (enableBitPrecent*0xFF)/1000;
+    uint32_t enableBitPercent= ((targetVoltage)*1000)/(DAC_HIGHEST_VOLTAGE*100);
+    uint32_t dacRegister= (enableBitPercent*0xFF)/1000;
 
    MCP48FV_Write(cmdCreator(DAC0_REGISTER_ADDRESS, DAC_WRITE_CMD,0,dacRegister));
 
     return true;
 }
 
-
+// TO DO: ADAPT FOR DIFFERENT REGISTER SIZES
 //creates the commands from register inputs
 uint32_t cmdCreator(uint8_t address, uint8_t cmdReadWrite, uint8_t cmderr, uint16_t dataBit){
     return ((address<<19) + (cmdReadWrite<<17) + (cmderr<<16) + (0<<12)+ dataBit);
