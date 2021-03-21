@@ -23,7 +23,7 @@
 #define DAC_SIZE_12 0xFFF
 
 // init function, responsible for initializing MiBspi
-bool MCP48FV_Init(){
+bool MCP48FV_Init(){ 
     mibspiInit();
     MCP48FV_Set_Value(0);        //500 = 5.00V, 250 = 2.5V  Can set this value to any default. How to handle with new flexibility?
     return true;
@@ -35,16 +35,16 @@ bool MCP48FV_Init(){
 /*Main DAC controller, configure to set the output voltage from 0-5VDC
  * use: targetVoltage= 500 = 5.00V, 251 = 2.51V
 */
-bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t DAC_SIZE){
+bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t DAC_SIZE, uint8_t dacVout){
 
    if(targetVoltage>496) // why this value? why not 500 (equivalent to 5V)?
    {
        targetVoltage = 496;
    }
     uint32_t enableBitPercent= ((targetVoltage)*1000)/(DAC_HIGHEST_VOLTAGE*100);
-    uint32_t dacRegister= (enableBitPercent*DAC_SIZE)/1000; 
+    uint32_t dacData= (enableBitPercent*DAC_SIZE)/1000; 
 
-   MCP48FV_Write(cmdCreator(DAC0_REGISTER_ADDRESS, DAC_WRITE_CMD,0,dacRegister)); // CHANGE TO ACCESS BOTH OUTPUTS
+   MCP48FV_Write(cmdCreator(dacVout, DAC_WRITE_CMD,0,dacData)); // CHANGE TO ACCESS BOTH OUTPUTS
 
     return true;
 }

@@ -19,7 +19,7 @@
 // FIX PARAMETERS FOR DIFFERENT SIZES OF DAC
 bool MCP48FV_Init();
 
-bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t DAC_SIZE);
+bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t DAC_SIZE, uint8_t dacVout);
 bool MCP48FV_Write(uint32_t cmdString);
 uint32_t cmdCreator(uint8_t address, uint8_t cmdReadWrite, uint8_t cmderr, uint16_t dataBit);
 bool MCP48FV_Write(uint32_t cmdString);
