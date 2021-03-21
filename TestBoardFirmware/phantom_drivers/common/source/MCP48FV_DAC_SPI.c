@@ -1,8 +1,8 @@
 //DAC init
 #include "MCP48FV_DAC_SPI.h"
-/* SET UP FOR TEST BOARD FILE
-#include "board_hardware.h"   // contains hardware defines for specific board used (i.e. VCU or launchpad)
-*/
+
+#include "hwConfig.h"   // contains hardware defines for specific board used (i.e. VCU or launchpad)
+
 //#include "mibspi.h"
 
 #define DAC_LOWEST_VOLTAGE 0
@@ -22,6 +22,8 @@
 #define DAC_SIZE_10 0x3FF
 #define DAC_SIZE_12 0xFFF
 
+// OLD: DAC_SPI_PORT NEW: NEED PORT DEFINITIONS FOR EACH DIFFERENT DAC, PASS INTO FUNCTIONS
+
 // init function, responsible for initializing MiBspi
 bool MCP48FV_Init(){ 
     mibspiInit();
@@ -29,9 +31,27 @@ bool MCP48FV_Init(){
     return true;
 }
 
+bool MCP48FV_Set_Value(uint16_t targetVoltage1, uint16_t targetVoltage2, uint16_t DAC_SIZE){
+    if(targetVoltage1>496) // why this value? why not 500 (equivalent to 5V)?
+   {
+       targetVoltage1 = 496;
+   }
+    if(targetVoltage2>496) // why this value? why not 500 (equivalent to 5V)?
+   {
+       targetVoltage2 = 496;
+   }
 
-// TO DO: CONFIGURE FOR DUAL VALUE ENTRY 
-// FIX PARAMETES, OVERLOAD FUNCTION
+    uint32_t enableBitPercent1= ((targetVoltage1)*1000)/(DAC_HIGHEST_VOLTAGE*100);
+    uint32_t dacData1= (enableBitPercent1*DAC_SIZE)/1000; 
+    MCP48FV_Write(cmdCreator(DAC0_REGISTER_ADDRESS, DAC_WRITE_CMD,0,dacData1)); 
+
+    uint32_t enableBitPercent2= ((targetVoltage2)*1000)/(DAC_HIGHEST_VOLTAGE*100);
+    uint32_t dacData2= (enableBitPercent2*DAC_SIZE)/1000; 
+    MCP48FV_Write(cmdCreator(DAC1_REGISTER_ADDRESS, DAC_WRITE_CMD,0,dacData2)); 
+
+    return true;
+}
+
 /*Main DAC controller, configure to set the output voltage from 0-5VDC
  * use: targetVoltage= 500 = 5.00V, 251 = 2.51V
 */
@@ -44,18 +64,17 @@ bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t DAC_SIZE, uint8_t dacVou
     uint32_t enableBitPercent= ((targetVoltage)*1000)/(DAC_HIGHEST_VOLTAGE*100);
     uint32_t dacData= (enableBitPercent*DAC_SIZE)/1000; 
 
-   MCP48FV_Write(cmdCreator(dacVout, DAC_WRITE_CMD,0,dacData)); // CHANGE TO ACCESS BOTH OUTPUTS
+   MCP48FV_Write(cmdCreator(dacVout, DAC_WRITE_CMD,0,dacData));
 
     return true;
 }
 
-// TO DO: ADAPT FOR DIFFERENT REGISTER SIZES
 //creates the commands from register inputs
 uint32_t cmdCreator(uint8_t address, uint8_t cmdReadWrite, uint8_t cmderr, uint16_t dataBit){
     return ((address<<19) + (cmdReadWrite<<17) + (cmderr<<16) + (0<<12)+ dataBit);
 }
 
-// TO DO: ADAPT FOR ABILITY TO USE MULTIPLE DACS (DAC_SPI_PORT WILL BE DIFFERENT HERE)
+// TO DO: ADAPT FOR ABILITY TO USE MULTIPLE DACS: (DAC_SPI_PORT WILL BE DIFFERENT HERE)
 //responsible for transmitting SPI command
 bool MCP48FV_Write(uint32_t cmdString){
 
