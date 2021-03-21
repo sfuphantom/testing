@@ -6,16 +6,7 @@
  */
 
 #include "apps.h"
-
-
-//will use spi and possibly pins 35, 33, 32 and 11 to set vals
-//apparently use halcogen to generate files?
-//find examples how to use mibspi on tms570
-
-
-//following values need to be set to proper value
-#define DEFAULT_APPS_1 1 //VALUE WITH NORMAL APPS RANGE
-#define DEFAULT_APPS_2 1 //VALUE WITH NORMAL APPS RANGE
+#include "hwConfig.h"
 
 enum
 {
@@ -31,6 +22,13 @@ enum
 
 // Static function prototypes
 static void normal_apps_operation();
+static void apps_implausibility();
+static void apps_open_circuit();
+static void apps_short_circuit();
+static void apps_bse_activated();
+static void apps_bse_deactivated();
+static void apps_out_of_range();
+static void apps_sweep();
 
 void apps_process(uint8_t state)
 {

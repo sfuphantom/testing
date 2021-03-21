@@ -6,9 +6,7 @@
  */
 
 #include "bse.h"
-
-//VALUES WILL HAVE TO BE SET PROPERLY
-#define DEFAULT_BSE 1
+#include "hwConfig.h"
 
 enum
 {
@@ -23,6 +21,12 @@ enum
 
 // Static function prototypes
 static void normal_bse_operation();
+static void bse_open_circuit();
+static void bse_short_circuit();
+static void bse_out_of_range();
+static void apps_bse_activated();
+static void apps_bse_deactivated();
+static void bse_sweep();
 
 void bse_process(uint8_t state){
     switch(state)
@@ -38,6 +42,12 @@ void bse_process(uint8_t state){
             break;
         case BSE_SWEEP:
             bse_sweep();
+            break;
+        case APPS_BSE_ACTIVATED:
+            apps_bse_activated();
+            break;
+        case APPS_BSE_DEACTIVATED:
+            apps_bse_deactivated();
             break;
         default:
             normal_bse_operation();
@@ -63,4 +73,12 @@ static void bse_out_of_range(){
 
 static void bse_sweep(){
 
+}
+
+static void apps_bse_activated(){
+
+}
+
+static void apps_bse_deactivated(){
+    
 }
