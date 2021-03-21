@@ -26,6 +26,7 @@ bool MCP48FV_Init(){
 
 
 // TO DO: CONFIGURE FOR DUAL VALUE ENTRY & DIFFERENT REGISTER SIZES
+// FIX PARAMETES, OVERLOAD FUNCTION
 /*Main DAC controller, configure to set the output voltage from 0-5VDC
  * use: targetVoltage= 500 = 5.00V, 251 = 2.51V
 */
@@ -36,9 +37,9 @@ bool MCP48FV_Set_Value(uint16_t targetVoltage){
        targetVoltage = 496;
    }
     uint32_t enableBitPercent= ((targetVoltage)*1000)/(DAC_HIGHEST_VOLTAGE*100);
-    uint32_t dacRegister= (enableBitPercent*0xFF)/1000;
+    uint32_t dacRegister= (enableBitPercent*0xFF)/1000; // CHANGE 0XFF, MAKE VARIABLE FOR OTHER DACS
 
-   MCP48FV_Write(cmdCreator(DAC0_REGISTER_ADDRESS, DAC_WRITE_CMD,0,dacRegister));
+   MCP48FV_Write(cmdCreator(DAC0_REGISTER_ADDRESS, DAC_WRITE_CMD,0,dacRegister)); // CHANGE TO ACCESS BOTH OUTPUTS
 
     return true;
 }
@@ -49,6 +50,7 @@ uint32_t cmdCreator(uint8_t address, uint8_t cmdReadWrite, uint8_t cmderr, uint1
     return ((address<<19) + (cmdReadWrite<<17) + (cmderr<<16) + (0<<12)+ dataBit);
 }
 
+// TO DO: ADAPT FOR ABILITY TO USE MULTIPLE DACS (DAC_SPI_PORT WILL BE DIFFERENT HERE)
 //responsible for transmitting SPI command
 bool MCP48FV_Write(uint32_t cmdString){
 
@@ -58,7 +60,7 @@ bool MCP48FV_Write(uint32_t cmdString){
 
 //
     uint16_t txbuffer[]={(uint8_t) (cmdString>>16),(uint8_t) (cmdString>>8),(uint8_t) (cmdString>>0)};
-    mibspiSetData(DAC_SPI_PORT,0,txbuffer);
+    mibspiSetData(DAC_SPI_PORT,0,txbuffer); // CHANGE SO THAT PORT CAN BE ADAPTED FOR MULTIPLE PORTS
     mibspiTransfer(DAC_SPI_PORT,0);
     while(!(mibspiIsTransferComplete(DAC_SPI_PORT,0))); // need a timeout
     // start a timer, don't use a while loop forever
