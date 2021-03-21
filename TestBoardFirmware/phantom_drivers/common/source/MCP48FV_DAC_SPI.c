@@ -17,6 +17,11 @@
 #define DAC_READ_CMD 03 //0b11
 #define DAC_WRITE_CMD 00
 
+// in some kind of definitions lib/file?
+#define DAC_SIZE_8 0xFF
+#define DAC_SIZE_10 0x3FF
+#define DAC_SIZE_12 0xFFF
+
 // init function, responsible for initializing MiBspi
 bool MCP48FV_Init(){
     mibspiInit();
@@ -30,14 +35,14 @@ bool MCP48FV_Init(){
 /*Main DAC controller, configure to set the output voltage from 0-5VDC
  * use: targetVoltage= 500 = 5.00V, 251 = 2.51V
 */
-bool MCP48FV_Set_Value(uint16_t targetVoltage){
+bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t DAC_SIZE){
 
    if(targetVoltage>496) // why this value? why not 500 (equivalent to 5V)?
    {
        targetVoltage = 496;
    }
     uint32_t enableBitPercent= ((targetVoltage)*1000)/(DAC_HIGHEST_VOLTAGE*100);
-    uint32_t dacRegister= (enableBitPercent*0xFF)/1000; // CHANGE 0XFF, MAKE VARIABLE FOR OTHER DACS
+    uint32_t dacRegister= (enableBitPercent*DAC_SIZE)/1000; 
 
    MCP48FV_Write(cmdCreator(DAC0_REGISTER_ADDRESS, DAC_WRITE_CMD,0,dacRegister)); // CHANGE TO ACCESS BOTH OUTPUTS
 
