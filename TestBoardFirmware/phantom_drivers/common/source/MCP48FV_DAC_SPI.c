@@ -25,12 +25,12 @@
 // init function, responsible for initializing MiBspi
 bool MCP48FV_Init(){
     mibspiInit();
-    MCP48FV_Set_Value(0);        //500 = 5.00V, 250 = 2.5V  Can set this value to any default
+    MCP48FV_Set_Value(0);        //500 = 5.00V, 250 = 2.5V  Can set this value to any default. How to handle with new flexibility?
     return true;
 }
 
 
-// TO DO: CONFIGURE FOR DUAL VALUE ENTRY & DIFFERENT REGISTER SIZES
+// TO DO: CONFIGURE FOR DUAL VALUE ENTRY 
 // FIX PARAMETES, OVERLOAD FUNCTION
 /*Main DAC controller, configure to set the output voltage from 0-5VDC
  * use: targetVoltage= 500 = 5.00V, 251 = 2.51V
@@ -85,6 +85,6 @@ uint16_t readRegister (uint8_t registerAddress){
 uint16_t MCP48FV_Read(){
 
     uint16_t rxBuffer[10]={0};
-    mibspiGetData(DAC_SPI_PORT,0,rxBuffer);
+    mibspiGetData(DAC_SPI_PORT,0,rxBuffer); // NEED TO CHANGE DAC_SPI_PORT
     return (rxBuffer[2]<<8+rxBuffer[1]<<8+rxBuffer[0]);
 }
