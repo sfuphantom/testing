@@ -23,6 +23,12 @@
 #define DAC_SIZE_12 0xFFF
 
 // OLD: DAC_SPI_PORT NEW: NEED PORT DEFINITIONS FOR EACH DIFFERENT DAC, PASS INTO FUNCTIONS
+#define APPS1_SPI_PORT "DAC 2 VOUT0"
+#define APPS2_SPI_PORT "DAC 2 VOUT1"
+#define BSE_SPI_PORT "DAC 1 VOUT1"
+#define HV_CURR_SPI_PORT "DAC 1 VOUT0"
+#define BMS_TEMP_SPI_PORT "DAC 3 VOUT1"
+#define BMS_VOLT_SPI_PORT "DAC 3 VOUT0"
 
 // init function, responsible for initializing MiBspi
 bool MCP48FV_Init(){ 
@@ -31,7 +37,10 @@ bool MCP48FV_Init(){
     return true;
 }
 
-bool MCP48FV_Set_Value(uint16_t targetVoltage1, uint16_t targetVoltage2, uint16_t DAC_SIZE){
+/* Main DAC controller, configure to set both output voltages from 0-5VDC
+ * use: targetVoltage= 500 = 5.00V, 251 = 2.51V
+*/
+bool MCP48FV_Set_Value(uint16_t targetVoltage1, uint16_t targetVoltage2, uint16_t DAC_SIZE){ //pass in spi port somehow
     if(targetVoltage1>496) // why this value? why not 500 (equivalent to 5V)?
    {
        targetVoltage1 = 496;
@@ -52,7 +61,7 @@ bool MCP48FV_Set_Value(uint16_t targetVoltage1, uint16_t targetVoltage2, uint16_
     return true;
 }
 
-/*Main DAC controller, configure to set the output voltage from 0-5VDC
+/* Main DAC controller, configure to set a single output voltage from 0-5VDC
  * use: targetVoltage= 500 = 5.00V, 251 = 2.51V
 */
 bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t DAC_SIZE, uint8_t dacVout){

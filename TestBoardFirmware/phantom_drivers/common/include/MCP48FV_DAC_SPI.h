@@ -15,8 +15,6 @@
 #include <halcogen_vcu/include/mibspi.h> // CHANGE PATH FOR TEST BOARD
 #include "stdbool.h"
 
-// INCLUDE OVERLOADED FUNCTION HEADERS, AND ANY EXTRA FUNCTIONS, THERES 2 WRITE DECLARATIONS
-// FIX PARAMETERS FOR DIFFERENT SIZES OF DAC
 bool MCP48FV_Init();
 
 bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t DAC_SIZE, uint8_t dacVout);
