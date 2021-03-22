@@ -8,14 +8,16 @@
 #include "apps.h"
 #include "hwConfig.h"
 #include "MCP48FV_DAC_SPI.c"
+#include "stdlib.h"
+#include "time.h"
 
 #define APPS1_MAX 440
 #define APPS1_MIN 150
 #define APPS2_MAX 150
 #define APPS2_MIN 50
-#define APPS1_OPEN 500
-#define APPS2_OPEN 330
-#define APPS_SHORT 0
+#define APPS1_SHORT 500
+#define APPS2_OPEN 0
+#define APPS_SHORT 330
 
 enum
 {
@@ -25,7 +27,6 @@ enum
     APPS_OPEN_CIRCUIT,
     APPS_BSE_ACTIVATED, // APPS sensor indicates >25% activation while BSE applied
     APPS_BSE_DEACTIVATED, // after APPS & BSE applied, power returns after APPS registers <5% activation
-    APPS_OUT_OF_RANGE, //values outside normal operating range, but not an open or short circuit, for more than 100ms
     APPS_SWEEP
 };
 
@@ -36,7 +37,6 @@ static void apps_open_circuit();
 static void apps_short_circuit();
 static void apps_bse_activated();
 static void apps_bse_deactivated();
-static void apps_out_of_range();
 static void apps_sweep();
 
 void apps_process(uint8_t state)
@@ -57,9 +57,6 @@ void apps_process(uint8_t state)
             break;
         case APPS_BSE_DEACTIVATED:
             apps_bse_deactivated();
-            break;
-        case APPS_OUT_OF_RANGE:
-            apps_out_of_range();
             break;
         case APPS_SWEEP:
             apps_sweep();
@@ -84,18 +81,46 @@ static void apps_implausibility()
 {
     // both APPS sensors operate between X(MIN) and X(MAX) range
     // APPS sensors indicate >10% difference in values 
+
+    return;
 }
 
-static void apps_short_circuit() // must do so either sensor, or both! -> rand num generator
+static void apps_short_circuit() 
 {
-    // one or both APPS sensors indicate short circuit (5V)
-    // both APPS sensor values within 10% of each other
+    uint_32 srand(time());
+    apps_select=rand()%3;
+    switch(apps_select){
+        case 0:
+            MCP48FV_Set_Value(APPS1_MAX+5, APPS2_MAX-5, 8)
+            break;
+        case 1:
+            MCP48FV_Set_Value(APPS1_MAX-5, APPS2_MAX+5, 8)
+            break;
+        case 2:
+            MCP48FV_Set_Value(APPS1_MAX+5, APPS2_MAX+5, 8)
+            break;
+    }
+
+    return;
 }
 
 static void apps_open_circuit()
 {
-    // one or both APPS sensors indicate open circuit (0V)
-    // both APPS sensor values within 10% of each other
+    uint_32 srand(time());
+    apps_select=rand()%3;
+    switch(apps_select){
+        case 0:
+            MCP48FV_Set_Value(APPS1_MIN-5, APPS2_MIN+5, 8)
+            break;
+        case 1:
+            MCP48FV_Set_Value(APPS1_MIN+5, APPS2_MIN-5, 8)
+            break;
+        case 2:
+            MCP48FV_Set_Value(APPS1_MIN-5, APPS2_MIN-5, 8)
+            break;
+    }
+
+    return;
 }
 
 static void apps_bse_activated() // how should this one be handled? involves BSE values
@@ -113,15 +138,9 @@ static void apps_bse_deactivated()
     // both APPS sensors operate between X(MIN) and X(MAX) range
     // both APPS sensor values within 10% of each other
 }
-}
-
-static void apps_out_of_range()
-{
-    // one or both APPS sensors indicate voltage outside normal operating range (X(MIN) - X(MAX))
-    // both APPS sensor values within 10% of each other
-}
 
 static void apps_sweep()
 {
     //sweep test, check range of values
+    // loop through apps values in range, within 10% of each other
 }
