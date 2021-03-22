@@ -10,6 +10,7 @@
 #include "MCP48FV_DAC_SPI.c"
 #include "stdlib.h"
 #include "time.h"
+#include "dos.h"
 
 #define APPS1_MAX 440
 #define APPS1_MIN 150
@@ -35,6 +36,7 @@ static void apps_short_circuit();
 static void apps_bse_activated();
 static void apps_bse_deactivated();
 static void apps_sweep();
+uint16_t create_apps2_volt(uint16_t apps1_volt);
 
 void apps_process(uint8_t state)
 {
@@ -143,10 +145,15 @@ static void apps_bse_deactivated()
 static void apps_sweep()
 {
     for(uint16_t i=APPS1_MIN; i<=APPS1_MAX; i+=10){
-        uint16_t apps2_volt = 0; //set to 10% of apps1
+        uint16_t apps2_volt = create_apps2_volt(i);
         MCP48FV_Set_Value(i, apps2_volt, 8);
-        //delay of some sort
+        delay(1500);
     }
 
     return;
+}
+
+uint16_t create_apps2_volt(uint16_t apps1_volt){
+    uint16_t apps2_volt = (((apps1_volt-APPS1_MIN)/(APPS1_MAX-APPS1_MIN))*(APPS2_MAX-APPS2_MIN))+APPS2_MIN;
+    return apps2_volt;
 }
