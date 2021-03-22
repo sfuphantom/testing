@@ -78,8 +78,11 @@ static void normal_apps_operation()
 
 static void apps_implausibility()
 {
-    // both APPS sensors operate between X(MIN) and X(MAX) range
-    // APPS sensors indicate >10% difference in values 
+    // sets APPS values at midpoint of valid APPS range
+    uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
+    uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.15);
+
+    MCP48FV_Set_Value(apps1_volt, apps2_volt, 8);
 
     return;
 }
@@ -122,12 +125,14 @@ static void apps_open_circuit()
     return;
 }
 
-static void apps_bse_activated() // how should this one be handled? involves BSE values
+static void apps_bse_activated()
 {
-    // both APPS sensors indicate >25% activation
-    // both APPS sensors operate between X(MIN) and X(MAX) range
-    // both APPS sensor values within 10% of each other
-    // BSE sensor activated
+    // sets APPS values at midpoint of valid APPS range
+    // BSE activated within bse.c
+    uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
+    uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.0);
+
+    MCP48FV_Set_Value(apps1_volt, apps2_volt, 8);
 
     return;
 }
