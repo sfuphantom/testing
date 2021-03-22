@@ -7,6 +7,15 @@
 
 #include "apps.h"
 #include "hwConfig.h"
+#include "MCP48FV_DAC_SPI.c"
+
+#define APPS1_MAX 440
+#define APPS1_MIN 150
+#define APPS2_MAX 150
+#define APPS2_MIN 50
+#define APPS1_OPEN 500
+#define APPS2_OPEN 330
+#define APPS_SHORT 0
 
 enum
 {
@@ -63,8 +72,12 @@ void apps_process(uint8_t state)
 
 static void normal_apps_operation()
 {
-    // both APPS sensors operate between X(MIN) and X(MAX) range
-    // both APPS sensor values within 10% of each other
+    // sets APPS values at midpoint of valid APPS range
+    uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
+    uint16_t apps2_volt = ((APPS2_MAX-APPS2_MIN)/2)+APPS2_MIN; //how does the vcu calculate 10% tho
+
+    MCP48FV_Set_Value(apps1_volt, apps2_volt, 8);
+    return;
 }
 
 static void apps_implausibility()
@@ -73,7 +86,7 @@ static void apps_implausibility()
     // APPS sensors indicate >10% difference in values 
 }
 
-static void apps_short_circuit()
+static void apps_short_circuit() // must do so either sensor, or both! -> rand num generator
 {
     // one or both APPS sensors indicate short circuit (5V)
     // both APPS sensor values within 10% of each other
