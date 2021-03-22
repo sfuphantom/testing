@@ -11,15 +11,14 @@
 
 #define BSE_MAX 43
 #define BSE_MIN 15
-#define BSE_OPEN 500
-#define BSE_SHORT 0
+#define BSE_OPEN 0
+#define BSE_SHORT 500
 
 enum
 {
     NORMAL_BSE_OPERATION,
-    BSE_OPEN_CIRCUIT,
-    BSE_SHORT_CIRCUIT,
-    BSE_OUT_OF_RANGE, // values outside normal operating range, but not open or short for more than 100ms
+    BSE_OPEN_CIRCUIT, //0V reading
+    BSE_SHORT_CIRCUIT, //5V reading
     APPS_BSE_ACTIVATED, // APPS sensor indicates >25% activation while BSE applied
     APPS_BSE_DEACTIVATED, // after APPS & BSE applied, power returns after APPS registers <5% activation
     BSE_SWEEP
@@ -29,7 +28,6 @@ enum
 static void normal_bse_operation();
 static void bse_open_circuit();
 static void bse_short_circuit();
-static void bse_out_of_range();
 static void apps_bse_activated();
 static void apps_bse_deactivated();
 static void bse_sweep();
@@ -42,9 +40,6 @@ void bse_process(uint8_t state){
             break;
         case BSE_SHORT_CIRCUIT:
             bse_short_circuit();
-            break;
-        case BSE_OUT_OF_RANGE:
-            bse_out_of_range();
             break;
         case BSE_SWEEP:
             bse_sweep();
@@ -70,24 +65,31 @@ static void normal_bse_operation(){
 
 static void bse_open_circuit(){
     // bse sensor reads an open circuit (0V)
+    MCP48FV_Set_Value(BSE_OPEN, 8, VOUT1);
+    return;
 }
 
 static void bse_short_circuit(){
     // bse sensor reads a short circuit (5V)
-}
-
-static void bse_out_of_range(){
-    // bse sensor reads outside of normal operating range, but not a short or open circuit
+    MCP48FV_Set_Value(BSE_SHORT, 8, VOUT1);
+    return;
 }
 
 static void bse_sweep(){
+    // loops through values within a normal range
+    // how would this work though - can't have apps going over 25% with brakes
 
+    return;
 }
 
 static void apps_bse_activated(){
+    // how to handle this? includes apps values
 
+    return;
 }
 
 static void apps_bse_deactivated(){
+    // how to handle this? must be done after previous test, and apps values
 
+    return;
 }
