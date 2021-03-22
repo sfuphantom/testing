@@ -36,7 +36,7 @@ static void apps_short_circuit();
 static void apps_bse_activated();
 static void apps_bse_deactivated();
 static void apps_sweep();
-uint16_t create_apps2_volt(uint16_t apps1_volt);
+uint16_t create_apps2_volt(uint16_t apps1_volt, float difference);
 
 void apps_process(uint8_t state)
 {
@@ -70,7 +70,7 @@ static void normal_apps_operation()
 {
     // sets APPS values at midpoint of valid APPS range
     uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
-    uint16_t apps2_volt = ((APPS2_MAX-APPS2_MIN)/2)+APPS2_MIN; //how does the vcu calculate 10% tho
+    uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.0);
 
     MCP48FV_Set_Value(apps1_volt, apps2_volt, 8);
     return;
@@ -145,7 +145,7 @@ static void apps_bse_deactivated()
 static void apps_sweep()
 {
     for(uint16_t i=APPS1_MIN; i<=APPS1_MAX; i+=10){
-        uint16_t apps2_volt = create_apps2_volt(i);
+        uint16_t apps2_volt = create_apps2_volt(i, 1.0);
         MCP48FV_Set_Value(i, apps2_volt, 8);
         delay(1500);
     }
@@ -153,7 +153,8 @@ static void apps_sweep()
     return;
 }
 
-uint16_t create_apps2_volt(uint16_t apps1_volt){
-    uint16_t apps2_volt = (((apps1_volt-APPS1_MIN)/(APPS1_MAX-APPS1_MIN))*(APPS2_MAX-APPS2_MIN))+APPS2_MIN;
+// difference is the ratio difference between APPS values, 1 meaning 0% difference
+uint16_t create_apps2_volt(uint16_t apps1_volt, float difference){
+        uint16_t apps2_volt = (difference*((apps1_volt-APPS1_MIN)/(APPS1_MAX-APPS1_MIN))*(APPS2_MAX-APPS2_MIN))+APPS2_MIN;
     return apps2_volt;
 }
