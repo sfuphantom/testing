@@ -15,9 +15,6 @@
 #define APPS1_MIN 150
 #define APPS2_MAX 150
 #define APPS2_MIN 50
-#define APPS1_SHORT 500
-#define APPS2_OPEN 0
-#define APPS_SHORT 330
 
 enum
 {
@@ -87,7 +84,7 @@ static void apps_implausibility()
 
 static void apps_short_circuit() 
 {
-    uint_32 srand(time());
+    uint32_t srand(time());
     apps_select=rand()%3;
     switch(apps_select){
         case 0:
@@ -129,6 +126,8 @@ static void apps_bse_activated() // how should this one be handled? involves BSE
     // both APPS sensors operate between X(MIN) and X(MAX) range
     // both APPS sensor values within 10% of each other
     // BSE sensor activated
+
+    return;
 }
 
 static void apps_bse_deactivated()
@@ -137,10 +136,17 @@ static void apps_bse_deactivated()
     // both APPS sensors indicate <5% activation
     // both APPS sensors operate between X(MIN) and X(MAX) range
     // both APPS sensor values within 10% of each other
+
+    return;
 }
 
 static void apps_sweep()
 {
-    //sweep test, check range of values
-    // loop through apps values in range, within 10% of each other
+    for(uint16_t i=APPS1_MIN; i<=APPS1_MAX; i+=10){
+        uint16_t apps2_volt = 0; //set to 10% of apps1
+        MCP48FV_Set_Value(i, apps2_volt, 8);
+        //delay of some sort
+    }
+
+    return;
 }
