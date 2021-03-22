@@ -7,6 +7,12 @@
 
 #include "bse.h"
 #include "hwConfig.h"
+#include "MCP48FV_DAC_SPI.c"
+
+#define BSE_MAX 43
+#define BSE_MIN 15
+#define BSE_OPEN 500
+#define BSE_SHORT 0
 
 enum
 {
@@ -56,7 +62,10 @@ void bse_process(uint8_t state){
 }
 
 static void normal_bse_operation(){
-    // bse sensor reads values between X(MIN) and X(MAX)
+    // sets BSE value at midpoint of operating range
+    uint16_t bse_volt = ((BSE_MAX-BSE_MIN)/2)+BSE_MIN;
+    MCP48FV_Set_Value(bse_volt, 8, VOUT1);
+    return;
 }
 
 static void bse_open_circuit(){
@@ -80,5 +89,5 @@ static void apps_bse_activated(){
 }
 
 static void apps_bse_deactivated(){
-    
+
 }
