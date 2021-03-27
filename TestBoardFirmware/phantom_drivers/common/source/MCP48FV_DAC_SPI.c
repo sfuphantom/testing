@@ -36,7 +36,9 @@
 // Function responsible for initializing MiBspi
 bool MCP48FV_Init(){ 
     mibspiInit();
-    MCP48FV_Set_Value(0);                                         // ADAPT TO NEW FUNCTION PARAMS
+    MCP48FV_Set_Value(0, 0, 0xFF, 0);
+    MCP48FV_Set_Value(0, 0, 0xFF, 1);
+    MCP48FV_Set_Value(0, 0, 0x3ff, 2)
     return true;
 }
 
