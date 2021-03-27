@@ -22,6 +22,11 @@
 #define DAC_SIZE_10 0x3FF
 #define DAC_SIZE_12 0xFFF
 
+// transfer groups - add to hwConfig.h
+#define TRANSFERGROUP_APPS 0
+#define TRANSFERGROUP_BSE_HV 1
+#define TRANSFERGROUP_BMS 2
+
 // OLD: DAC_SPI_PORT NEW: NEED PORT DEFINITIONS FOR EACH DIFFERENT DAC, PASS INTO FUNCTIONS
 #define APPS1_SPI_PORT "DAC 2 VOUT0"
 #define APPS2_SPI_PORT "DAC 2 VOUT1"
@@ -40,7 +45,7 @@ bool MCP48FV_Init(){
 /* Main DAC controller, configure to set both output voltages from 0-5VDC
  * use: targetVoltage= 500 = 5.00V, 251 = 2.51V
 */
-bool MCP48FV_Set_Value(uint16_t targetVoltage1, uint16_t targetVoltage2, uint16_t DAC_SIZE){ //pass in spi port somehow
+bool MCP48FV_Set_Value(uint16_t targetVoltage1, uint16_t targetVoltage2, uint16_t DAC_SIZE, uint32_t transfer_group){ //pass in spi port somehow
     if(targetVoltage1>496) // why this value? why not 500 (equivalent to 5V)?
    {
        targetVoltage1 = 496;
@@ -64,7 +69,7 @@ bool MCP48FV_Set_Value(uint16_t targetVoltage1, uint16_t targetVoltage2, uint16_
 /* Main DAC controller, configure to set a single output voltage from 0-5VDC
  * use: targetVoltage= 500 = 5.00V, 251 = 2.51V
 */
-bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t DAC_SIZE, uint8_t dacVout){
+bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t DAC_SIZE, uint8_t dacVout, uint32_t transfer_group){
 
    if(targetVoltage>496) // why this value? why not 500 (equivalent to 5V)?
    {
@@ -73,7 +78,7 @@ bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t DAC_SIZE, uint8_t dacVou
     uint32_t enableBitPercent= ((targetVoltage)*1000)/(DAC_HIGHEST_VOLTAGE*100);
     uint32_t dacData= (enableBitPercent*DAC_SIZE)/1000; 
 
-   MCP48FV_Write(cmdCreator(dacVout, DAC_WRITE_CMD,0,dacData));
+   MCP48FV_Write(cmdCreator(dacVout, DAC_WRITE_CMD,0,dacData), transfer_group);
 
     return true;
 }
@@ -85,7 +90,7 @@ uint32_t cmdCreator(uint8_t address, uint8_t cmdReadWrite, uint8_t cmderr, uint1
 
 // TO DO: ADAPT FOR ABILITY TO USE MULTIPLE DACS: (DAC_SPI_PORT WILL BE DIFFERENT HERE)
 //responsible for transmitting SPI command
-bool MCP48FV_Write(uint32_t cmdString){
+bool MCP48FV_Write(uint32_t cmdString, uint32_t transfer_group){ 
 
 //    uint8_t cmdSPI1= cmdString; // debug
 //    uint8_t cmdSPI2= (cmdString>>8);
@@ -93,9 +98,9 @@ bool MCP48FV_Write(uint32_t cmdString){
 
 //
     uint16_t txbuffer[]={(uint8_t) (cmdString>>16),(uint8_t) (cmdString>>8),(uint8_t) (cmdString>>0)};
-    mibspiSetData(DAC_SPI_PORT,0,txbuffer); // CHANGE SO THAT PORT CAN BE ADAPTED FOR MULTIPLE PORTS
-    mibspiTransfer(DAC_SPI_PORT,0);
-    while(!(mibspiIsTransferComplete(DAC_SPI_PORT,0))); // need a timeout
+    mibspiSetData(DAC_SPI_PORT, transfer_group,txbuffer); // CHANGE SO THAT PORT CAN BE ADAPTED FOR MULTIPLE PORTS
+    mibspiTransfer(DAC_SPI_PORT,transfer_group);
+    while(!(mibspiIsTransferComplete(DAC_SPI_PORT,transfer_group))); // need a timeout
     // start a timer, don't use a while loop forever
 
     return true;
@@ -103,16 +108,16 @@ bool MCP48FV_Write(uint32_t cmdString){
 }
 
 //return register data from specific register
-uint16_t readRegister (uint8_t registerAddress){
+uint16_t readRegister (uint8_t registerAddress, uint32_t transfer_group){
 
-    MCP48FV_Write(cmdCreator(registerAddress,DAC_READ_CMD,0,0));
-    return  MCP48FV_Read() % (1<<12);
+    MCP48FV_Write(cmdCreator(registerAddress,DAC_READ_CMD,0,0), uint32_t transfer_group);
+    return  MCP48FV_Read(transfer_group) % (1<<12);
 }
 
 //receive data from MCP48FV
-uint16_t MCP48FV_Read(){
+uint16_t MCP48FV_Read(uint32_t transfer_group){
 
     uint16_t rxBuffer[10]={0};
-    mibspiGetData(DAC_SPI_PORT,0,rxBuffer); // NEED TO CHANGE DAC_SPI_PORT
+    mibspiGetData(DAC_SPI_PORT,transfer_group,rxBuffer); // NEED TO CHANGE DAC_SPI_PORT
     return (rxBuffer[2]<<8+rxBuffer[1]<<8+rxBuffer[0]);
 }
