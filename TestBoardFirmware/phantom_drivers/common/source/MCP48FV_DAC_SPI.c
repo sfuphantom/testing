@@ -15,24 +15,6 @@
 
 #define CMDERR 0
 
-// in some kind of definitions lib/file?
-#define DAC_SIZE_8 0xFF
-#define DAC_SIZE_10 0x3FF
-#define DAC_SIZE_12 0xFFF
-
-// transfer groups - add to hwConfig.h
-#define TRANSFERGROUP_APPS 0
-#define TRANSFERGROUP_BSE_HV 1
-#define TRANSFERGROUP_BMS 2
-
-// output lines OF components
-#define APPS1_SPI_VOUT 0
-#define APPS2_SPI_VOUT 1
-#define BSE_SPI_VOUT 1
-#define HV_CURR_SPI_VOUT 0
-#define BMS_TEMP_SPI_VOUT 1
-#define BMS_VOLT_SPI_VOUT 0
-
 // Function responsible for initializing MiBspi
 bool MCP48FV_Init(){ 
     mibspiInit();
