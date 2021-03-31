@@ -21,6 +21,11 @@ enum
 
 // Static function prototypes
 static void normal_hv_vs_operation();
+static void hv_vs_both_bounds();
+static void hv_vs_out_of_range();
+static void hv_vs_both_bounds();
+static void hv_vs_at_zero();
+static void hv_vs_sweep();
 
 void hv_vs_process(uint8_t state)
 {
@@ -48,6 +53,7 @@ static int getADCdigital(int battery_voltage)
 {
    int output_voltage;
    // convert accumulator voltage to ADC output in floating form
+   // convert accumulator voltage to ADC output in integer form
    if (battery_voltage >=144){
        output_voltage = ((battery_voltage *(4.99/479.99))-1.5)*8.2/2.048*2^12;
    }
@@ -111,6 +117,7 @@ static void hv_vs_at_zero()
 }
 
 static void HV_VS_SWEEP()
+static void hv_vs_sweep()
 {
     //Sweep test with 1V increment from 125V to 168V
     int input_voltage = 125;
