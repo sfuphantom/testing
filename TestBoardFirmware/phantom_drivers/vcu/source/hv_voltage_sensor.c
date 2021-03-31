@@ -12,6 +12,7 @@
 # define START_INDEX    (1u)
 
 static uint8 binaryNum[12];
+static uint16_t ADC_output;
 
 enum
 {
@@ -26,6 +27,7 @@ enum
 static void normal_hv_vs_operation();
 
 void hv_cs_process(uint8_t state)
+void hv_vs_process(uint8_t state)
 {
     switch(state)
     {
@@ -49,10 +51,13 @@ void hv_cs_process(uint8_t state)
 
 
 static float (int battery_voltage)
+static int getADCdigital(int battery_voltage)
 {
    float output_voltage;
+   int output_voltage;
    // convert accumulator voltage to ADC output in floating form
    if (battery_voltage >=0){
+   if (battery_voltage >=144){
        output_voltage = ((battery_voltage *(4.99/479.99))-1.5)*8.2/2.048*2^12;
    }
    else if {
@@ -91,6 +96,7 @@ static void extract12bits(int n)
             binaryNum[idx] = 0;
         }
     }
+   return output_voltage
 }
 
 void getADCdigital(int input)
@@ -111,6 +117,14 @@ static void normal_hv_vs_operation()
 static void hv_vs_both_bounds()
 {
     // HV_VS indicate 125V and 168V
+    //sending lower bound voltage of 125
+    ADC_output = getADCdigital(125)
+    TX_ADS7044_Slave[1] = ADC_output;
+        
+    //wait for some time after sending first data?
+    //sending upper bound voltage of 168
+    ADC_output = getADCdigital(168)
+    TX_ADS7044_Slave[1] = ADC_output;
 }
 
 static void hv_vs_out_of_range()
