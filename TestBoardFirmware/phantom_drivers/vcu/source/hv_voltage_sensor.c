@@ -150,4 +150,11 @@ static void hv_vs_at_zero()
 static void HV_VS_SWEEP()
 {
     // Sweep test checking range of values
+    //Sweep test with 1V increment from 125V to 168V
+    int input_voltage = 125;
+    while(input_voltage <=168)
+        ADC_output = getADCdigital(120)
+        TX_ADS7044_Slave[1] = 0;
+        //time delay?
+        input_voltage += 1;
 }
