@@ -130,6 +130,15 @@ static void hv_vs_both_bounds()
 static void hv_vs_out_of_range()
 {
     // HV_VS operate outside normal operating range between 125V and 168V
+    // HV_VS doesn't operate outside normal operating range between 125V and 168V
+    //sending ADC output voltage below the lower bound voltage
+    ADC_output = getADCdigital(120)
+    TX_ADS7044_Slave[1] = ADC_output;
+           
+    //wait for some time after sending first data?
+    //sending ADC output voltage above the upper bound voltage
+    ADC_output = getADCdigital(170)
+    TX_ADS7044_Slave[1] = ADC_output;
 }
 
 static void hv_vs_at_zero()
