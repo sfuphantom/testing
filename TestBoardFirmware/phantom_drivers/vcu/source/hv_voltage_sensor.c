@@ -68,6 +68,13 @@ static void normal_hv_vs_operation()
 {
     // HV_VS operate between 125V and 168V range
     
+    // HV_VS operate between 123V and 168V range
+        int current_voltage = 123;
+        while(input_voltage <=168)
+            ADC_output = getADCdigital(120)
+            TX_ADS7044_Slave[1] = 0;
+            //time delay?
+            current_voltage += 5;
 }
 
 static void hv_vs_both_bounds()
