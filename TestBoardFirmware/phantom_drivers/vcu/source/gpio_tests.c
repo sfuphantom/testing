@@ -20,6 +20,15 @@
 // #define READY_TO_DRIVE_PORT   gioPORTA
 // #define READY_TO_DRIVE_PIN    2
 
+//TODO: Setup in halcogen
+		// - RTD signal/buzzer
+		// - Shutdown GPIOs/HETs: IMD,BMS,BSPD
+
+// Figure out how to use TSAL and BSE drivers here 
+
+//Add Shutdown Tests...and other GPIOs
+
+
 // #include "hwConfig.h"
 #include "gpio_tests.h"
 
@@ -68,13 +77,23 @@ void gpio_process(uint8_t state)
 }
 
 /*
-* Fn: normal_imd_operation
+* Fn: rtd_normal_procedure
 * Purpose: Sends and holds GPIO signal '1' to TSAL then to BSE then to RTD *may need timer/delays?*
-* Resulting State: RUNNING   
+* Resulting State: RUNNING, Expect RTD buzzer HIGH   
 */
 static void rtd_normal_procedure()
 {
-        
+ 	//turn TSAL ON 
+
+	//delay?
+
+	//send bse signal ON
+
+	//delay?
+
+	//finally, send RTD signal 
+
+
 }
 
 /*
@@ -85,7 +104,12 @@ static void rtd_normal_procedure()
 static void rtd_latch_test()
 { 
 
-	
+	//RTD procedure 
+
+	//delay?
+
+	//turn off RTD signal 
+
 }
 
 /*
@@ -95,6 +119,16 @@ static void rtd_latch_test()
 */
 static void rtd_inorder_test()
 {
-    
+
+	//send RTD signal 
+
+	//delay?
+
+	//send bse signal ON
+
+	//delay?
+
+	//finally, turn on TSAL
+
 }
 

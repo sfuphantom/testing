@@ -11,6 +11,7 @@
 
 #include "stdint.h"
 
+void gpio_init();
 
 void gpio_process(uint8_t state);
 
