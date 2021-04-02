@@ -78,6 +78,10 @@ static void bse_short_circuit(){
 static void bse_sweep(){
     // loops through values within a normal range
     // how would this work though - can't have apps going over 25% with brakes
+    for(uint16_t i=BSE_MIN; i<=BSE_MAX; i+=10){
+        MCP48FV_Set_Value(i, 8, VOUT1, 1);
+        delay(1500);
+    }
 
     return;
 }
