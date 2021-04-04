@@ -6,7 +6,7 @@
  *      Author: Rafael Guevara
  */
 
-//Pins
+//Pins (from hwConfig.h)
 // #define SHUTDOWN_CIRCUIT_PORT gioPORTA
 // #define BMS_FAULT_PIN         7 
 // #define IMD_FAULT_PIN         6 
@@ -24,21 +24,20 @@
 		// - RTD signal/buzzer
 		// - Shutdown GPIOs/HETs: IMD,BMS,BSPD
 
-// Figure out how to use TSAL and BSE drivers here 
+//Figure out how to use TSAL and BSE drivers here 
 
 //Add Shutdown Tests...and other GPIOs
 
 
-// #include "hwConfig.h"
+// #include "hwConfig.h" (merge with hwConfig branch first)
 #include "gpio_tests.h"
 
-
-enum operation 
+typedef enum operation
 {
     RTD_NORMAL_PROCEDURE //Get VCU to state RUNNING
     RTD_LATCH,  //Simulate RTD procedure -> turn off RTD
     RTD_INORDER, //Reverse order of RTD procedure
-};
+}operation;
 
 // Static function definitions
 static void rtd_normal_procedure();
@@ -51,11 +50,11 @@ void gpio_init(){
 
 }
 
-void gpio_process(uint8_t state)
+void gpio_process(operation testcase)
 {
-    switch(state)
+    switch(testcase)
     {
-        case NORMAL_HV_VS_OPERATION:
+        case RTD_NORMAL_PROCEDURE:
             
             rtd_normal_procedure();
 
