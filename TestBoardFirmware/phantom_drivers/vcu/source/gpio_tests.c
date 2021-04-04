@@ -34,10 +34,10 @@
 
 typedef enum operation
 {
-    RTD_NORMAL_PROCEDURE //Get VCU to state RUNNING
+    RTD_NORMAL_PROCEDURE, //Get VCU to state RUNNING
     RTD_LATCH,  //Simulate RTD procedure -> turn off RTD
     RTD_INORDER, //Reverse order of RTD procedure
-}operation;
+} operation;
 
 // Static function definitions
 static void rtd_normal_procedure();
