@@ -27,7 +27,13 @@ int main(void)
 
     res = initUARTandModeHandler(&testBoardState);
 
-    // TODO: Interrupt based wait to get test mode
+    // TODO: Interrupt based wait to get test mode from PC
+//    while(!initGUI) need a way to know where start and end of message is (startbyte..,.,..endbyte)
+
+    //parse JSON and set states
+
+
+    //determine the expected state of VCU/BMS
 
     while(1)
     {
@@ -59,7 +65,13 @@ int main(void)
         }
 
         delayms(5000);
+
+
+        //validate test cases
+
     }
+
+    //process functions for constant output vs variable output
 }
 
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
@@ -77,10 +89,13 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     return SUCCESS;
 }
 
+//pass timer ptr to each pointer peripheral. timer to periodically call test function you want
+//inner state machines for each BMS peripheral and three outer state machines -Meeting with Amneet
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr)
 {
     Result_t ret = FAIL;
 
+    //set voltage at a specific rate; eg simulate discharge cycle (every 50 ms decrease output voltage; looks like step function)
     ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
 
     if(ret != SUCCESS)
@@ -89,6 +104,7 @@ static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *time
         return FAIL;
     }
 
+    //thermistor expansion is interrupt based; BMS needs to ask for the values else it would ignore
     ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
 
     if(ret != SUCCESS)
@@ -97,6 +113,7 @@ static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *time
         return FAIL;
     }
 
+    //BMS/VCU expects to receive messages from system every ...ms
     ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
 
     if(ret == FAIL)
@@ -110,6 +127,8 @@ static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *time
 
 static void vcu_mode_process(TestBoardState_t *stateptr)
 {
+
+    //eg Constant outputs don't need periodic timers should
 
 }
 

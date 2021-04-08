@@ -38,8 +38,8 @@ enum BMSPeripheralPosition
 
 typedef struct
 {
-  TestBoardModes_t testMode;
-  uint8_t peripheralStateArray[10];
+  TestBoardModes_t testMode; //BMS/VCU mode
+  uint8_t peripheralStateArray[10]; //holds test to run
 } TestBoardState_t;
 
 
