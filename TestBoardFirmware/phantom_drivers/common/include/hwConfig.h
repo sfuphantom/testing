@@ -12,7 +12,7 @@
 
 /***************  VCU PINS  *********************/
 
-/*********   SHUTDOWN/RTD GPIO   ****************/
+/*********   SHUTDOWN/RTD GPIO   ****************/ //(gioGetBit)
 #define SHUTDOWN_CIRCUIT_PORT gioPORTA
 #define BMS_FAULT_PIN         7 
 #define IMD_FAULT_PIN         6 
