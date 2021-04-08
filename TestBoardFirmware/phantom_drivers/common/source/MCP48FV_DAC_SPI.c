@@ -27,23 +27,23 @@ bool MCP48FV_Init(){
 /*  Main DAC controllers, configure to set output voltage(s) from 0-5VDC
  *  Example Use: targetVoltage = 500 for 5.00V, 251 = 2.51V
 */
-bool MCP48FV_Set_Value(uint16_t targetVoltage1, uint16_t targetVoltage2, uint16_t dac_size, uint32_t transfer_group){ 
+bool MCP48FV_Set_Value_Double(uint16_t targetVoltage1, uint16_t targetVoltage2, uint16_t dac_size, uint32_t transfer_group){ 
 
     targetVoltage1 = (targetVoltage1>496) ? 496 : targetVoltage1;
     targetVoltage2 = (targetVoltage2>496) ? 496 : targetVoltage2;
 
     uint32_t enableBitPercent1= ((targetVoltage1)*1000)/(DAC_HIGHEST_VOLTAGE*100);
     uint32_t dacData1= (enableBitPercent1*dac_size)/1000; 
-    MCP48FV_Write(cmdCreator(DAC0_REGISTER_ADDRESS, DAC_WRITE_CMD, CMDERR, dacData1)); 
+    MCP48FV_Write(cmdCreator(DAC0_REGISTER_ADDRESS, DAC_WRITE_CMD, CMDERR, dacData1), transfer_group); 
 
     uint32_t enableBitPercent2= ((targetVoltage2)*1000)/(DAC_HIGHEST_VOLTAGE*100);
     uint32_t dacData2= (enableBitPercent2*dac_size)/1000; 
-    MCP48FV_Write(cmdCreator(DAC1_REGISTER_ADDRESS, DAC_WRITE_CMD, CMDERR, dacData2)); 
+    MCP48FV_Write(cmdCreator(DAC1_REGISTER_ADDRESS, DAC_WRITE_CMD, CMDERR, dacData2), transfer_group); 
 
     return true;
 }
 
-bool MCP48FV_Set_Value(uint16_t targetVoltage, uint16_t dac_size, uint8_t dacVout, uint32_t transfer_group){
+bool MCP48FV_Set_Value_Single(uint16_t targetVoltage, uint16_t dac_size, uint8_t dacVout, uint32_t transfer_group){
 
     targetVoltage = (targetVoltage>496) ? 496 : targetVoltage;
 
