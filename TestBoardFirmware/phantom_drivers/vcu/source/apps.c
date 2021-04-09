@@ -72,7 +72,7 @@ static void normal_apps_operation()
     uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
     uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.0);
 
-    MCP48FV_Set_Value(apps1_volt, apps2_volt, 8, 0);
+    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, 8, 0);
     return;
 }
 
@@ -82,7 +82,7 @@ static void apps_implausibility()
     uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
     uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.15);
 
-    MCP48FV_Set_Value(apps1_volt, apps2_volt, 8, 0);
+    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, 8, 0);
 
     return;
 }
@@ -93,13 +93,13 @@ static void apps_short_circuit()
     apps_select=rand()%3;
     switch(apps_select){
         case 0:
-            MCP48FV_Set_Value(APPS1_MAX+5, APPS2_MAX-5, 8, 0);
+            MCP48FV_Set_Value_Double(APPS1_MAX+5, APPS2_MAX-5, 8, 0);
             break;
         case 1:
-            MCP48FV_Set_Value(APPS1_MAX-5, APPS2_MAX+5, 8, 0);
+            MCP48FV_Set_Value_Double(APPS1_MAX-5, APPS2_MAX+5, 8, 0);
             break;
         case 2:
-            MCP48FV_Set_Value(APPS1_MAX+5, APPS2_MAX+5, 8, 0);
+            MCP48FV_Set_Value_Double(APPS1_MAX+5, APPS2_MAX+5, 8, 0);
             break;
     }
 
@@ -112,13 +112,13 @@ static void apps_open_circuit()
     apps_select=rand()%3;
     switch(apps_select){
         case 0:
-            MCP48FV_Set_Value(APPS1_MIN-5, APPS2_MIN+5, 8, 0);
+            MCP48FV_Set_Value_Double(APPS1_MIN-5, APPS2_MIN+5, 8, 0);
             break;
         case 1:
-            MCP48FV_Set_Value(APPS1_MIN+5, APPS2_MIN-5, 8, 0);
+            MCP48FV_Set_Value_Double(APPS1_MIN+5, APPS2_MIN-5, 8, 0);
             break;
         case 2:
-            MCP48FV_Set_Value(APPS1_MIN-5, APPS2_MIN-5, 8, 0);
+            MCP48FV_Set_Value_Double(APPS1_MIN-5, APPS2_MIN-5, 8, 0);
             break;
     }
 
@@ -132,7 +132,7 @@ static void apps_bse_activated()
     uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
     uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.0);
 
-    MCP48FV_Set_Value(apps1_volt, apps2_volt, 8, 0);
+    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, 8, 0);
 
     return;
 }
@@ -151,8 +151,8 @@ static void apps_sweep()
 {
     for(uint16_t i=APPS1_MIN; i<=APPS1_MAX; i+=10){
         uint16_t apps2_volt = create_apps2_volt(i, 1.0);
-        MCP48FV_Set_Value(i, apps2_volt, 8, 0);
-        delay(1500);
+        MCP48FV_Set_Value_Double(i, apps2_volt, 8, 0);
+        delay(1500); //use timer instead
     }
 
     return;
