@@ -59,19 +59,19 @@ void bse_process(uint8_t state){
 static void normal_bse_operation(){
     // sets BSE value at midpoint of operating range
     uint16_t bse_volt = ((BSE_MAX-BSE_MIN)/2)+BSE_MIN;
-    MCP48FV_Set_Value(bse_volt, 8, VOUT1, 1);
+    MCP48FV_Set_Value_Single(bse_volt, 8, VOUT1, 1);
     return;
 }
 
 static void bse_open_circuit(){
     // bse sensor reads an open circuit (0V)
-    MCP48FV_Set_Value(BSE_OPEN, 8, VOUT1, 1);
+    MCP48FV_Set_Value_Single(BSE_OPEN, 8, VOUT1, 1);
     return;
 }
 
 static void bse_short_circuit(){
     // bse sensor reads a short circuit (5V)
-    MCP48FV_Set_Value(BSE_SHORT, 8, VOUT1, 1);
+    MCP48FV_Set_Value_Single(BSE_SHORT, 8, VOUT1, 1);
     return;
 }
 
@@ -79,8 +79,8 @@ static void bse_sweep(){
     // loops through values within a normal range
     // how would this work though - can't have apps going over 25% with brakes
     for(uint16_t i=BSE_MIN; i<=BSE_MAX; i+=10){
-        MCP48FV_Set_Value(i, 8, VOUT1, 1);
-        delay(1500);
+        MCP48FV_Set_Value_Single(i, 8, VOUT1, 1);
+        delay(1500); //use timer instead
     }
 
     return;
