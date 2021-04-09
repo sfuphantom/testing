@@ -136,3 +136,4 @@ void set_testboard_state(uint8_t *state_array, TestBoardModes_t mode)
 {
     memcpy(&testBoardState.peripheralStateArray[0], state_array, sizeof(*state_array));
     testBoardState.testMode = mode;
+}
