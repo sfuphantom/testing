@@ -48,8 +48,6 @@ void gpio_init(){
 
 	// initalize + configure pins
 
-    gioInit();
-
 }
 
 void gpio_process(operation testcase)
@@ -85,8 +83,6 @@ void gpio_process(operation testcase)
 static void rtd_normal_procedure()
 {
  	//turn TSAL ON 
-
-    gioSetBit(TSAL_ACTIVE_PORT,TSAL_PIN,1);
 
 	//delay?
 
