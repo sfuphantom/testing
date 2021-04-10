@@ -32,7 +32,6 @@ int main(void)
 
     //parse JSON and set states
 
-
     //determine the expected state of VCU/BMS
 
     while(1)
@@ -67,7 +66,8 @@ int main(void)
         delayms(5000);
 
 
-        //validate test cases
+        //validate test cases (through timer and send to PC)
+        //send a single pass/result to PC
 
     }
 
