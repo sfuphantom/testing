@@ -44,7 +44,7 @@ int main(void)
             }
             case BMS_MODE:
             {
-                res = bms_mode_process(&testBoardState);
+//                res = bms_mode_process(&testBoardState);
 
                 if(res != SUCCESS)
                 {
@@ -93,35 +93,32 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
 //inner state machines for each BMS peripheral and three outer state machines -Meeting with Amneet
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr)
 {
-    Result_t ret = FAIL;
-
-    //set voltage at a specific rate; eg simulate discharge cycle (every 50 ms decrease output voltage; looks like step function)
-    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
-
-    if(ret != SUCCESS)
-    {
-        UARTprintf("BMS SLAVE FAIL %d\n\r", ret);
-        return FAIL;
-    }
-
-    //thermistor expansion is interrupt based; BMS needs to ask for the values else it would ignore
-    ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
-
-    if(ret != SUCCESS)
-    {
-        UARTprintf("THERMISTOR FAIL %d\n\r", ret);
-        return FAIL;
-    }
-
-    //BMS/VCU expects to receive messages from system every ...ms
-    ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
-
-    if(ret == FAIL)
-    {
-        UARTprintf("CAN COMMUNICATIONS FAIL %d\n\r", ret);
-        return FAIL;
-    }
-
+//    Result_t ret = FAIL;
+//
+//    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
+//
+//    if(ret != SUCCESS)
+//    {
+//        UARTprintf("BMS SLAVE FAIL %d\n\r", ret);
+//        return FAIL;
+//    }
+//
+//    ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
+//
+//    if(ret != SUCCESS)
+//    {
+//        UARTprintf("THERMISTOR FAIL %d\n\r", ret);
+//        return FAIL;
+//    }
+//
+//    ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
+//
+//    if(ret == FAIL)
+//    {
+//        UARTprintf("CAN COMMUNICATIONS FAIL %d\n\r", ret);
+//        return FAIL;
+//    }
+//
     return SUCCESS;
 }
 

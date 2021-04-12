@@ -8,15 +8,17 @@
 #ifndef PHANTOM_DRIVERS_INCLUDE_HWCONFIG_H_
 #define PHANTOM_DRIVERS_INCLUDE_HWCONFIG_H_
 
+
+
 /***************  VCU PINS  *********************/
 
-/*********   SHUTDOWN/RTD GPIO   ****************/
+/*********   SHUTDOWN/RTD GPIO   ****************/ //(gioGetBit)
 #define SHUTDOWN_CIRCUIT_PORT gioPORTA //configure in halcogen
-#define BMS_FAULT_PIN         7
-#define IMD_FAULT_PIN         6
+#define BMS_FAULT_PIN         7 
+#define IMD_FAULT_PIN         6 
 
 #define BSPD_PORT             hetPORT1 //configure in halcogen
-#define BSPD_FAULT_PIN        9
+#define BSPD_FAULT_PIN        9 
 
 #define RESET_PORT            hetPORT1 //configure in halcogen
 #define RESET_PIN             26
@@ -34,7 +36,7 @@
 
 /***************  TSAL GPIO  *********************/
 #define TSAL_PORT             gioPORTA //configure in halcogen
-#define TSAL_ACTIVE_PIN       5
+#define TSAL_ACTIVE_PIN       5 
 
 
 ///*********   HV CURRENT/VOLTAGE   ****************/
