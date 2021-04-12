@@ -1909,3 +1909,67 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product com.ti.ccstud
 
 !ENTRY com.ti.ccstudio.project.ui.webcontent 1 0 2021-04-10 17:32:07.348
 !MESSAGE CCS HTTP adapter started! [ccs.port:54407] - Open 'http://localhost:54407/ide' in web browser to see listing of available APIs...
+!SESSION 2021-04-11 20:20:51.179 -----------------------------------------------
+eclipse.buildId=4.8.0.I20180611-0500
+java.version=1.8.0_144
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_CA
+Framework arguments:  -product com.ti.ccstudio.branding.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product com.ti.ccstudio.branding.product
+
+!ENTRY org.eclipse.core.resources 2 10035 2021-04-11 20:20:54.608
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY com.ti.common.core 1 0 2021-04-11 20:20:54.672
+!MESSAGE path=ccs_base/DebugServer
+
+!ENTRY com.ti.common.core 1 0 2021-04-11 20:20:54.674
+!MESSAGE debugServerDir=C:/ti/ccs930/ccs/ccs_base/DebugServer
+
+!ENTRY org.eclipse.launchbar.core 2 0 2021-04-11 20:21:06.427
+!MESSAGE Enablement expression is missing for descriptor type org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2021-04-11 20:21:06.435
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2021-04-11 20:21:06.437
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY com.ti.ccstudio.ui 1 0 2021-04-11 20:21:06.684
+!MESSAGE CCS IDE session started!
+	CCS build: 9.3.0.00012
+	CCS location: C:/ti/ccs930/ccs
+	Workspace location: C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2021-04-11 20:21:06.911
+!MESSAGE constructor
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2021-04-11 20:21:06.913
+!MESSAGE done with directories
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2021-04-11 20:21:06.914
+!MESSAGE loading ti_logger
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2021-04-11 20:21:06.917
+!MESSAGE Platform os: win32
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2021-04-11 20:21:06.918
+!MESSAGE loading cToolsIF
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2021-04-11 20:21:06.924
+!MESSAGE loading cTools
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2021-04-11 20:21:06.927
+!MESSAGE loading TraceFactory
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2021-04-11 20:21:06.932
+!MESSAGE loading sqlite3
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2021-04-11 20:21:06.935
+!MESSAGE loading CloudTrace
+
+!ENTRY com.ti.dbgtrc.webapp.CloudTraceInterface 0 0 2021-04-11 20:21:06.948
+!MESSAGE CloudTrace interface loaded
+
+!ENTRY com.ti.ccstudio.project.ui.webcontent 1 0 2021-04-11 20:21:07.076
+!MESSAGE CCS HTTP adapter started! [ccs.port:56959] - Open 'http://localhost:56959/ide' in web browser to see listing of available APIs...
