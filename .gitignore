@@ -535,3 +535,4 @@
 .metadata/.plugins/org.eclipse.ui.ide/dialog_settings.xml
 .metadata/.plugins/org.eclipse.ui.workbench/dialog_settings.xml
 .metadata/.plugins/org.eclipse.ui.workbench/workingsets.xml
+/.metadata/
