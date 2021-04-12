@@ -39,7 +39,7 @@ int main(void)
             }
             case BMS_MODE:
             {
-                res = bms_mode_process(&testBoardState);
+//                res = bms_mode_process(&testBoardState);
 
                 if(res != SUCCESS)
                 {
@@ -79,32 +79,32 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
 
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr)
 {
-    Result_t ret = FAIL;
-
-    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
-
-    if(ret != SUCCESS)
-    {
-        UARTprintf("BMS SLAVE FAIL %d\n\r", ret);
-        return FAIL;
-    }
-
-    ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
-
-    if(ret != SUCCESS)
-    {
-        UARTprintf("THERMISTOR FAIL %d\n\r", ret);
-        return FAIL;
-    }
-
-    ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
-
-    if(ret == FAIL)
-    {
-        UARTprintf("CAN COMMUNICATIONS FAIL %d\n\r", ret);
-        return FAIL;
-    }
-
+//    Result_t ret = FAIL;
+//
+//    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
+//
+//    if(ret != SUCCESS)
+//    {
+//        UARTprintf("BMS SLAVE FAIL %d\n\r", ret);
+//        return FAIL;
+//    }
+//
+//    ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
+//
+//    if(ret != SUCCESS)
+//    {
+//        UARTprintf("THERMISTOR FAIL %d\n\r", ret);
+//        return FAIL;
+//    }
+//
+//    ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
+//
+//    if(ret == FAIL)
+//    {
+//        UARTprintf("CAN COMMUNICATIONS FAIL %d\n\r", ret);
+//        return FAIL;
+//    }
+//
     return SUCCESS;
 }
 
@@ -117,3 +117,4 @@ void set_testboard_state(uint8_t *state_array, TestBoardModes_t mode)
 {
     memcpy(&testBoardState.peripheralStateArray[0], state_array, sizeof(*state_array));
     testBoardState.testMode = mode;
+}
