@@ -27,7 +27,12 @@ int main(void)
 
     res = initUARTandModeHandler(&testBoardState);
 
-    // TODO: Interrupt based wait to get test mode
+    // TODO: Interrupt based wait to get test mode from PC
+//    while(!initGUI) need a way to know where start and end of message is (startbyte..,.,..endbyte)
+
+    //parse JSON and set states
+
+    //determine the expected state of VCU/BMS
 
     while(1)
     {
@@ -39,7 +44,7 @@ int main(void)
             }
             case BMS_MODE:
             {
-                res = bms_mode_process(&testBoardState);
+//                res = bms_mode_process(&testBoardState);
 
                 if(res != SUCCESS)
                 {
@@ -59,7 +64,14 @@ int main(void)
         }
 
         delayms(5000);
+
+
+        //validate test cases (through timer and send to PC)
+        //send a single pass/result to PC
+
     }
+
+    //process functions for constant output vs variable output
 }
 
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
@@ -77,39 +89,43 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     return SUCCESS;
 }
 
+//pass timer ptr to each pointer peripheral. timer to periodically call test function you want
+//inner state machines for each BMS peripheral and three outer state machines -Meeting with Amneet
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr)
 {
-    Result_t ret = FAIL;
-
-    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
-
-    if(ret != SUCCESS)
-    {
-        UARTprintf("BMS SLAVE FAIL %d\n\r", ret);
-        return FAIL;
-    }
-
-    ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
-
-    if(ret != SUCCESS)
-    {
-        UARTprintf("THERMISTOR FAIL %d\n\r", ret);
-        return FAIL;
-    }
-
-    ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
-
-    if(ret == FAIL)
-    {
-        UARTprintf("CAN COMMUNICATIONS FAIL %d\n\r", ret);
-        return FAIL;
-    }
-
+//    Result_t ret = FAIL;
+//
+//    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
+//
+//    if(ret != SUCCESS)
+//    {
+//        UARTprintf("BMS SLAVE FAIL %d\n\r", ret);
+//        return FAIL;
+//    }
+//
+//    ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
+//
+//    if(ret != SUCCESS)
+//    {
+//        UARTprintf("THERMISTOR FAIL %d\n\r", ret);
+//        return FAIL;
+//    }
+//
+//    ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
+//
+//    if(ret == FAIL)
+//    {
+//        UARTprintf("CAN COMMUNICATIONS FAIL %d\n\r", ret);
+//        return FAIL;
+//    }
+//
     return SUCCESS;
 }
 
 static void vcu_mode_process(TestBoardState_t *stateptr)
 {
+
+    //eg Constant outputs don't need periodic timers should
 
 }
 
@@ -117,3 +133,4 @@ void set_testboard_state(uint8_t *state_array, TestBoardModes_t mode)
 {
     memcpy(&testBoardState.peripheralStateArray[0], state_array, sizeof(*state_array));
     testBoardState.testMode = mode;
+}
