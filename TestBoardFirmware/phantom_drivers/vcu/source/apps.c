@@ -8,7 +8,6 @@
 #include "apps.h"
 #include "hwConfig.h"
 #include "MCP48FV_DAC_SPI.h"
-#include "stdlib.h"
 
 #define APPS1_MAX 440
 #define APPS1_MIN 150
