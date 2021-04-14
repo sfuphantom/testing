@@ -7,10 +7,8 @@
 
 #include "apps.h"
 #include "hwConfig.h"
-#include "MCP48FV_DAC_SPI.c"
+#include "MCP48FV_DAC_SPI.h"
 #include "stdlib.h"
-#include "time.h"
-#include "dos.h"
 
 #define APPS1_MAX 440
 #define APPS1_MIN 150
@@ -89,8 +87,8 @@ static void apps_implausibility()
 
 static void apps_short_circuit() 
 {
-    uint32_t srand(time());
-    apps_select=rand()%3;
+    //have something to determine which loopthrough its one in order to set which one is shorted
+    int apps_select= 0;
     switch(apps_select){
         case 0:
             MCP48FV_Set_Value_Double(APPS1_MAX+5, APPS2_MAX-5, 8, 0);
@@ -108,8 +106,8 @@ static void apps_short_circuit()
 
 static void apps_open_circuit()
 {
-    uint_32 srand(time());
-    apps_select=rand()%3;
+    //have something to determine which loop through it is to set which one is open 
+    int apps_select=0;
     switch(apps_select){
         case 0:
             MCP48FV_Set_Value_Double(APPS1_MIN-5, APPS2_MIN+5, 8, 0);
@@ -149,11 +147,7 @@ static void apps_bse_deactivated()
 
 static void apps_sweep()
 {
-    for(uint16_t i=APPS1_MIN; i<=APPS1_MAX; i+=10){
-        uint16_t apps2_volt = create_apps2_volt(i, 1.0);
-        MCP48FV_Set_Value_Double(i, apps2_volt, 8, 0);
-        delay(1500); //use timer instead
-    }
+
 
     return;
 }

@@ -7,12 +7,13 @@
 
 #include "bse.h"
 #include "hwConfig.h"
-#include "MCP48FV_DAC_SPI.c"
+#include "MCP48FV_DAC_SPI.h"
 
 #define BSE_MAX 43
 #define BSE_MIN 15
 #define BSE_OPEN 0
 #define BSE_SHORT 500
+#define VOUT1 1
 
 enum
 {
@@ -78,10 +79,6 @@ static void bse_short_circuit(){
 static void bse_sweep(){
     // loops through values within a normal range
     // how would this work though - can't have apps going over 25% with brakes
-    for(uint16_t i=BSE_MIN; i<=BSE_MAX; i+=10){
-        MCP48FV_Set_Value_Single(i, 8, VOUT1, 1);
-        delay(1500); //use timer instead
-    }
 
     return;
 }
