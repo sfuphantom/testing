@@ -16,7 +16,8 @@
 
 enum
 {
-    NORMAL_APPS_OPERATION,
+    NORMAL_APPS_ON,
+    NORMAL_APPS_OFF,
     APPS_IMPLAUSIBILITY,
     APPS_SHORT_CIRCUIT,
     APPS_OPEN_CIRCUIT,
@@ -26,7 +27,8 @@ enum
 };
 
 // Static function prototypes
-static void normal_apps_operation();
+static void normal_apps_on();
+static void normal_apps_off();
 static void apps_implausibility();
 static void apps_open_circuit();
 static void apps_short_circuit();
@@ -39,6 +41,9 @@ void apps_process(uint8_t state)
 {
     switch(state)
     {
+        case NORMAL_APPS_ON:
+            normal_apps_on();
+            break;
         case APPS_IMPLAUSIBILITY:
             apps_implausibility();
             break;
@@ -58,12 +63,17 @@ void apps_process(uint8_t state)
             apps_sweep();
             break;
         default: 
-            normal_apps_operation();
+            normal_apps_off();
             break;
     }
 }
 
-static void normal_apps_operation()
+static void normal_apps_off(){
+    MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN, 8, 0);
+    return;
+}
+
+static void normal_apps_on()
 {
     // sets APPS values at midpoint of valid APPS range
     uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
