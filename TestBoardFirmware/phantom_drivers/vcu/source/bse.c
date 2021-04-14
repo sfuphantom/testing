@@ -17,7 +17,8 @@
 
 enum
 {
-    NORMAL_BSE_OPERATION,
+    NORMAL_BSE_OFF,
+    NORMAL_BSE_ON,
     BSE_OPEN_CIRCUIT, //0V reading
     BSE_SHORT_CIRCUIT, //5V reading
     APPS_BSE_ACTIVATED, // APPS sensor indicates >25% activation while BSE applied
@@ -26,7 +27,8 @@ enum
 };
 
 // Static function prototypes
-static void normal_bse_operation();
+static void normal_bse_off();
+static void normal_bse_on();
 static void bse_open_circuit();
 static void bse_short_circuit();
 static void apps_bse_activated();
@@ -36,6 +38,9 @@ static void bse_sweep();
 void bse_process(uint8_t state){
     switch(state)
     {
+        case NORMAL_BSE_ON:
+            normal_bse_on();
+            break;
         case BSE_OPEN_CIRCUIT:
             bse_open_circuit();
             break;
@@ -52,12 +57,18 @@ void bse_process(uint8_t state){
             apps_bse_deactivated();
             break;
         default:
-            normal_bse_operation();
+            normal_bse_off();
             break;
     }
 }
 
-static void normal_bse_operation(){
+static void normal_bse_off(){
+    //sets BSE value at minimum of its range as though the pedal is not being pressed
+    MCP48FV_Set_Value_Single(BSE_MIN, 8, VOUT1, 1);
+    return;
+}
+
+static void normal_bse_on(){
     // sets BSE value at midpoint of operating range
     uint16_t bse_volt = ((BSE_MAX-BSE_MIN)/2)+BSE_MIN;
     MCP48FV_Set_Value_Single(bse_volt, 8, VOUT1, 1);
