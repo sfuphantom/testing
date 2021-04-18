@@ -13,6 +13,7 @@
 #define APPS1_MIN 150
 #define APPS2_MAX 150
 #define APPS2_MIN 50
+#define DAC_SIZE_APPS 0xFF
 
 enum
 {
@@ -36,6 +37,7 @@ static void apps_bse_activated();
 static void apps_bse_deactivated();
 static void apps_sweep();
 uint16_t create_apps2_volt(uint16_t apps1_volt, float difference);
+uint16_t get_apps_voltage(uint16_t dac_val);
 
 void apps_process(uint8_t state)
 {
@@ -69,7 +71,7 @@ void apps_process(uint8_t state)
 }
 
 static void normal_apps_off(){
-    MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN, 8, 0);
+    MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN, DAC_SIZE_APPS, 0);
     return;
 }
 
@@ -79,55 +81,38 @@ static void normal_apps_on()
     uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
     uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.0);
 
-    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, 8, 0);
+    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
     return;
 }
 
 static void apps_implausibility()
 {
-    // sets APPS values at midpoint of valid APPS range
     uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
     uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.15);
 
-    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, 8, 0);
+    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
 
     return;
 }
 
+/* TESTS NEEDING TIMERS BEGIN HERE */
+
 static void apps_short_circuit() 
 {
-    //have something to determine which loopthrough its one in order to set which one is shorted
-    int apps_select= 0;
-    switch(apps_select){
-        case 0:
-            MCP48FV_Set_Value_Double(APPS1_MAX+5, APPS2_MAX-5, 8, 0);
-            break;
-        case 1:
-            MCP48FV_Set_Value_Double(APPS1_MAX-5, APPS2_MAX+5, 8, 0);
-            break;
-        case 2:
-            MCP48FV_Set_Value_Double(APPS1_MAX+5, APPS2_MAX+5, 8, 0);
-            break;
-    }
+    uint16_t prev = get_apps_voltage(readRegister(1, 0));
+    (prev == APPS1_MIN) ? MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0);
+    (prev == APPS1_MAX+20) ? MCP48FV_Set_Value_Double(APPS1_MAX, APPS2_MAX+20, DAC_SIZE_APPS, 0);
+    (prev == APPS2_MAX+20) ? MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX+20, DAC_SIZE_APPS, 0);
 
     return;
 }
 
 static void apps_open_circuit()
 {
-    //have something to determine which loop through it is to set which one is open 
-    int apps_select=0;
-    switch(apps_select){
-        case 0:
-            MCP48FV_Set_Value_Double(APPS1_MIN-5, APPS2_MIN+5, 8, 0);
-            break;
-        case 1:
-            MCP48FV_Set_Value_Double(APPS1_MIN+5, APPS2_MIN-5, 8, 0);
-            break;
-        case 2:
-            MCP48FV_Set_Value_Double(APPS1_MIN-5, APPS2_MIN-5, 8, 0);
-            break;
-    }
+    uint16_t prev = get_apps_voltage(readRegister(1, 0));
+    (prev == APPS1_MIN) ? MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0);
+    (prev == APPS1_MIN-20) ? MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0);
+    (prev == APPS2_MIN-20) ? MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0);
 
     return;
 }
@@ -139,7 +124,7 @@ static void apps_bse_activated()
     uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
     uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.0);
 
-    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, 8, 0);
+    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
 
     return;
 }
@@ -147,22 +132,28 @@ static void apps_bse_activated()
 static void apps_bse_deactivated()
 {
     // to be executed after apps_bse_activated()
-    // both APPS sensors indicate <5% activation
-    // both APPS sensors operate between X(MIN) and X(MAX) range
-    // both APPS sensor values within 10% of each other
+    // APPS sensors indicate <5% activation, regardless if BSE is still activated
+    MCP48FV_Set_Value_Double(APPS1_MIN+10, create_apps2_volt(APPS1_MIN+10, 1.00), DAC_SIZE_APPS, 0);
 
     return;
 }
 
 static void apps_sweep()
 {
-
-
+    // make sure it doesnt go over voltage - stop it somehow
+    int prev_voltage = get_apps_voltage(readRegister(0, 0); 
+    MCP48FV_Set_Value_Double(prev_voltage+50, create_apps2_volt(prev_voltage+50, 1.00), DAC_SIZE_APPS, 0);
     return;
 }
 
+/* TESTS NEEDING TIMERS END HERE */
+
 // difference is the ratio difference between APPS values, 1 meaning 0% difference
 uint16_t create_apps2_volt(uint16_t apps1_volt, float difference){
-        uint16_t apps2_volt = (difference*((apps1_volt-APPS1_MIN)/(APPS1_MAX-APPS1_MIN))*(APPS2_MAX-APPS2_MIN))+APPS2_MIN;
+    uint16_t apps2_volt = (difference*((apps1_volt-APPS1_MIN)/(APPS1_MAX-APPS1_MIN))*(APPS2_MAX-APPS2_MIN))+APPS2_MIN;
     return apps2_volt;
+}
+
+uint16_t get_apps_voltage(uint16_t dac_val){
+    return ((dac_val*500000)/(0xFF*1000));
 }
