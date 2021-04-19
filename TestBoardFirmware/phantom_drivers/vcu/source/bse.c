@@ -33,7 +33,7 @@ static void bse_open_circuit();
 static void bse_short_circuit();
 static void apps_bse_activated();
 static void bse_sweep();
-uint16_t get_apps_voltage(uint16_t dac_val);
+uint16_t get_bse_voltage(uint16_t dac_val);
 
 void bse_process(uint8_t state){
     switch(state)
@@ -89,7 +89,7 @@ static void bse_short_circuit(){
 static void bse_sweep(){
     // loops through values within a normal range
     // make sure it stops when it reaches the max voltage
-    int prev_voltage = get_apps_voltage(readRegister(VOUT1, 1));
+    int prev_voltage = get_bse_voltage(readRegister(VOUT1, 1));
     MCP48FV_Set_Value_Single(prev_voltage+50, DAC_SIZE_BSE, VOUT1, 1);
 
     return;
@@ -102,6 +102,6 @@ static void apps_bse_activated(){
     return;
 }
 
-uint16_t get_apps_voltage(uint16_t dac_val){
+uint16_t get_bse_voltage(uint16_t dac_val){
     return ((dac_val*500000)/(0xFF*1000));
 }

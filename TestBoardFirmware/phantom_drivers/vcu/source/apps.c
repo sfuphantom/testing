@@ -23,7 +23,6 @@ enum
     APPS_SHORT_CIRCUIT,
     APPS_OPEN_CIRCUIT,
     APPS_BSE_ACTIVATED, // APPS sensor indicates >25% activation while BSE applied
-    APPS_BSE_DEACTIVATED, // after APPS & BSE applied, power returns after APPS registers <5% activation
     APPS_SWEEP
 };
 
@@ -34,7 +33,6 @@ static void apps_implausibility();
 static void apps_open_circuit();
 static void apps_short_circuit();
 static void apps_bse_activated();
-static void apps_bse_deactivated();
 static void apps_sweep();
 uint16_t create_apps2_volt(uint16_t apps1_volt, float difference);
 uint16_t get_apps_voltage(uint16_t dac_val);
@@ -57,9 +55,6 @@ void apps_process(uint8_t state)
             break;
         case APPS_BSE_ACTIVATED:
             apps_bse_activated();
-            break;
-        case APPS_BSE_DEACTIVATED:
-            apps_bse_deactivated();
             break;
         case APPS_SWEEP:
             apps_sweep();
@@ -99,20 +94,20 @@ static void apps_implausibility()
 
 static void apps_short_circuit() 
 {
-    uint16_t prev = get_apps_voltage(readRegister(1, 0));
-    (prev == APPS1_MIN) ? MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0);
-    (prev == APPS1_MAX+20) ? MCP48FV_Set_Value_Double(APPS1_MAX, APPS2_MAX+20, DAC_SIZE_APPS, 0);
-    (prev == APPS2_MAX+20) ? MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX+20, DAC_SIZE_APPS, 0);
+    uint16_t prev = get_apps_voltage(readRegister(0, 0));
+    if (prev == APPS1_MIN) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0);
+    if (prev == APPS1_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX, APPS2_MAX+20, DAC_SIZE_APPS, 0);
+    if (prev == APPS2_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX+20, DAC_SIZE_APPS, 0);
 
     return;
 }
 
 static void apps_open_circuit()
 {
-    uint16_t prev = get_apps_voltage(readRegister(1, 0));
-    (prev == APPS1_MIN) ? MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0);
-    (prev == APPS1_MIN-20) ? MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0);
-    (prev == APPS2_MIN-20) ? MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0);
+    uint16_t prev = get_apps_voltage(readRegister(0, 0));
+    if (prev == APPS1_MIN) MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0);
+    if (prev == APPS1_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0);
+    if (prev == APPS2_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0);
 
     return;
 }
@@ -121,19 +116,15 @@ static void apps_bse_activated()
 {
     // sets APPS values at midpoint of valid APPS range
     // BSE activated within bse.c
-    uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
-    uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.0);
-
-    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
-
-    return;
-}
-
-static void apps_bse_deactivated()
-{
-    // to be executed after apps_bse_activated()
-    // APPS sensors indicate <5% activation, regardless if BSE is still activated
-    MCP48FV_Set_Value_Double(APPS1_MIN+10, create_apps2_volt(APPS1_MIN+10, 1.00), DAC_SIZE_APPS, 0);
+    uint16_t apps1_volt, apps2_volt;
+    if (get_apps_voltage(readRegister(0, 0)) == APPS1_MIN){ 
+        apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
+        apps2_volt = create_apps2_volt(apps1_volt, 1.0);
+        MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
+    } else 
+        // to be executed after apps_bse_activated()
+        // APPS sensors indicate <5% activation, regardless if BSE is still activated
+        MCP48FV_Set_Value_Double(APPS1_MIN+10, create_apps2_volt(APPS1_MIN+10, 1.00), DAC_SIZE_APPS, 0);
 
     return;
 }
@@ -141,7 +132,7 @@ static void apps_bse_deactivated()
 static void apps_sweep()
 {
     // make sure it doesnt go over voltage - stop it somehow
-    int prev_voltage = get_apps_voltage(readRegister(0, 0); 
+    int prev_voltage = get_apps_voltage(readRegister(0, 0)); 
     MCP48FV_Set_Value_Double(prev_voltage+50, create_apps2_volt(prev_voltage+50, 1.00), DAC_SIZE_APPS, 0);
     return;
 }
