@@ -17,6 +17,7 @@
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr);
 static void vcu_mode_process(TestBoardState_t *stateptr);
+static void setPeripheralTestCases(json_t);
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0} };
@@ -31,6 +32,15 @@ int main(void)
 //    while(!initGUI) need a way to know where start and end of message is (startbyte..,.,..endbyte)
 
     //parse JSON and set states
+
+    //* test code *//
+    testBoardState.testMode = VCU_MODE;
+
+    testBoardState.peripheralStateArray[BSE] = NORMAL_BSE_OFF;
+
+    setPeripheralTestCases(JSON);
+
+
 
     //determine the expected state of VCU/BMS
 
@@ -89,6 +99,36 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     return SUCCESS;
 }
 
+static void setPeripheralTestCases(json_t jsonGUI){
+
+    //TestBoard Mode
+    testBoardState.testMode = VCU_MODE;
+
+
+    //VCU Tests
+    testBoardState.peripheralStateArray[APPS] = 0;
+
+    testBoardState.peripheralStateArray[BSE] = NORMAL_BSE_OFF;
+
+    testBoardState.peripheralStateArray[TSAL] = 0;
+
+    testBoardState.peripheralStateArray[IMD] = 0;
+
+    testBoardState.peripheralStateArray[LV] = 0;
+
+    testBoardState.peripheralStateArray[VCU_COMMUNICATIONS] = 0;
+
+
+    //BMS Tests
+    testBoardState.peripheralStateArray[BMS_SLAVES] = 0;
+
+    testBoardState.peripheralStateArray[THERMISTOR_EXPANSION] = 0;
+
+    testBoardState.peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+
+}
+
+
 //pass timer ptr to each pointer peripheral. timer to periodically call test function you want
 //inner state machines for each BMS peripheral and three outer state machines -Meeting with Amneet
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr)
@@ -129,8 +169,8 @@ static void vcu_mode_process(TestBoardState_t *stateptr)
 
 }
 
-void set_testboard_state(uint8_t *state_array, TestBoardModes_t mode)
-{
-    memcpy(&testBoardState.peripheralStateArray[0], state_array, sizeof(*state_array));
-    testBoardState.testMode = mode;
-}
+//void set_testboard_state(uint8_t *state_array, TestBoardModes_t mode)
+//{
+//    memcpy(&testBoardState.peripheralStateArray[0], state_array, sizeof(*state_array));
+//    testBoardState.testMode = mode;
+//}
