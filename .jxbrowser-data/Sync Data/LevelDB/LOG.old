@@ -1,7 +1,9 @@
 <<<<<<< HEAD
-2021/04/03-19:43:49.146 16396 Reusing MANIFEST C:\Users\Rafael\OneDrive - Simon Fraser University (1sfu)\Documents\TestBoardFirmware\.jxbrowser-data\Sync Data\LevelDB/MANIFEST-000001
-2021/04/03-19:43:49.146 16396 Recovering log #3
-2021/04/03-19:43:49.147 16396 Reusing old log C:\Users\Rafael\OneDrive - Simon Fraser University (1sfu)\Documents\TestBoardFirmware\.jxbrowser-data\Sync Data\LevelDB/000003.log 
+2021/04/11-21:54:24.646 3156 Reusing MANIFEST C:\Users\Rafael\OneDrive - Simon Fraser University (1sfu)\Documents\TestBoardFirmware\.jxbrowser-data\Sync Data\LevelDB/MANIFEST-000001
+2021/04/11-21:54:24.647 3156 Recovering log #3
+2021/04/11-21:54:24.647 3156 Reusing old log C:\Users\Rafael\OneDrive - Simon Fraser University (1sfu)\Documents\TestBoardFirmware\.jxbrowser-data\Sync Data\LevelDB/000003.log 
 =======
-2021/04/07-18:06:48.057 1856 Reusing MANIFEST C:\Users\Rafael\OneDrive - Simon Fraser University (1sfu)\Documents\TestBoardFirmware\.jxbrowser-data\Sync Data\LevelDB/MANIFEST-000001
+2021/04/07-18:07:42.569 11332 Reusing MANIFEST C:\Users\Rafael\OneDrive - Simon Fraser University (1sfu)\Documents\TestBoardFirmware\.jxbrowser-data\Sync Data\LevelDB/MANIFEST-000001
+2021/04/07-18:07:42.571 11332 Recovering log #3
+2021/04/07-18:07:42.571 11332 Reusing old log C:\Users\Rafael\OneDrive - Simon Fraser University (1sfu)\Documents\TestBoardFirmware\.jxbrowser-data\Sync Data\LevelDB/000003.log 
 >>>>>>> master
