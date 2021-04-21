@@ -13,6 +13,11 @@
 
 #include "common.h"
 
+//Drivers
+#include "BSE.h"
+
+
+
 // Static Function Declaration
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr);
@@ -37,6 +42,8 @@ int main(void)
     testBoardState.testMode = VCU_MODE;
 
     testBoardState.peripheralStateArray[BSE] = NORMAL_BSE_OFF;
+
+    json_t JSON;
 
     setPeripheralTestCases(JSON);
 
