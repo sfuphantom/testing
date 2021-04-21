@@ -6,8 +6,8 @@
 #include "tiny-json.h"
 #include "main.h"
 #include "Phantom_sci.h"
-#include "FreeRTOS.h"
-#include "FreeRTOSConfig.h"
+//#include "FreeRTOS.h"
+//#include "FreeRTOSConfig.h"
 #include "os_task.h"
 #include "os_timer.h"
 
@@ -23,6 +23,11 @@ static TestBoardState_t testBoardState = { IDLE, {0} };
 
 int main(void)
 {
+
+    gioInit();
+
+    gioSetBit(gioPORTA,2,1);
+
     Result_t res = SUCCESS;
 
     res = initUARTandModeHandler(&testBoardState);

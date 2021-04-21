@@ -21,7 +21,7 @@
 // #define READY_TO_DRIVE_PIN    2
 
 //TODO: Setup in halcogen
-		// - RTD signal/buzzer
+		// - RTD signal (DONE)/buzzer
 		// - Shutdown GPIOs/HETs: IMD,BMS,BSPD
 
 //Figure out how to use TSAL and BSE drivers here 
