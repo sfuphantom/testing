@@ -10,7 +10,18 @@
 
 #include "stdint.h"
 
+//FreeRTOS files
+#include "FreeRTOS.h"
+#include "FreeRTOSConfig.h"
+#include "os_task.h"
+#include "os_timer.h"
+
+
 void bse_process(uint8_t state);
+
+
+//Timer Callback Functions
+void bse_sweep_timer(TimerHandle_t);
 
 
 enum

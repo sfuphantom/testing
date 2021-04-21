@@ -4920,3 +4920,520 @@ Finished building target: "TestBoardFirmware.out"
  
 
 **** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 48: warning #551-D: variable "JSON" is used before its value is set
+"../main.c", line 72: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 141: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+gmake[1]: 'TestBoardFirmware.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+gmake[1]: 'TestBoardFirmware.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 48: warning #551-D: variable "JSON" is used before its value is set
+"../main.c", line 72: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 141: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 44: warning #551-D: variable "JSON" is used before its value is set
+"../main.c", line 68: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 137: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+gmake[1]: 'TestBoardFirmware.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+ 
+>> Compilation failure
+subdir_rules.mk:9: recipe for target 'main.obj' failed
+"../main.c", line 44: error #141: too many arguments in function call
+"../main.c", line 44: warning #551-D: variable "JSON" is used before its value is set
+"../main.c", line 68: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 105: error #148: declaration is incompatible with "void setPeripheralTestCases(json_t)" (declared at line 25)
+"../main.c", line 137: warning #179-D: function "bms_mode_process" was declared but never referenced
+2 errors detected in the compilation of "../main.c".
+gmake: *** [main.obj] Error 1
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+ 
+>> Compilation failure
+subdir_rules.mk:9: recipe for target 'main.obj' failed
+"../main.c", line 42: error #169: argument of type "TestBoardState_t *" is incompatible with parameter of type "json_t"
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 103: error #148: declaration is incompatible with "void setPeripheralTestCases(json_t)" (declared at line 25)
+"../main.c", line 135: warning #179-D: function "bms_mode_process" was declared but never referenced
+2 errors detected in the compilation of "../main.c".
+gmake: *** [main.obj] Error 1
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+ 
+>> Compilation failure
+subdir_rules.mk:9: recipe for target 'main.obj' failed
+"../main.c", line 42: error #169: argument of type "TestBoardState_t *" is incompatible with parameter of type "json_t"
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 103: error #148: declaration is incompatible with "void setPeripheralTestCases(json_t)" (declared at line 25)
+"../main.c", line 135: warning #179-D: function "bms_mode_process" was declared but never referenced
+2 errors detected in the compilation of "../main.c".
+gmake: *** [main.obj] Error 1
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 135: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+gmake[1]: 'TestBoardFirmware.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../phantom_drivers/vcu/source/bse.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="phantom_drivers/vcu/source/bse.d_raw" --obj_directory="phantom_drivers/vcu/source"  "../phantom_drivers/vcu/source/bse.c"
+ 
+>> Compilation failure
+phantom_drivers/vcu/source/subdir_rules.mk:9: recipe for target 'phantom_drivers/vcu/source/bse.obj' failed
+"../phantom_drivers/vcu/source/bse.c", line 30: warning #225-D: function "printf" declared implicitly
+"../phantom_drivers/vcu/source/bse.c", line 32: error #66: expected a ";"
+1 error detected in the compilation of "../phantom_drivers/vcu/source/bse.c".
+gmake: *** [phantom_drivers/vcu/source/bse.obj] Error 1
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 135: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../phantom_drivers/vcu/source/bse.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="phantom_drivers/vcu/source/bse.d_raw" --obj_directory="phantom_drivers/vcu/source"  "../phantom_drivers/vcu/source/bse.c"
+"../phantom_drivers/vcu/source/bse.c", line 30: warning #225-D: function "printf" declared implicitly
+Finished building: "../phantom_drivers/vcu/source/bse.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+warning #10247-D: creating output section ".sysmem" without a SECTIONS specification
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../phantom_drivers/vcu/source/bse.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="phantom_drivers/vcu/source/bse.d_raw" --obj_directory="phantom_drivers/vcu/source"  "../phantom_drivers/vcu/source/bse.c"
+Finished building: "../phantom_drivers/vcu/source/bse.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+warning #10247-D: creating output section ".sysmem" without a SECTIONS specification
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../phantom_drivers/vcu/source/bse.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="phantom_drivers/vcu/source/bse.d_raw" --obj_directory="phantom_drivers/vcu/source"  "../phantom_drivers/vcu/source/bse.c"
+Finished building: "../phantom_drivers/vcu/source/bse.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+gmake[1]: 'TestBoardFirmware.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+gmake[1]: 'TestBoardFirmware.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 135: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 135: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 135: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 137: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+ 
+>> Compilation failure
+subdir_rules.mk:9: recipe for target 'main.obj' failed
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 112: error #20: identifier "BSE_OPEN_CIRCUIT" is undefined
+"../main.c", line 130: warning #121-D: return value type does not match the function type
+"../main.c", line 137: warning #179-D: function "bms_mode_process" was declared but never referenced
+1 error detected in the compilation of "../main.c".
+gmake: *** [main.obj] Error 1
+Building file: "../phantom_drivers/vcu/source/bse.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="phantom_drivers/vcu/source/bse.d_raw" --obj_directory="phantom_drivers/vcu/source"  "../phantom_drivers/vcu/source/bse.c"
+Finished building: "../phantom_drivers/vcu/source/bse.c"
+ 
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../phantom_drivers/vcu/source/bse.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="phantom_drivers/vcu/source/bse.d_raw" --obj_directory="phantom_drivers/vcu/source"  "../phantom_drivers/vcu/source/bse.c"
+Finished building: "../phantom_drivers/vcu/source/bse.c"
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 130: warning #121-D: return value type does not match the function type
+"../main.c", line 137: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+gmake[1]: 'TestBoardFirmware.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+gmake[1]: 'TestBoardFirmware.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+gmake[1]: 'TestBoardFirmware.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 130: warning #121-D: return value type does not match the function type
+"../main.c", line 137: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+gmake[1]: 'TestBoardFirmware.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+"../main.c", line 66: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 130: warning #121-D: return value type does not match the function type
+"../main.c", line 137: warning #179-D: function "bms_mode_process" was declared but never referenced
+Finished building: "../main.c"
+ 
+Building target: "TestBoardFirmware.out"
+Invoking: ARM Linker
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi -z -m"TestBoardFirmware.map" --heap_size=0x800 --stack_size=0x800 -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="TestBoardFirmware_linkInfo.xml" --rom_model --be32 -o "TestBoardFirmware.out" "./main.obj" "./HAL_drivers/source/rti.obj" "./phantom_drivers/bms/source/bms_slaves.obj" "./phantom_drivers/bms/source/communications.obj" "./phantom_drivers/bms/source/thermistor_expansion.obj" "./phantom_drivers/common/source/MCP48FV_DAC_SPI.obj" "./phantom_drivers/common/source/Phantom_sci.obj" "./phantom_drivers/common/source/common.obj" "./phantom_drivers/common/source/serialComms.obj" "./phantom_drivers/vcu/source/apps.obj" "./phantom_drivers/vcu/source/bse.obj" "./phantom_drivers/vcu/source/hv_current_sensor.obj" "./phantom_drivers/vcu/source/hv_voltage_sensor.obj" "./phantom_drivers/vcu/source/imd.obj" "./phantom_drivers/vcu/source/imd_notes.obj" "./phantom_drivers/vcu/source/lv_sensor.obj" "./source/adc.obj" "./source/can.obj" "./source/crc.obj" "./source/dabort.obj" "./source/dcc.obj" "./source/ecap.obj" "./source/eqep.obj" "./source/errata_SSWF021_45.obj" "./source/esm.obj" "./source/etpwm.obj" "./source/gio.obj" "./source/het.obj" "./source/i2c.obj" "./source/lin.obj" "./source/mibspi.obj" "./source/notification.obj" "./source/os_croutine.obj" "./source/os_event_groups.obj" "./source/os_heap.obj" "./source/os_list.obj" "./source/os_mpu_wrappers.obj" "./source/os_port.obj" "./source/os_portasm.obj" "./source/os_queue.obj" "./source/os_tasks.obj" "./source/os_timer.obj" "./source/pinmux.obj" "./source/sci.obj" "./source/spi.obj" "./source/sys_core.obj" "./source/sys_dma.obj" "./source/sys_intvecs.obj" "./source/sys_mpu.obj" "./source/sys_pcr.obj" "./source/sys_phantom.obj" "./source/sys_pmm.obj" "./source/sys_pmu.obj" "./source/sys_selftest.obj" "./source/sys_startup.obj" "./source/sys_vim.obj" "./source/system.obj" "./third_party/tiny-json/tiny-json.obj" "../source/sys_link.cmd"  -lrtsv7R4_T_be_v3D16_eabi.lib 
+<Linking>
+Finished building target: "TestBoardFirmware.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project TestBoardFirmware ****
+
+"C:\\ti\\ccs930\\ccs\\utils\\bin\\gmake" -k -j 8 all -O 
+ 
+Building file: "../main.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+ 
+>> Compilation failure
+subdir_rules.mk:9: recipe for target 'main.obj' failed
+"../main.c", line 36: error #17: expected a "]"
+"../main.c", line 36: warning #262-D: explicit type is missing ("int" assumed)
+"../main.c", line 36: error #171: expected a declaration
+"../main.c", line 52: error #18: expected a ")"
+"../main.c", line 52: error #18: expected a ")"
+"../main.c", line 52: error #18: expected a ")"
+"../main.c", line 52: error #18: expected a ")"
+"../main.c", line 52: error #167: too few arguments in function call
+"../main.c", line 52: error #18: expected a ")"
+"../main.c", line 48: warning #515-D: a value of type "TimerHandle_t" cannot be assigned to an entity of type "int"
+"../main.c", line 52: error #29: expected an expression
+"../main.c", line 60: warning #12-D: parsing restarts here after previous syntax error
+"../main.c", line 103: warning #179-D: variable "i" was declared but never referenced
+"../main.c", line 167: warning #121-D: return value type does not match the function type
+"../main.c", line 174: warning #179-D: function "bms_mode_process" was declared but never referenced
+"../main.c", line 46: warning #179-D: function "timerInit" was declared but never referenced
+"../main.c", line 36: warning #552-D: variable "xTimers" was set but never used
+9 errors detected in the compilation of "../main.c".
+gmake: *** [main.obj] Error 1
+Building file: "../phantom_drivers/vcu/source/bse.c"
+Invoking: ARM Compiler
+"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/bin/armcl" -mv7R4 --code_state=32 --float_support=VFPv3D16 --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/bms/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/common/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/phantom_drivers/vcu/include" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware" --include_path="C:/Users/Rafael/OneDrive - Simon Fraser University (1sfu)/Documents/TestBoardFirmware/TestBoardFirmware/third_party/tiny-json" --include_path="C:/ti/ccs930/ccs/tools/compiler/ti-cgt-arm_18.12.4.LTS/include" -g --diag_suppress=190 --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --abi=eabi --preproc_with_compile --preproc_dependency="phantom_drivers/vcu/source/bse.d_raw" --obj_directory="phantom_drivers/vcu/source"  "../phantom_drivers/vcu/source/bse.c"
+Finished building: "../phantom_drivers/vcu/source/bse.c"
+ 
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****

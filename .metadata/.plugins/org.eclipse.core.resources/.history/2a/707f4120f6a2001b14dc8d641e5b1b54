@@ -1,0 +1,26 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+SHELL = cmd.exe
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../HAL_drivers/source/rti.c 
+
+C_DEPS += \
+./HAL_drivers/source/rti.d 
+
+OBJS += \
+./HAL_drivers/source/rti.obj 
+
+OBJS__QUOTED += \
+"HAL_drivers\source\rti.obj" 
+
+C_DEPS__QUOTED += \
+"HAL_drivers\source\rti.d" 
+
+C_SRCS__QUOTED += \
+"../HAL_drivers/source/rti.c" 
+
+

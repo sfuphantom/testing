@@ -26,6 +26,7 @@ static void bse_sweep();
 uint16_t get_bse_voltage(uint16_t dac_val);
 
 void bse_process(uint8_t state){
+
     switch(state)
     {
         case NORMAL_BSE_ON:
@@ -76,7 +77,7 @@ static void bse_short_circuit(){
 
 /* TESTS THE NEED TIMERS BEGIN HERE */
 
-static void bse_sweep(){
+void bse_sweep_timer(TimerHandle_t sweepTimer){
     // loops through values within a normal range
     // make sure it stops when it reaches the max voltage
     int prev_voltage = get_bse_voltage(readRegister(VOUT1, 1));
@@ -84,6 +85,16 @@ static void bse_sweep(){
 
     return;
 }
+
+static void bse_sweep(){
+
+    //start timer
+
+
+}
+
+
+
 
 /* TESTS THAT NEED TIMERS END HERE */
 
