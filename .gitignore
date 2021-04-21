@@ -44,3 +44,5 @@
 .metadata/.plugins/org.eclipse.core.resources/.projects/TestBoardFirmware/.syncinfo.snap
 .metadata/.plugins/org.eclipse.core.resources/.root/.markers.snap
 .metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources
+.metadata/.log
+.metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi
