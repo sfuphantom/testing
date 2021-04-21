@@ -13,6 +13,11 @@
 
 #include "common.h"
 
+
+#define NUM_TIMERS 1;
+
+#define SWEEP_PERIOD 1000;
+
 //Drivers
 #include "BSE.h"
 
@@ -22,10 +27,42 @@
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr);
 static void vcu_mode_process(TestBoardState_t *stateptr);
-static void setPeripheralTestCases(json_t);
+static void setPeripheralTestCases(TestBoardState_t* stateptr);
+static void timerInit();
+
 
 // Static global variables
-static TestBoardState_t testBoardState = { IDLE, {0} };
+static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
+static xTimers[NUM_TIMERS];
+
+enum{
+
+    BSE_SWEEP_TIMER
+
+
+};
+
+
+static void timerInit(){
+
+    xTimers[BSE_SWEEP_TIMER] = xTimerCreate(
+
+                                "BSE_Sweep_Timer",
+
+                                pdMS_TO_TICKS(SWEEP_PERIOD),
+
+                                pdTRUE,
+
+                                (void* ) 0,
+
+                                bse_sweep_timer
+
+                                );
+
+
+
+}
+
 
 int main(void)
 {
@@ -39,13 +76,7 @@ int main(void)
     //parse JSON and set states
 
     //* test code *//
-    testBoardState.testMode = VCU_MODE;
-
-    testBoardState.peripheralStateArray[BSE] = NORMAL_BSE_OFF;
-
-    json_t JSON;
-
-    setPeripheralTestCases(JSON);
+    setPeripheralTestCases(&testBoardState);
 
 
 
@@ -106,32 +137,34 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     return SUCCESS;
 }
 
-static void setPeripheralTestCases(json_t jsonGUI){
+static void setPeripheralTestCases(TestBoardState_t *stateptr){
 
     //TestBoard Mode
-    testBoardState.testMode = VCU_MODE;
+    stateptr->testMode = VCU_MODE;
 
 
     //VCU Tests
-    testBoardState.peripheralStateArray[APPS] = 0;
+    stateptr->peripheralStateArray[APPS] = 0;
 
-    testBoardState.peripheralStateArray[BSE] = NORMAL_BSE_OFF;
+    stateptr->peripheralStateArray[BSE] = 0;
 
-    testBoardState.peripheralStateArray[TSAL] = 0;
+    stateptr->peripheralStateArray[TSAL] = 0;
 
-    testBoardState.peripheralStateArray[IMD] = 0;
+    stateptr->peripheralStateArray[IMD] = 0;
 
-    testBoardState.peripheralStateArray[LV] = 0;
+    stateptr->peripheralStateArray[LV] = 0;
 
-    testBoardState.peripheralStateArray[VCU_COMMUNICATIONS] = 0;
+    stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = 0;
 
 
     //BMS Tests
-    testBoardState.peripheralStateArray[BMS_SLAVES] = 0;
+    stateptr->peripheralStateArray[BMS_SLAVES] = 0;
 
-    testBoardState.peripheralStateArray[THERMISTOR_EXPANSION] = 0;
+    stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 
-    testBoardState.peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+    stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+
+    return SUCCESS;
 
 }
 
@@ -173,6 +206,9 @@ static void vcu_mode_process(TestBoardState_t *stateptr)
 {
 
     //eg Constant outputs don't need periodic timers should
+
+    bse_process(stateptr->peripheralStateArray[BSE]);
+
 
 }
 
