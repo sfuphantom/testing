@@ -47,3 +47,9 @@
 .metadata/.log
 .metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi
 *.snap
+/.metadata/
+.jxbrowser-data/History
+.jxbrowser-data/History-journal
+.jxbrowser-data/Login Data
+.jxbrowser-data/Local Storage - EXT/file_null.localstorage
+.jxbrowser-data/Sync Data/LevelDB/LOG.old
