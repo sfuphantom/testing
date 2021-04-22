@@ -16,6 +16,17 @@ typedef enum
   FAIL
 } Result_t;
 
+
+enum{
+
+    BSE_SWEEP_TIMER
+
+
+};
+
+
+
+
 void delayms(uint16_t ms);
 
 #endif /* PHANTOM_DRIVERS_COMMON_INCLUDE_COMMON_H_ */
