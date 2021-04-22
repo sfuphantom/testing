@@ -83,9 +83,9 @@ int main(void)
 
 
     //start timer
-    xTimerStart(xTimers[BSE_SWEEP_TIMER],pdMS_TO_TICKS(500));
+//    xTimerStart(xTimers[BSE_SWEEP_TIMER],pdMS_TO_TICKS(500));
 
-    vTaskStartScheduler();
+//    vTaskStartScheduler();
     //determine the expected state of VCU/BMS
 
     while(1)
@@ -152,7 +152,7 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr){
     //VCU Tests
     stateptr->peripheralStateArray[APPS] = 0;
 
-    stateptr->peripheralStateArray[BSE] = BSE_SWEEP;
+    stateptr->peripheralStateArray[BSE] = BSE_OPEN_CIRCUIT;
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
