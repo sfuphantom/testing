@@ -14,34 +14,28 @@
 #include "common.h"
 
 
-#define NUM_TIMERS 1;
+#define NUM_TIMERS 1
 
-#define SWEEP_PERIOD 1000;
+#define SWEEP_PERIOD 500
 
 //Drivers
 #include "BSE.h"
+
+#include "MCP48FV_DAC_SPI.h"
 
 
 
 // Static Function Declaration
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr);
-static void vcu_mode_process(TestBoardState_t *stateptr);
+static void vcu_mode_process(TestBoardState_t *stateptr,TimerHandle_t *timerptr);
 static void setPeripheralTestCases(TestBoardState_t* stateptr);
 static void timerInit();
 
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
-static xTimers[NUM_TIMERS];
-
-enum{
-
-    BSE_SWEEP_TIMER
-
-
-};
-
+static TimerHandle_t xTimers[NUM_TIMERS];
 
 static void timerInit(){
 
@@ -66,6 +60,14 @@ static void timerInit(){
 
 int main(void)
 {
+
+    //initialization
+
+    MCP48FV_Init();
+
+    timerInit();
+
+
     Result_t res = SUCCESS;
 
     res = initUARTandModeHandler(&testBoardState);
@@ -80,6 +82,10 @@ int main(void)
 
 
 
+    //start timer
+    xTimerStart(xTimers[BSE_SWEEP_TIMER],pdMS_TO_TICKS(500));
+
+    vTaskStartScheduler();
     //determine the expected state of VCU/BMS
 
     while(1)
@@ -107,7 +113,7 @@ int main(void)
             }
             case VCU_MODE:
             {
-                vcu_mode_process(&testBoardState);
+                vcu_mode_process(&testBoardState, &xTimers);
             }
         }
 
@@ -146,7 +152,7 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr){
     //VCU Tests
     stateptr->peripheralStateArray[APPS] = 0;
 
-    stateptr->peripheralStateArray[BSE] = 0;
+    stateptr->peripheralStateArray[BSE] = BSE_SWEEP;
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
@@ -202,12 +208,12 @@ static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *time
     return SUCCESS;
 }
 
-static void vcu_mode_process(TestBoardState_t *stateptr)
+static void vcu_mode_process(TestBoardState_t *stateptr,TimerHandle_t *timerptr)
 {
 
     //eg Constant outputs don't need periodic timers should
 
-    bse_process(stateptr->peripheralStateArray[BSE]);
+    bse_process(stateptr->peripheralStateArray[BSE],timerptr);
 
 
 }
