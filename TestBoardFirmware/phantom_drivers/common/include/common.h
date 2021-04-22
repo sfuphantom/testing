@@ -24,6 +24,10 @@ enum{
 
 };
 
+#define TIMER_DEBUG
+
+#define SWEEP_STEP 50
+
 
 
 
