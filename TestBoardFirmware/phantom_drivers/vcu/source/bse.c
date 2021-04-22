@@ -80,14 +80,46 @@ static void bse_short_circuit(){
 void bse_sweep_timer(TimerHandle_t sweepTimer){
     // loops through values within a normal range
     // make sure it stops when it reaches the max voltage
-    int prev_voltage = get_bse_voltage(readRegister(VOUT1, 1));
-    MCP48FV_Set_Value_Single(prev_voltage+50, DAC_SIZE_BSE, VOUT1, 1);
+//    int prev_voltage = get_bse_voltage(readRegister(VOUT1, 1));
+
+    uint8_t num_cycles =  (uint8_t) pvTimerGetTimerID(sweepTimer);
+
+
+    #ifdef TIMER_DEBUG
+
+//    UARTSend(PC_UART, "Bse sweep timer expired!\n\r");
+
+    UARTSend(PC_UART, (char) num_cycles);
+
+
+    #endif
+
+
+
+
+    int voltage = BSE_MIN + ( SWEEP_STEP * num_cycles );
+
+    MCP48FV_Set_Value_Single(voltage, DAC_SIZE_BSE, VOUT1, 1);
+
+    //increment cycle
+
+    num_cycles++;
+
+    vTimerSetTimerID( sweepTimer, ( void * ) num_cycles );
+
+
 }
 
 static void bse_sweep(TimerHandle_t *timerptr){
 
+
+//    TimerHandle_t sweepTimer = timerptr[BSE_SWEEP_TIMER];
+
+    //reset timer ID ( counts # of cycles)
+//    vTimerSetTimerID( sweepTimer, ( void * ) 0 );
+
     //start timer
-//    xTimerStart(timerptr[BSE_SWEEP_TIMER],pdMS_TO_TICKS(500));
+//    xTimerStart( sweepTimer, pdMS_TO_TICKS(500) );
 
 }
 
