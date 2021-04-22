@@ -9,8 +9,8 @@
 #include "hwConfig.h"
 #include "MCP48FV_DAC_SPI.h"
 
-#define BSE_MAX 43
-#define BSE_MIN 15
+#define BSE_MAX 430
+#define BSE_MIN 150
 #define BSE_OPEN 0
 #define BSE_SHORT 500
 #define VOUT1 1
