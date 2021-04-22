@@ -16,8 +16,9 @@
 #include "os_task.h"
 #include "os_timer.h"
 
+#include "common.h"
 
-void bse_process(uint8_t state);
+void bse_process(uint8_t state,TimerHandle_t *timerptr);
 
 
 //Timer Callback Functions

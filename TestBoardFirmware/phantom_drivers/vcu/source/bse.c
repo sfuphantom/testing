@@ -9,8 +9,8 @@
 #include "hwConfig.h"
 #include "MCP48FV_DAC_SPI.h"
 
-#define BSE_MAX 43
-#define BSE_MIN 15
+#define BSE_MAX 430
+#define BSE_MIN 150
 #define BSE_OPEN 0
 #define BSE_SHORT 500
 #define VOUT1 1
@@ -25,7 +25,7 @@ static void apps_bse_activated();
 static void bse_sweep();
 uint16_t get_bse_voltage(uint16_t dac_val);
 
-void bse_process(uint8_t state){
+void bse_process(uint8_t state,TimerHandle_t *timerptr){
 
     switch(state)
     {
@@ -39,7 +39,7 @@ void bse_process(uint8_t state){
             bse_short_circuit();
             break;
         case BSE_SWEEP:
-            bse_sweep();
+            bse_sweep(timerptr);
             break;
         case APPS_BSE_ACTIVATED:
             apps_bse_activated();
@@ -82,14 +82,12 @@ void bse_sweep_timer(TimerHandle_t sweepTimer){
     // make sure it stops when it reaches the max voltage
     int prev_voltage = get_bse_voltage(readRegister(VOUT1, 1));
     MCP48FV_Set_Value_Single(prev_voltage+50, DAC_SIZE_BSE, VOUT1, 1);
-
-    return;
 }
 
-static void bse_sweep(){
+static void bse_sweep(TimerHandle_t *timerptr){
 
     //start timer
-
+//    xTimerStart(timerptr[BSE_SWEEP_TIMER],pdMS_TO_TICKS(500));
 
 }
 
