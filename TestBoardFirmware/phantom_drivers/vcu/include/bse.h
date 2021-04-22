@@ -10,6 +10,8 @@
 
 #include "stdint.h"
 
+#include "Phantom_sci.h"
+
 //FreeRTOS files
 #include "FreeRTOS.h"
 #include "FreeRTOSConfig.h"
