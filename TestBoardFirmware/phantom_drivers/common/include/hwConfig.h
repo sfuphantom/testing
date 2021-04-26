@@ -64,7 +64,7 @@
 
 
 ///*********   UART PORTS   ****************/
-#define PC_UART               sciREG //configure in halcogen
+//#define PC_UART               sciREG //configure in halcogen
 //#define BMS_UART              scilinREG
 
 

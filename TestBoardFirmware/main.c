@@ -65,9 +65,9 @@ int main(void)
 
     //initialization
 
-    MCP48FV_Init();
+    //MCP48FV_Init();
 
-    timerInit();
+    //timerInit();
 
 
     Result_t res = SUCCESS;
@@ -81,7 +81,7 @@ int main(void)
     // while(!initGUI) need a way to know where start and end of message is (startbyte..,.,..endbyte)
     // receive UART from GUI
     // need length - what ways could difference be handled?
-    sciReceive(PC_UART, 1,  (unsigned char *)&UARTBuffer); //fix length params for GUI data
+    //sciReceive(PC_UART, 1,  (unsigned char *)&UARTBuffer); //fix length params for GUI data
 
     //parse JSON and set states
     // tiny-json stuff
@@ -142,7 +142,7 @@ int main(void)
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
 {
     sciInit(); // replace with UARTInit() to set baudrate
-    sciSetBaudrate(PC_UART, 10000);
+    sciSetBaudrate(PC_UART, 9600);
     sciEnableNotification(PC_UART, SCI_RX_INT);
 
     UARTprintf("hello world\n\r");
@@ -157,7 +157,7 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
 }
 
 static void UARTTest(){
-    UARTprintf("Enter character\n\r");
+    UARTprintf("Enter character \n\r");
     sciReceive(PC_UART, 1, (unsigned char *)&UARTBuffer);
     UARTprintf("This is your character:\n\r");
     UARTSend(PC_UART, UARTBuffer);
