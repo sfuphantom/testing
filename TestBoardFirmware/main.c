@@ -36,7 +36,7 @@ int main(void)
     UARTTest();
 
     // TODO: Interrupt based wait to get test mode from PC
-//    while(!initGUI) need a way to know where start and end of message is (startbyte..,.,..endbyte)
+    // while(!initGUI) need a way to know where start and end of message is (startbyte..,.,..endbyte)
     // receive UART from GUI
     // need length - what ways could difference be handled?
     sciReceive(PC_UART, 1,  (unsigned char *)&UARTBuffer); //fix length params for GUI data
