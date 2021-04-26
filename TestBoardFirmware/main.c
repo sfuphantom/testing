@@ -10,6 +10,7 @@
 #include "FreeRTOSConfig.h"
 #include "os_task.h"
 #include "os_timer.h"
+#include "hwConfig.h"
 
 #include "common.h"
 
@@ -17,9 +18,13 @@
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr);
 static void vcu_mode_process(TestBoardState_t *stateptr);
+static void UARTTest();
+static void JSONHandler();
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0} };
+
+unsigned char UARTBuffer[100];
 
 int main(void)
 {
@@ -27,10 +32,19 @@ int main(void)
 
     res = initUARTandModeHandler(&testBoardState);
 
+    // UART test function
+    UARTTest();
+
     // TODO: Interrupt based wait to get test mode from PC
 //    while(!initGUI) need a way to know where start and end of message is (startbyte..,.,..endbyte)
+    // receive UART from GUI
+    // need length - what ways could difference be handled?
+    sciReceive(PC_UART, 1,  (unsigned char *)&UARTBuffer); //fix length params for GUI data
 
     //parse JSON and set states
+    // tiny-json stuff
+    // check formatting of string sent by GUI - may need to adjust string for compatibility
+    JSONHandler();
 
     //determine the expected state of VCU/BMS
 
@@ -76,7 +90,9 @@ int main(void)
 
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
 {
-    sciInit();
+    sciInit(); // replace with UARTInit() to set baudrate
+    sciSetBaudrate(PC_UART, 10000);
+    sciEnableNotification(PC_UART, SCI_RX_INT);
 
     UARTprintf("hello world\n\r");
 
@@ -87,6 +103,21 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     stateptr->testMode = BMS_MODE;
 
     return SUCCESS;
+}
+
+static void UARTTest(){
+    UARTprintf("Enter character\n\r");
+    sciReceive(PC_UART, 1, (unsigned char *)&UARTBuffer);
+    UARTprintf("This is your character:\n\r");
+    UARTSend(PC_UART, UARTBuffer);
+    return;
+}
+
+static void JSONHandler(){
+    // json_t array[]
+    // json_t = json_create()
+    // error checking the JSON
+    return;
 }
 
 //pass timer ptr to each pointer peripheral. timer to periodically call test function you want
