@@ -16,16 +16,6 @@
 #define VOUT1 1
 #define DAC_SIZE_BSE 0xFF
 
-enum
-{
-    NORMAL_BSE_OFF,
-    NORMAL_BSE_ON,
-    BSE_OPEN_CIRCUIT, //0V reading
-    BSE_SHORT_CIRCUIT, //5V reading
-    APPS_BSE_ACTIVATED, // APPS sensor indicates >25% activation while BSE applied
-    BSE_SWEEP
-};
-
 // Static function prototypes
 static void normal_bse_off();
 static void normal_bse_on();
@@ -35,7 +25,8 @@ static void apps_bse_activated();
 static void bse_sweep();
 uint16_t get_bse_voltage(uint16_t dac_val);
 
-void bse_process(uint8_t state){
+void bse_process(uint8_t state,TimerHandle_t *timerptr){
+
     switch(state)
     {
         case NORMAL_BSE_ON:
@@ -48,7 +39,7 @@ void bse_process(uint8_t state){
             bse_short_circuit();
             break;
         case BSE_SWEEP:
-            bse_sweep();
+            bse_sweep(timerptr);
             break;
         case APPS_BSE_ACTIVATED:
             apps_bse_activated();
@@ -86,14 +77,54 @@ static void bse_short_circuit(){
 
 /* TESTS THE NEED TIMERS BEGIN HERE */
 
-static void bse_sweep(){
+void bse_sweep_timer(TimerHandle_t sweepTimer){
     // loops through values within a normal range
     // make sure it stops when it reaches the max voltage
-    int prev_voltage = get_bse_voltage(readRegister(VOUT1, 1));
-    MCP48FV_Set_Value_Single(prev_voltage+50, DAC_SIZE_BSE, VOUT1, 1);
+//    int prev_voltage = get_bse_voltage(readRegister(VOUT1, 1));
 
-    return;
+    uint8_t num_cycles =  (uint8_t) pvTimerGetTimerID(sweepTimer);
+
+
+    #ifdef TIMER_DEBUG
+
+//    UARTSend(PC_UART, "Bse sweep timer expired!\n\r");
+
+    UARTSend(PC_UART, (char) num_cycles);
+
+
+    #endif
+
+
+
+
+    int voltage = BSE_MIN + ( SWEEP_STEP * num_cycles );
+
+    MCP48FV_Set_Value_Single(voltage, DAC_SIZE_BSE, VOUT1, 1);
+
+    //increment cycle
+
+    num_cycles++;
+
+    vTimerSetTimerID( sweepTimer, ( void * ) num_cycles );
+
+
 }
+
+static void bse_sweep(TimerHandle_t *timerptr){
+
+
+//    TimerHandle_t sweepTimer = timerptr[BSE_SWEEP_TIMER];
+
+    //reset timer ID ( counts # of cycles)
+//    vTimerSetTimerID( sweepTimer, ( void * ) 0 );
+
+    //start timer
+//    xTimerStart( sweepTimer, pdMS_TO_TICKS(500) );
+
+}
+
+
+
 
 /* TESTS THAT NEED TIMERS END HERE */
 

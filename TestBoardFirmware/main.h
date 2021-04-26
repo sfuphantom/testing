@@ -19,22 +19,38 @@ typedef enum
     VCU_MODE
 } TestBoardModes_t;
 
-enum VCUPeripheralPosition
+//enum VCUPeripheralPosition
+//{
+//    APPS,
+//    BSE,
+//    TSAL,
+//    IMD,
+//    LV,
+//    VCU_COMMUNICATIONS
+//};
+//
+//enum BMSPeripheralPosition
+//{
+//    BMS_SLAVES,
+//    THERMISTOR_EXPANSION,
+//    BMS_COMMUNICATIONS
+//};
+
+enum
 {
     APPS,
     BSE,
     TSAL,
     IMD,
     LV,
-    VCU_COMMUNICATIONS
-};
-
-enum BMSPeripheralPosition
-{
+    VCU_COMMUNICATIONS,
     BMS_SLAVES,
     THERMISTOR_EXPANSION,
     BMS_COMMUNICATIONS
 };
+
+
+
 
 typedef struct
 {

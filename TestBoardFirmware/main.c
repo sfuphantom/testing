@@ -14,20 +14,64 @@
 
 #include "common.h"
 
+
+#define NUM_TIMERS 1
+
+#define SWEEP_PERIOD 500
+
+//Drivers
+#include "BSE.h"
+
+#include "MCP48FV_DAC_SPI.h"
+
+
+
 // Static Function Declaration
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr);
-static void vcu_mode_process(TestBoardState_t *stateptr);
+static void vcu_mode_process(TestBoardState_t *stateptr,TimerHandle_t *timerptr);
+static void setPeripheralTestCases(TestBoardState_t* stateptr);
+static void timerInit();
 static void UARTTest();
 static void JSONHandler();
 
 // Static global variables
-static TestBoardState_t testBoardState = { IDLE, {0} };
+static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
+static TimerHandle_t xTimers[NUM_TIMERS];
+
+static void timerInit(){
+
+    xTimers[BSE_SWEEP_TIMER] = xTimerCreate(
+
+                                "BSE_Sweep_Timer",
+
+                                pdMS_TO_TICKS(SWEEP_PERIOD),
+
+                                pdTRUE,
+
+                                (void* ) 0,
+
+                                bse_sweep_timer
+
+                                );
+
+
+
+}
+
 
 unsigned char UARTBuffer[100];
 
 int main(void)
 {
+
+    //initialization
+
+    MCP48FV_Init();
+
+    timerInit();
+
+
     Result_t res = SUCCESS;
 
     res = initUARTandModeHandler(&testBoardState);
@@ -46,6 +90,15 @@ int main(void)
     // check formatting of string sent by GUI - may need to adjust string for compatibility
     JSONHandler();
 
+    //* test code *//
+    setPeripheralTestCases(&testBoardState);
+
+
+
+    //start timer
+//    xTimerStart(xTimers[BSE_SWEEP_TIMER],pdMS_TO_TICKS(500));
+
+//    vTaskStartScheduler();
     //determine the expected state of VCU/BMS
 
     while(1)
@@ -73,7 +126,7 @@ int main(void)
             }
             case VCU_MODE:
             {
-                vcu_mode_process(&testBoardState);
+                vcu_mode_process(&testBoardState, &xTimers);
             }
         }
 
@@ -120,6 +173,38 @@ static void JSONHandler(){
     return;
 }
 
+static void setPeripheralTestCases(TestBoardState_t *stateptr){
+
+    //TestBoard Mode
+    stateptr->testMode = VCU_MODE;
+
+
+    //VCU Tests
+    stateptr->peripheralStateArray[APPS] = 0;
+
+    stateptr->peripheralStateArray[BSE] = BSE_OPEN_CIRCUIT;
+
+    stateptr->peripheralStateArray[TSAL] = 0;
+
+    stateptr->peripheralStateArray[IMD] = 0;
+
+    stateptr->peripheralStateArray[LV] = 0;
+
+    stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = 0;
+
+
+    //BMS Tests
+    stateptr->peripheralStateArray[BMS_SLAVES] = 0;
+
+    stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
+
+    stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+
+    return SUCCESS;
+
+}
+
+
 //pass timer ptr to each pointer peripheral. timer to periodically call test function you want
 //inner state machines for each BMS peripheral and three outer state machines -Meeting with Amneet
 static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr)
@@ -153,15 +238,18 @@ static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *time
     return SUCCESS;
 }
 
-static void vcu_mode_process(TestBoardState_t *stateptr)
+static void vcu_mode_process(TestBoardState_t *stateptr,TimerHandle_t *timerptr)
 {
 
     //eg Constant outputs don't need periodic timers should
 
+    bse_process(stateptr->peripheralStateArray[BSE],timerptr);
+
+
 }
 
-void set_testboard_state(uint8_t *state_array, TestBoardModes_t mode)
-{
-    memcpy(&testBoardState.peripheralStateArray[0], state_array, sizeof(*state_array));
-    testBoardState.testMode = mode;
-}
+//void set_testboard_state(uint8_t *state_array, TestBoardModes_t mode)
+//{
+//    memcpy(&testBoardState.peripheralStateArray[0], state_array, sizeof(*state_array));
+//    testBoardState.testMode = mode;
+//}
