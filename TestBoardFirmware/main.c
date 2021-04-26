@@ -24,7 +24,8 @@
 
 #include "MCP48FV_DAC_SPI.h"
 
-
+static unsigned char UARTBuffer[100];
+static unsigned char UARTchar;
 
 // Static Function Declaration
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
@@ -58,9 +59,6 @@ static void timerInit(){
 
 
 }
-
-
-unsigned char UARTBuffer[100];
 
 int main(void)
 {
