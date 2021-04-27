@@ -16,17 +16,11 @@ typedef enum
   FAIL
 } Result_t;
 
-
-enum{
-
-    BSE_SWEEP_TIMER
-
-
-};
-
 #define TIMER_DEBUG
 
 #define SWEEP_STEP 50
+
+#define SWEEP_PERIOD 500
 
 
 

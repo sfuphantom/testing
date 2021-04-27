@@ -12,19 +12,22 @@
 
 #include "Phantom_sci.h"
 
+
+#include "timer.h"
+
 //FreeRTOS files
-#include "FreeRTOS.h"
-#include "FreeRTOSConfig.h"
-#include "os_task.h"
-#include "os_timer.h"
+//#include "FreeRTOS.h"
+//#include "FreeRTOSConfig.h"
+//#include "os_task.h"
+//#include "os_timer.h"
 
 #include "common.h"
 
-void bse_process(uint8_t state,TimerHandle_t *timerptr);
+void bse_process(uint8_t state);
 
 
 //Timer Callback Functions
-void bse_sweep_timer(TimerHandle_t);
+void bse_sweep_timer(Timer, int);
 
 
 enum
