@@ -5,13 +5,17 @@
  *      Author: Rafael Guevara
  */
 
+//Halcogen Setup
+// 1. Enable RTI driver
+// 2. Enable appropriate VIM channel (ie look for compare block)
+// 3. Set period of compare block
+
 #ifndef TIMERS_TIMERS_H_
 #define TIMERS_TIMERS_H_
 
 #include "rti.h"
 
-#define NUM_TIMERS 2 //define more timers here...
-
+#define NUM_TIMERS 1 //define more timers here...
 
 /* Variables */
 
@@ -19,8 +23,7 @@
 // Indexes of all timers in xTimers array
 typedef enum{
 
-    LED1,
-    LED2
+    BSE_SWEEP_TIMER,
 
     //more timers here...
 
@@ -30,6 +33,8 @@ typedef void (*Callbackfunc)(Timer, int); //callback function signature; MUST re
 
 // TimerHandle Struct
 typedef struct{
+
+    char* name;
 
     Callbackfunc callback; //function that executes when timer expires
 
@@ -59,7 +64,11 @@ uint8_t isBlocked(Timer);
 
 /* Setters */
 
-void xTimerSet(Timer, Callbackfunc, int, int);
+void xTimerSet(char*, Timer, Callbackfunc, int, int);
+
+void startGlobalTimer();
+
+void stopGlobalTimer();
 
 void startTimer(Timer);
 
@@ -68,85 +77,5 @@ void stopTimer(Timer);
 void setTimerID(Timer, int);
 
 void setTimerPeriod(Timer, int);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//// get member of a specific timer
-//
-///* Fn: getTimerID
-//* Purpose: Gets ID of a timer based on the *timer* index given
-//* Parameters: timer
-//* */
-//int getTimerID(Timer);
-//
-//
-//
-//
-//
-///* Fn: xTimerSet
-//* Purpose: Sets all members of a timer based on the *timer* index given
-//* Parameters: timer, callback, period, ID
-//* */
-//void xTimerSet(Timer, Callbackfunc, int, int);
-//
-//
-//
-///* Fn: setTimerID
-//* Purpose: Sets ID of a timer based on the *timer* index given
-//* Parameters: timer, ID
-//* */
-//
-//void setTimerID(Timer, int);
-//
-//
-//
-///* Fn: startTimer
-//* Purpose: Sets stop member of a given timer to false
-//* Parameters: timer
-//* */
-//void startTimer(Timer);
-//
-//
-//
-///* Fn: stopTimer
-//* Purpose: Sets stop member of a given timer to true
-//* Parameters: timer
-//* */
-//void stopTimer(Timer);
-
 
 #endif /* TIMERS_TIMERS_H_ */

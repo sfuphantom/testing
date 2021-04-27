@@ -4,7 +4,18 @@
  *  Created on: Apr 26, 2021
  *      Author: Rafael Guevara
  */
-#include "timers.h"
+#include "timer.h"
+
+
+void timerInit(){
+
+    rtiInit();
+
+    rtiEnableNotification(rtiNOTIFICATION_COMPARE0);
+
+    _enable_IRQ();
+}
+
 
 /* Static Functions */
 
@@ -43,15 +54,6 @@ void rtiNotification(uint32 notification)
 
 }
 
-void timerInit(){
-
-    rtiInit();
-
-    rtiEnableNotification(rtiNOTIFICATION_COMPARE0);
-
-    _enable_IRQ();
-}
-
 /* Getters */
 
 uint8_t isBlocked(Timer timer){
@@ -72,7 +74,9 @@ int getTimerPeriod(Timer timer){
 
 /* Setters */
 
-void xTimerSet(Timer timer, Callbackfunc callback, int period,int ID){
+void xTimerSet(char* name, Timer timer, Callbackfunc callback, int period,int ID){
+
+    xTimers[timer].name = name;
 
     setTimerID(timer, ID);
 
@@ -82,6 +86,17 @@ void xTimerSet(Timer timer, Callbackfunc callback, int period,int ID){
 
     xTimers[timer].callback = callback;
 }
+
+void startGlobalTimer(){
+    ticks = 0;
+    rtiStartCounter(rtiCOUNTER_BLOCK0);
+}
+
+void stopGlobalTimer(){
+
+    rtiStopCounter(rtiCOUNTER_BLOCK0);
+}
+
 
 void startTimer(Timer timer){
 
@@ -101,3 +116,4 @@ void setTimerID(Timer timer,int ID){
 void setTimerPeriod(Timer timer,int period){
     xTimers[timer].period = period;
 }
+
