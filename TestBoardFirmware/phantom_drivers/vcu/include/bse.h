@@ -36,7 +36,7 @@ enum
     NORMAL_BSE_ON,
     BSE_OPEN_CIRCUIT, //0V reading
     BSE_SHORT_CIRCUIT, //5V reading
-    APPS_BSE_ACTIVATED, // APPS sensor indicates >25% activation while BSE applied
+    BSE_APPS_ACTIVATED, // APPS sensor indicates >25% activation while BSE applied
     BSE_SWEEP
 };
 

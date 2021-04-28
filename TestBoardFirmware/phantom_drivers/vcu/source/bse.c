@@ -41,7 +41,7 @@ void bse_process(uint8_t state){
         case BSE_SWEEP:
             bse_sweep();
             break;
-        case APPS_BSE_ACTIVATED:
+        case BSE_APPS_ACTIVATED:
             apps_bse_activated();
             break;
         default:
@@ -52,26 +52,26 @@ void bse_process(uint8_t state){
 
 static void normal_bse_off(){
     //sets BSE value at minimum of its range as though the pedal is not being pressed
-//    MCP48FV_Set_Value_Single(BSE_MIN, DAC_SIZE_BSE, VOUT1, 1);
+   MCP48FV_Set_Value_Single(BSE_MIN, DAC_SIZE_BSE, VOUT1, 1);
     return;
 }
 
 static void normal_bse_on(){
     // sets BSE value at midpoint of operating range
     uint16_t bse_volt = ((BSE_MAX-BSE_MIN)/2)+BSE_MIN;
-//    MCP48FV_Set_Value_Single(bse_volt, DAC_SIZE_BSE, VOUT1, 1);
+   MCP48FV_Set_Value_Single(bse_volt, DAC_SIZE_BSE, VOUT1, 1);
     return;
 }
 
 static void bse_open_circuit(){
     // bse sensor reads an open circuit (0V)
-//    MCP48FV_Set_Value_Single(BSE_OPEN, DAC_SIZE_BSE, VOUT1, 1);
+   MCP48FV_Set_Value_Single(BSE_OPEN, DAC_SIZE_BSE, VOUT1, 1);
     return;
 }
 
 static void bse_short_circuit(){
     // bse sensor reads a short circuit (5V)
-//    MCP48FV_Set_Value_Single(BSE_SHORT, DAC_SIZE_BSE, VOUT1, 1);
+   MCP48FV_Set_Value_Single(BSE_SHORT, DAC_SIZE_BSE, VOUT1, 1);
     return;
 }
 
@@ -85,30 +85,23 @@ void bse_sweep_timer(Timer sweepTimer, int ID){
 //    uint8_t num_cycles =  (uint8_t) pvTimerGetTimerID(sweepTimer);
 
 
-//    #ifdef TIMER_DEBUG
-//
-////    UARTSend(PC_UART, "Bse sweep timer expired!\n\r");
-//
-//    UARTSend(PC_UART, (char) num_cycles);
-//
-//
-//    #endif
+    #ifdef TIMER_DEBUG
+
+    UARTprintf("Bse sweep timer expired.\n\n\r");
+
+    #endif
 
 
 
 
-//    int voltage = BSE_MIN + ( SWEEP_STEP * num_cycles );
-//
-//    MCP48FV_Set_Value_Single(voltage, DAC_SIZE_BSE, VOUT1, 1);
-//
-//    //increment cycle
-//
-//    num_cycles++;
-//
-//    vTimerSetTimerID( sweepTimer, ( void * ) num_cycles );
+    int voltage = BSE_MIN + ( SWEEP_STEP * ID);
 
+    MCP48FV_Set_Value_Single(voltage, DAC_SIZE_BSE, VOUT1, 1);
 
-    UARTprintf("Bse sweep timer expired!\n\r");
+    //increment cycle
+
+    setTimerID( sweepTimer, ++ID );
+
 
 
 }
