@@ -15,7 +15,7 @@
 
 #include "rti.h"
 
-#define NUM_TIMERS 1 //define more timers here...
+#define NUM_TIMERS 6 //define more timers here...
 
 /* Variables */
 
@@ -23,7 +23,16 @@
 // Indexes of all timers in xTimers array
 typedef enum{
 
+    TEST_COMPLETE_TIMER,
+
+    //bse timers
     BSE_SWEEP_TIMER,
+
+    //apps timers
+    APPS_SHORT_TIMER,
+    APPS_OPEN_TIMER,
+    APPS_BSE_ACTIVATED_TIMER,
+    APPS_SWEEP_TIMER
 
     //more timers here...
 
@@ -69,6 +78,11 @@ void xTimerSet(char*, Timer, Callbackfunc, int, int);
 void startGlobalTimer();
 
 void stopGlobalTimer();
+
+//test functions
+void startAllTimers();
+
+void stopAllTimers();
 
 void startTimer(Timer);
 
