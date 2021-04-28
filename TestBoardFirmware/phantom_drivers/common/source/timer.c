@@ -6,6 +6,17 @@
  */
 #include "timer.h"
 
+/* Static Functions */
+
+static void executeTimerCallback(Timer timer){
+
+    xTimers[timer].callback( timer, getTimerID(timer) );
+}
+
+static uint8_t isExpired(Timer timer){
+
+    return (ticks % xTimers[timer].period  == 0) && (ticks != 0);
+}
 
 void timerInit(){
 
@@ -16,28 +27,9 @@ void timerInit(){
     _enable_IRQ();
 }
 
-
-/* Static Functions */
-
-static void executeTimerCallback(Timer timer){
-
-    xTimers[timer].callback( timer, getTimerID(timer) );
-}
-
-static uint8_t isExpired(Timer timer){
-
-    return (ticks % xTimers[timer].period  == 0);
-}
-
-
 void rtiNotification(uint32 notification)
 {
 /*  enter user code between the USER CODE BEGIN and USER CODE END. */
-
-    //deal with overflow
-    if(ticks + 1 == 100000)
-        ticks = 0;
-
 
     //check timer expirations
 
@@ -45,12 +37,18 @@ void rtiNotification(uint32 notification)
 
     for(timer = 0; timer < NUM_TIMERS; timer++){
 
-        if( isExpired(timer) && !isBlocked(timer) )
-
+        if( isExpired(timer) && !isBlocked(timer) ){
             executeTimerCallback(timer);
+        }
     }
 
     ticks++;
+
+    //deal with overflow
+    if(ticks == 100001){
+        ticks = 0;
+    }
+
 
 }
 
@@ -85,6 +83,8 @@ void xTimerSet(char* name, Timer timer, Callbackfunc callback, int period,int ID
     stopTimer(timer);
 
     xTimers[timer].callback = callback;
+
+    xTimers[timer].stop = true;
 }
 
 void startGlobalTimer(){
@@ -97,6 +97,27 @@ void stopGlobalTimer(){
     rtiStopCounter(rtiCOUNTER_BLOCK0);
 }
 
+//test functions
+
+void startAllTimers(){
+
+    Timer timer;
+
+    for(timer = 0; timer < NUM_TIMERS; timer++){
+        startTimer(timer);
+    }
+}
+
+void stopAllTimers(){
+
+    Timer timer;
+
+    for(timer = 0; timer < NUM_TIMERS; timer++){
+        stopTimer(timer);
+    }
+}
+
+//end of test functions
 
 void startTimer(Timer timer){
 
