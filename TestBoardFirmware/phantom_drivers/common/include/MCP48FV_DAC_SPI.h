@@ -15,6 +15,10 @@
 #include "mibspi.h"
 #include "stdbool.h"
 
+#define TRANSFERGROUP_APPS 0
+#define TRANSFERGROUP_BSE_HV 1
+#define TRANSFERGROUP_BMS 2
+
 bool MCP48FV_Init();
 
 bool MCP48FV_Set_Value_Single(uint16_t targetVoltage, uint16_t DAC_SIZE, uint8_t dacVout, uint32_t transfer_group);

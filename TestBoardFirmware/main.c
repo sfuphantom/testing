@@ -6,67 +6,57 @@
 #include "tiny-json.h"
 #include "main.h"
 #include "Phantom_sci.h"
-#include "FreeRTOS.h"
-#include "FreeRTOSConfig.h"
-#include "os_task.h"
-#include "os_timer.h"
 #include "hwConfig.h"
+//#include "FreeRTOS.h"
+//#include "FreeRTOSConfig.h"
+//#include "os_task.h"
+//#include "os_timer.h"
 
 #include "common.h"
 
-
-#define NUM_TIMERS 1
-
-#define SWEEP_PERIOD 500
-
 //Drivers
 #include "bse.h"
-
 #include "MCP48FV_DAC_SPI.h"
+#include "apps.h"
+#include "timer.h"
+
+#define TIMER_PERIOD 1000
 
 static unsigned char UARTBuffer[100];
 static unsigned char UARTchar;
 
 // Static Function Declaration
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
-static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr);
-static void vcu_mode_process(TestBoardState_t *stateptr,TimerHandle_t *timerptr);
+static Result_t bms_mode_process(TestBoardState_t *stateptr);
+static void vcu_mode_process(TestBoardState_t *stateptr);
 static void setPeripheralTestCases(TestBoardState_t* stateptr);
-static void timerInit();
-static void UARTTest();
-static void JSONHandler();
+static void createTimers();
+static void test_complete_timer(Timer, int);
+void UARTTest();
+void JSONHandler();
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
-static TimerHandle_t xTimers[NUM_TIMERS];
+static bool isTestComplete = false;
 
-static void timerInit(){
-
-    xTimers[BSE_SWEEP_TIMER] = xTimerCreate(
-
-                                "BSE_Sweep_Timer",
-
-                                pdMS_TO_TICKS(SWEEP_PERIOD),
-
-                                pdTRUE,
-
-                                (void* ) 0,
-
-                                bse_sweep_timer
-
-   ); 
-
-
-
-}
+static void createTimers();
 
 int main(void)
-{
+    {
 
     //initialization
 
+    MCP48FV_Init();
+
+
+   // sciInit();
+    timerInit();
+
+    createTimers();
+
+
     Result_t res = SUCCESS;
-    res = MCP48FV_Init(); 
+    //res = MCP48FV_Init(); 
 
     //timerInit();
 
@@ -88,16 +78,21 @@ UARTprintf("test complete");
     //* test code *//
     setPeripheralTestCases(&testBoardState);
 
+    startAllTimers();
 
+    startGlobalTimer();
 
-    //start timer
-//    xTimerStart(xTimers[BSE_SWEEP_TIMER],pdMS_TO_TICKS(500));
+    isTestComplete = false;
 
-//    vTaskStartScheduler();
     //determine the expected state of VCU/BMS
 
     while(1)
     {
+
+        startTimer(TEST_COMPLETE_TIMER);
+
+        isTestComplete = false;
+
         switch(testBoardState.testMode)
         {
             case IDLE:
@@ -121,15 +116,19 @@ UARTprintf("test complete");
             }
             case VCU_MODE:
             {
-                vcu_mode_process(&testBoardState, &xTimers);
+                vcu_mode_process(&testBoardState);
             }
         }
 
-        delayms(5000);
 
+        while(!isTestComplete);
+
+        stopTimer(TEST_COMPLETE_TIMER);
 
         //validate test cases (through timer and send to PC)
         //send a single pass/result to PC
+
+        delayms(5000);
 
     }
 
@@ -180,9 +179,9 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr){
 
 
     //VCU Tests
-    stateptr->peripheralStateArray[APPS] = 0;
+    stateptr->peripheralStateArray[APPS] = APPS_BSE_ACTIVATED;
 
-    stateptr->peripheralStateArray[BSE] = BSE_OPEN_CIRCUIT;
+    stateptr->peripheralStateArray[BSE] = BSE_SWEEP;
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
@@ -200,14 +199,12 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr){
 
     stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
 
-    return SUCCESS;
-
 }
 
 
 //pass timer ptr to each pointer peripheral. timer to periodically call test function you want
 //inner state machines for each BMS peripheral and three outer state machines -Meeting with Amneet
-static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *timerptr)
+static Result_t bms_mode_process(TestBoardState_t *stateptr)
 {
 //    Result_t ret = FAIL;
 //
@@ -238,15 +235,110 @@ static Result_t bms_mode_process(TestBoardState_t *stateptr, TimerHandle_t *time
     return SUCCESS;
 }
 
-static void vcu_mode_process(TestBoardState_t *stateptr,TimerHandle_t *timerptr)
+static void vcu_mode_process(TestBoardState_t *stateptr)
 {
 
     //eg Constant outputs don't need periodic timers should
 
-    bse_process(stateptr->peripheralStateArray[BSE],timerptr);
+    bse_process(stateptr->peripheralStateArray[BSE]);
+
+    apps_process(stateptr->peripheralStateArray[APPS]);
 
 
 }
+
+static void test_complete_timer(Timer timer, int ID){
+
+    #ifdef TIMER_DEBUG
+    UARTprintf("Tests Complete!\r\n\n");
+    #endif
+
+    isTestComplete = true;
+
+    stopAllTimers();
+
+}
+
+void createTimers(){
+
+
+    xTimerSet(
+                "Test_Complete", // name
+
+                TEST_COMPLETE_TIMER, // index
+
+                test_complete_timer, // callback function
+
+                10000, // period in ms
+
+                0 // ID
+             );
+
+    xTimerSet(
+                "BSE_Sweep_Timer", // name
+
+                BSE_SWEEP_TIMER, // index
+
+                bse_sweep_timer, // callback function
+
+                TIMER_PERIOD, // period in ms
+
+                0 // ID
+             );
+
+    xTimerSet(
+                "APPS_Short_Timer", // name
+
+                APPS_SHORT_TIMER, // index
+
+                apps_short_timer, // callback function
+
+                TIMER_PERIOD, // period in ms
+
+                0 // ID
+             );
+
+    xTimerSet(
+                "APPS_Open_Timer", // name
+
+                APPS_OPEN_TIMER, // index
+
+                apps_open_timer, // callback function
+
+                TIMER_PERIOD, // period in ms
+
+                0 // ID
+             );
+
+    xTimerSet(
+               "APPS_BSE_Activated_Timer", // name
+
+               APPS_BSE_ACTIVATED_TIMER, // index
+
+               apps_bse_activated_timer, // callback function
+
+               TIMER_PERIOD, // period in ms
+
+               0 // ID
+            );
+
+    xTimerSet(
+               "APPS_Sweep_Timer", // name
+
+               APPS_SWEEP_TIMER, // index
+
+               apps_sweep_timer, // callback function
+
+               TIMER_PERIOD, // period in ms
+
+               0 // ID
+            );
+
+    //add more timers here...
+
+
+}
+
 
 //void set_testboard_state(uint8_t *state_array, TestBoardModes_t mode)
 //{
