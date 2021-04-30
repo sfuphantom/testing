@@ -20,7 +20,7 @@
 #define SWEEP_PERIOD 500
 
 //Drivers
-#include "BSE.h"
+#include "bse.h"
 
 #include "MCP48FV_DAC_SPI.h"
 
@@ -54,7 +54,7 @@ static void timerInit(){
 
                                 bse_sweep_timer
 
-                                );
+   ); 
 
 
 
@@ -65,23 +65,20 @@ int main(void)
 
     //initialization
 
-    //MCP48FV_Init();
+    Result_t res = SUCCESS;
+    res = MCP48FV_Init(); 
 
     //timerInit();
-
-
-    Result_t res = SUCCESS;
 
     res = initUARTandModeHandler(&testBoardState);
 
     // UART test function
     UARTTest();
-
+UARTprintf("test complete");
     // TODO: Interrupt based wait to get test mode from PC
     // while(!initGUI) need a way to know where start and end of message is (startbyte..,.,..endbyte)
     // receive UART from GUI
     // need length - what ways could difference be handled?
-    //sciReceive(PC_UART, 1,  (unsigned char *)&UARTBuffer); //fix length params for GUI data
 
     //parse JSON and set states
     // tiny-json stuff
@@ -157,10 +154,15 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
 }
 
 static void UARTTest(){
+    UARTprintf("UART Test Begin:\n\r");
+    char n[] = {'a', 'r', 'r', 'a', 'y', 'd', 'a', 't', 'a'};
+    UARTSend(PC_UART, n);
+    UARTprintf("\n\r");
     UARTprintf("Enter character \n\r");
-    sciReceive(PC_UART, 1, (unsigned char *)&UARTBuffer);
+    //sciReceive(PC_UART, 1, (unsigned char *)&UARTBuffer);
     UARTprintf("This is your character:\n\r");
     UARTSend(PC_UART, UARTBuffer);
+    UARTprintf("character received\n\r");
     return;
 }
 
@@ -251,3 +253,21 @@ static void vcu_mode_process(TestBoardState_t *stateptr,TimerHandle_t *timerptr)
 //    memcpy(&testBoardState.peripheralStateArray[0], state_array, sizeof(*state_array));
 //    testBoardState.testMode = mode;
 //}
+
+//change this function as necessary
+void sciNotification(sciBASE_t *sci, unsigned flags){
+    //echoes character received
+    UARTprintf("sciNotification \n\r");
+    sciSend(PC_UART, 1, (unsigned char *)&UARTchar);
+    // waits for new character
+    sciReceive(PC_UART, 1, (unsigned char *)&UARTchar);
+}
+
+//not used but must be present for SCI notifications to work
+void esmGroup1Notification(int bit){
+    return;
+}
+
+void esmGroup2Notification(int bit){
+    return;
+}
