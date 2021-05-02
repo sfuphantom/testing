@@ -23,7 +23,7 @@
 #define TIMER_PERIOD 1000
 
 static unsigned char UARTBuffer[100];
-static unsigned char UARTchar;
+//static bool initGUI = false;
 
 // Static Function Declaration
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
@@ -63,12 +63,19 @@ int main(void)
     res = initUARTandModeHandler(&testBoardState);
 
     // UART test function
-    UARTTest();
-UARTprintf("test complete");
-    // TODO: Interrupt based wait to get test mode from PC
-    // while(!initGUI) need a way to know where start and end of message is (startbyte..,.,..endbyte)
-    // receive UART from GUI
+    // UARTTest();
+    // UARTprintf("test complete");
+
     // need length - what ways could difference be handled?
+    UARTprintf(" Ready to initialize GUI \n\r");
+    sciReceive(PC_UART, 1, (unsigned char *)&UARTBuffer);
+    // //while (initGUI == false){
+    //     // wait for GUI UART
+    //     // process JSON after. set state
+    //     // update initGUI somewhere
+    //     UARTprintf("GUI NOT INITIALIZED\n\r");
+    //     delayms(1000);
+    // }
 
     //parse JSON and set states
     // tiny-json stuff
@@ -139,7 +146,7 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
 {
     sciInit(); // replace with UARTInit() to set baudrate
     sciSetBaudrate(PC_UART, 9600);
-    sciEnableNotification(PC_UART, SCI_RX_INT);
+   // sciEnableNotification(PC_UART, SCI_RX_INT);
 
     UARTprintf("hello world\n\r");
 
@@ -152,18 +159,15 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     return SUCCESS;
 }
 
-static void UARTTest(){
-    UARTprintf("UART Test Begin:\n\r");
-    char n[] = {'a', 'r', 'r', 'a', 'y', 'd', 'a', 't', 'a'};
-    UARTSend(PC_UART, n);
-    UARTprintf("\n\r");
-    UARTprintf("Enter character \n\r");
-    //sciReceive(PC_UART, 1, (unsigned char *)&UARTBuffer);
-    UARTprintf("This is your character:\n\r");
-    UARTSend(PC_UART, UARTBuffer);
-    UARTprintf("character received\n\r");
-    return;
-}
+// static void UARTTest(){
+//     UARTprintf("UART Test Begin:\n\r");
+//     UARTprintf("Enter 2 characters: \n\r");
+//     sciReceive(PC_UART, 2, (unsigned char *)&UARTBuffer);
+//     UARTSend(PC_UART, UARTBuffer);
+//     UARTprintf("This is your character:\n\r");
+//     UARTSend(PC_UART, UARTBuffer);
+//     return;
+// }
 
 static void JSONHandler(){
     // json_t array[]
@@ -347,19 +351,26 @@ void createTimers(){
 //}
 
 //change this function as necessary
-void sciNotification(sciBASE_t *sci, unsigned flags){
-    //echoes character received
-    UARTprintf("sciNotification \n\r");
-    sciSend(PC_UART, 1, (unsigned char *)&UARTchar);
-    // waits for new character
-    sciReceive(PC_UART, 1, (unsigned char *)&UARTchar);
-}
+// void sciNotification(sciBASE_t *sci, unsigned flags){
+//     sciSend(PC_UART, 1, UARTBuffer);
+//     //UARTTest();
+//     UARTprintf("sciNotification \n\r");
+//     //sciSend(PC_UART, 10, (unsigned char *)&UARTBuffer);
+//     int i = 1;
+//     while(temp !=  '}'){
+//         UARTBuffer[i] = temp;
+//         sciSend(PC_UART, 1, temp);
+//         i++;
+//         sciReceive(PC_UART, 1, temp);
+//     }
+//     UARTSend(PC_UART, UARTBuffer);
+// }
 
-//not used but must be present for SCI notifications to work
-void esmGroup1Notification(int bit){
-    return;
-}
+// //not used but must be present for SCI notifications to work
+// void esmGroup1Notification(int bit){
+//     return;
+// }
 
-void esmGroup2Notification(int bit){
-    return;
-}
+// void esmGroup2Notification(int bit){
+//     return;
+// }

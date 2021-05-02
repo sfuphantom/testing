@@ -111,7 +111,7 @@ void apps_short_timer(Timer timer, int ID){
 
     #ifdef TIMER_DEBUG
 
-    UARTprintf("Apps short timer expired\n\n\r");
+    //UARTprintf("Apps short timer expired\n\n\r");
 
     #endif
 
@@ -129,7 +129,7 @@ void apps_open_timer(Timer timer, int ID){
 
     #ifdef TIMER_DEBUG
 
-    UARTprintf("Apps open timer expired\n\n\r");
+   // UARTprintf("Apps open timer expired\n\n\r");
 
     #endif
 
@@ -145,7 +145,7 @@ void apps_bse_activated_timer(Timer timer, int ID){
 
     #ifdef TIMER_DEBUG
 
-    UARTprintf("Apps bse activated timer expired\n\n\r");
+    //UARTprintf("Apps bse activated timer expired\n\n\r");
 
     #endif
 
@@ -172,7 +172,7 @@ void apps_sweep_timer(Timer timer, int ID){
 
     #ifdef TIMER_DEBUG
 
-    UARTprintf("Apps sweep timer expired.\n\n\r");
+   // UARTprintf("Apps sweep timer expired.\n\n\r");
 
     #endif
 

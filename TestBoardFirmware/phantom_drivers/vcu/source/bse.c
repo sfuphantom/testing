@@ -87,7 +87,7 @@ void bse_sweep_timer(Timer sweepTimer, int ID){
 
     #ifdef TIMER_DEBUG
 
-    UARTprintf("Bse sweep timer expired.\n\n\r");
+  //  UARTprintf("Bse sweep timer expired.\n\n\r");
 
     #endif
 
