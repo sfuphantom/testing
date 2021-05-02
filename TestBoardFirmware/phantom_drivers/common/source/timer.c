@@ -8,14 +8,14 @@
 
 /* Static Functions */
 
-static void executeTimerCallback(Timer timer){
+static void executeTimerCallback(Peripheral peripheral_timer){
 
-    xTimers[timer].callback( timer, getTimerID(timer) );
+    xTimers[peripheral_timer].callback( xTimers[peripheral_timer].timer, getTimerID(peripheral_timer) );
 }
 
-static uint8_t isExpired(Timer timer){
+static uint8_t isExpired(Peripheral peripheral_timer){
 
-    return (ticks % xTimers[timer].period  == 0) && (ticks != 0);
+    return (ticks % xTimers[peripheral_timer].period  == 0) && (ticks != 0);
 }
 
 void timerInit(){
@@ -25,6 +25,13 @@ void timerInit(){
     rtiEnableNotification(rtiNOTIFICATION_COMPARE0);
 
     _enable_IRQ();
+
+    //initialize timers in blocked state
+
+    Peripheral peripheral_timer;
+
+    for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++)
+           stopTimer(peripheral_timer);
 }
 
 void rtiNotification(uint32 notification)
@@ -33,12 +40,12 @@ void rtiNotification(uint32 notification)
 
     //check timer expirations
 
-    Timer timer;
+    Peripheral peripheral_timer;
 
-    for(timer = 0; timer < NUM_TIMERS; timer++){
+    for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++){
 
-        if( isExpired(timer) && !isBlocked(timer) ){
-            executeTimerCallback(timer);
+        if( isExpired(peripheral_timer) && !isBlocked(peripheral_timer) ){
+            executeTimerCallback(peripheral_timer);
         }
     }
 
@@ -54,37 +61,39 @@ void rtiNotification(uint32 notification)
 
 /* Getters */
 
-uint8_t isBlocked(Timer timer){
+uint8_t isBlocked(Peripheral peripheral_timer){
 
-    return (xTimers[timer].stop);
+    return (xTimers[peripheral_timer].stop);
 }
 
-int getTimerID(Timer timer){
+int getTimerID(Peripheral peripheral_timer){
 
-    return xTimers[timer].ID;
+    return xTimers[peripheral_timer].ID;
 }
 
-int getTimerPeriod(Timer timer){
+int getTimerPeriod(Peripheral peripheral_timer){
 
-    return xTimers[timer].period;
+    return xTimers[peripheral_timer].period;
 }
 
 
 /* Setters */
 
-void xTimerSet(char* name, Timer timer, Callbackfunc callback, int period,int ID){
+void xTimerSet(char* name, Peripheral peripheral_timer, Callbackfunc callback, int ID){
 
-    xTimers[timer].name = name;
+    xTimers[peripheral_timer].name = name;
 
-    setTimerID(timer, ID);
+    setTimerID(peripheral_timer, ID);
 
-    setTimerPeriod(timer, period);
+    setTimerPeriod(peripheral_timer, 0);
 
-    stopTimer(timer);
+    stopTimer(peripheral_timer);
 
-    xTimers[timer].callback = callback;
+    xTimers[peripheral_timer].callback = callback;
 
-    xTimers[timer].stop = true;
+    xTimers[peripheral_timer].stop = true;
+
+    xTimers[peripheral_timer].timer = 0; //default
 }
 
 void startGlobalTimer(){
@@ -97,44 +106,37 @@ void stopGlobalTimer(){
     rtiStopCounter(rtiCOUNTER_BLOCK0);
 }
 
-//test functions
-
-void startAllTimers(){
-
-    Timer timer;
-
-    for(timer = 0; timer < NUM_TIMERS; timer++){
-        startTimer(timer);
-    }
-}
-
 void stopAllTimers(){
 
-    Timer timer;
+    Peripheral peripheral_timer;
 
-    for(timer = 0; timer < NUM_TIMERS; timer++){
-        stopTimer(timer);
+    for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++){
+        stopTimer(peripheral_timer);
     }
 }
 
 //end of test functions
 
-void startTimer(Timer timer){
+void startTimer(Peripheral peripheral_timer, Timer timer, int period){
 
-    xTimers[timer].stop = false;
+    xTimers[peripheral_timer].stop = false;
+
+    xTimers[peripheral_timer].timer = timer;
+
+    setTimerPeriod(peripheral_timer, period);
 }
 
-void stopTimer(Timer timer){
+void stopTimer(Peripheral peripheral_timer){
 
-    xTimers[timer].stop = true;
+    xTimers[peripheral_timer].stop = true;
 }
 
-void setTimerID(Timer timer,int ID){
+void setTimerID(Peripheral peripheral_timer,int ID){
 
-    xTimers[timer].ID = ID;
+    xTimers[peripheral_timer].ID = ID;
 }
 
-void setTimerPeriod(Timer timer,int period){
-    xTimers[timer].period = period;
+void setTimerPeriod(Peripheral peripheral_timer,int period){
+    xTimers[peripheral_timer].period = period;
 }
 

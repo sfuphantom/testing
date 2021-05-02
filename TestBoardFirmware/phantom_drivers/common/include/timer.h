@@ -5,6 +5,9 @@
  *      Author: Rafael Guevara
  */
 
+//One RTI handles all software timers; each peripheral has at most one software timer with one
+//callback function. Within the callback function, the peripheral decides which test case to run
+
 //Halcogen Setup
 // 1. Enable RTI driver
 // 2. Enable appropriate VIM channel (ie look for compare block)
@@ -14,25 +17,24 @@
 #define TIMERS_TIMERS_H_
 
 #include "rti.h"
+#include "common.h"
 
-#define NUM_TIMERS 6 //define more timers here...
+#define NUM_TIMERS 10 //each system gets one timer if needed. reduce number of timers later...
 
 /* Variables */
 
 // Timer List Enum
-// Indexes of all timers in xTimers array
 typedef enum{
 
-    TEST_COMPLETE_TIMER,
+    TEST_COMPLETE_TIMER = 0,
 
-    //bse timers
-    BSE_SWEEP_TIMER,
+
+    SWEEP_TIMER, //general vcu timer
 
     //apps timers
-    APPS_SHORT_TIMER,
-    APPS_OPEN_TIMER,
-    APPS_BSE_ACTIVATED_TIMER,
-    APPS_SWEEP_TIMER
+    SHORT_TIMER,
+    OPEN_TIMER,
+    BSE_ACTIVATED_TIMER,
 
     //more timers here...
 
@@ -53,7 +55,10 @@ typedef struct{
 
     bool stop; //boolean to start/stop timer
 
+    Timer timer;
+
 } TimerHandle;
+
 
 static unsigned long long int ticks; //number of times RTI has expired in ms
 
@@ -65,31 +70,28 @@ void timerInit();
 
 /* Getters */
 
-int getTimerID(Timer);
+int getTimerID(Peripheral);
 
-int getTimerPeriod(Timer);
+int getTimerPeriod(Peripheral);
 
-uint8_t isBlocked(Timer);
+uint8_t isBlocked(Peripheral);
 
 /* Setters */
 
-void xTimerSet(char*, Timer, Callbackfunc, int, int);
+void xTimerSet(char*, Peripheral, Callbackfunc, int);
 
 void startGlobalTimer();
 
 void stopGlobalTimer();
 
-//test functions
-void startAllTimers();
-
 void stopAllTimers();
 
-void startTimer(Timer);
+void startTimer(Peripheral, Timer, int);
 
-void stopTimer(Timer);
+void stopTimer(Peripheral);
 
-void setTimerID(Timer, int);
+void setTimerID(Peripheral, int);
 
-void setTimerPeriod(Timer, int);
+void setTimerPeriod(Peripheral, int);
 
 #endif /* TIMERS_TIMERS_H_ */
