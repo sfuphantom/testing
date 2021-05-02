@@ -23,6 +23,7 @@
 #define TIMER_PERIOD 1000
 
 static unsigned char UARTBuffer[100];
+static unsigned char testMode[3];
 //static bool initGUI = false;
 
 // Static Function Declaration
@@ -62,20 +63,13 @@ int main(void)
 
     res = initUARTandModeHandler(&testBoardState);
 
-    // UART test function
-    // UARTTest();
-    // UARTprintf("test complete");
-
     // need length - what ways could difference be handled?
     UARTprintf(" Ready to initialize GUI \n\r");
-    sciReceive(PC_UART, 1, (unsigned char *)&UARTBuffer);
-    // //while (initGUI == false){
-    //     // wait for GUI UART
-    //     // process JSON after. set state
-    //     // update initGUI somewhere
-    //     UARTprintf("GUI NOT INITIALIZED\n\r");
-    //     delayms(1000);
-    // }
+    sciReceive(PC_UART, 3, (unsigned char *)&testMode);
+    UARTprintf("Mode detected: ");
+    UARTSend(PC_UART, testMode);
+
+    sciReceive(PC_UART, 10, (unsigned char *)&UARTBuffer);
 
     //parse JSON and set states
     // tiny-json stuff
@@ -158,16 +152,6 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
 
     return SUCCESS;
 }
-
-// static void UARTTest(){
-//     UARTprintf("UART Test Begin:\n\r");
-//     UARTprintf("Enter 2 characters: \n\r");
-//     sciReceive(PC_UART, 2, (unsigned char *)&UARTBuffer);
-//     UARTSend(PC_UART, UARTBuffer);
-//     UARTprintf("This is your character:\n\r");
-//     UARTSend(PC_UART, UARTBuffer);
-//     return;
-// }
 
 static void JSONHandler(){
     // json_t array[]
@@ -349,28 +333,3 @@ void createTimers(){
 //    memcpy(&testBoardState.peripheralStateArray[0], state_array, sizeof(*state_array));
 //    testBoardState.testMode = mode;
 //}
-
-//change this function as necessary
-// void sciNotification(sciBASE_t *sci, unsigned flags){
-//     sciSend(PC_UART, 1, UARTBuffer);
-//     //UARTTest();
-//     UARTprintf("sciNotification \n\r");
-//     //sciSend(PC_UART, 10, (unsigned char *)&UARTBuffer);
-//     int i = 1;
-//     while(temp !=  '}'){
-//         UARTBuffer[i] = temp;
-//         sciSend(PC_UART, 1, temp);
-//         i++;
-//         sciReceive(PC_UART, 1, temp);
-//     }
-//     UARTSend(PC_UART, UARTBuffer);
-// }
-
-// //not used but must be present for SCI notifications to work
-// void esmGroup1Notification(int bit){
-//     return;
-// }
-
-// void esmGroup2Notification(int bit){
-//     return;
-// }
