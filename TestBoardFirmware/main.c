@@ -34,19 +34,22 @@ static void test_complete_timer(Timer, int);
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
-static bool isTestComplete = false;
+static bool isTestComplete;
 
 static void createTimers();
 
-int main(void)
-    {
+int main(void){
+
+
+    //TODO: Modify APPS timer functions to support new functionality of timer api.
+    //Modify rest of code for that as well.
+
 
     //initialization
 
     MCP48FV_Init();
 
-
-    sciInit();
+//    sciInit();
     timerInit();
 
     createTimers();
@@ -64,18 +67,19 @@ int main(void)
     //* test code *//
     setPeripheralTestCases(&testBoardState);
 
-    startAllTimers();
 
-    startGlobalTimer();
 
     isTestComplete = false;
 
-    //determine the expected state of VCU/BMS
+    while(true){
 
-    while(1)
-    {
+        //get test cases
 
-        startTimer(TEST_COMPLETE_TIMER);
+        //determine the expected state of VCU/BMS
+
+        startGlobalTimer();
+
+        startTimer(TEST_COMPLETE, TEST_COMPLETE_TIMER, 5000); //figure this out
 
         isTestComplete = false;
 
@@ -104,22 +108,23 @@ int main(void)
             {
                 vcu_mode_process(&testBoardState);
             }
-        }
+        }//switch case
 
 
         while(!isTestComplete);
 
-        stopTimer(TEST_COMPLETE_TIMER);
+        stopGlobalTimer();
 
         //validate test cases (through timer and send to PC)
         //send a single pass/result to PC
 
         delayms(5000);
-
-    }
+    }//superloop
 
     //process functions for constant output vs variable output
-}
+
+    return;
+}//main
 
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
 {
@@ -143,7 +148,7 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr){
 
 
     //VCU Tests
-    stateptr->peripheralStateArray[APPS] = APPS_BSE_ACTIVATED;
+    stateptr->peripheralStateArray[APPS] = APPS_SHORT_CIRCUIT;
 
     stateptr->peripheralStateArray[BSE] = BSE_SWEEP;
 
@@ -229,76 +234,35 @@ void createTimers(){
     xTimerSet(
                 "Test_Complete", // name
 
-                TEST_COMPLETE_TIMER, // index
+                TEST_COMPLETE_TIMER, // peripheral
 
                 test_complete_timer, // callback function
 
-                10000, // period in ms
+                0 // ID
+             );
+
+    xTimerSet(
+                "BSE", // name
+
+                BSE, // peripheral
+
+                bse_timer, // callback function
 
                 0 // ID
              );
 
     xTimerSet(
-                "BSE_Sweep_Timer", // name
+                "APPS", // name
 
-                BSE_SWEEP_TIMER, // index
+                APPS, // peripheral
 
-                bse_sweep_timer, // callback function
-
-                TIMER_PERIOD, // period in ms
+                apps_timer, // callback function
 
                 0 // ID
              );
 
-    xTimerSet(
-                "APPS_Short_Timer", // name
 
-                APPS_SHORT_TIMER, // index
-
-                apps_short_timer, // callback function
-
-                TIMER_PERIOD, // period in ms
-
-                0 // ID
-             );
-
-    xTimerSet(
-                "APPS_Open_Timer", // name
-
-                APPS_OPEN_TIMER, // index
-
-                apps_open_timer, // callback function
-
-                TIMER_PERIOD, // period in ms
-
-                0 // ID
-             );
-
-    xTimerSet(
-               "APPS_BSE_Activated_Timer", // name
-
-               APPS_BSE_ACTIVATED_TIMER, // index
-
-               apps_bse_activated_timer, // callback function
-
-               TIMER_PERIOD, // period in ms
-
-               0 // ID
-            );
-
-    xTimerSet(
-               "APPS_Sweep_Timer", // name
-
-               APPS_SWEEP_TIMER, // index
-
-               apps_sweep_timer, // callback function
-
-               TIMER_PERIOD, // period in ms
-
-               0 // ID
-            );
-
-    //add more timers here...
+    //add more peripheral timers here...
 
 
 }
