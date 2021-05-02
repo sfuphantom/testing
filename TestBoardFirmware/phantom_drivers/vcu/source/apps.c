@@ -26,6 +26,11 @@ static void apps_sweep();
 uint16_t create_apps2_volt(uint16_t apps1_volt, float difference);
 uint16_t get_apps_voltage(uint16_t dac_val);
 
+//Timer Periods
+#define SHORT_PERIOD 500
+#define OPEN_PERIOD 500
+#define BSE_ACTIVATED_PERIOD 500
+
 void apps_process(uint8_t state)
 {
     switch(state)
@@ -84,103 +89,120 @@ static void apps_implausibility()
 
 static void apps_short_circuit()
 {
-    startTimer(APPS_SHORT_TIMER);
+    startTimer(APPS, SHORT_TIMER, SHORT_PERIOD);
     return;
 }
 
 static void apps_open_circuit()
 {
-    startTimer(APPS_OPEN_TIMER);
+    startTimer(APPS, OPEN_TIMER, OPEN_PERIOD);
     return;
 }
 
 static void apps_bse_activated()
 {
-    startTimer(APPS_BSE_ACTIVATED_TIMER);
+    startTimer(APPS, BSE_ACTIVATED_TIMER, BSE_ACTIVATED_PERIOD);
     return;
 }
 
 static void apps_sweep()
 {
-    startTimer(APPS_SWEEP_TIMER);
+    startTimer(APPS, SWEEP_TIMER, SWEEP_PERIOD);
     return;
 }
 
-void apps_short_timer(Timer timer, int ID){
+
+void apps_timer(Timer timer, int ID){
 
 
-    #ifdef TIMER_DEBUG
+    uint16_t apps1_volt, apps2_volt; //bse_activated_timer
 
-    UARTprintf("Apps short timer expired\n\n\r");
+    uint16_t prev; //short_timer, open_timer
 
-    #endif
+    int prev_voltage; //sweep_timer
 
+    switch(timer){
 
-    //stop timer here...
+        case SWEEP_TIMER:
 
-    uint16_t prev = get_apps_voltage(readRegister(0, 0));
-    if (prev == APPS1_MIN) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0);
-    if (prev == APPS1_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX, APPS2_MAX+20, DAC_SIZE_APPS, 0);
-    if (prev == APPS2_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX+20, DAC_SIZE_APPS, 0);
-}
+            #ifdef TIMER_DEBUG
+            UARTprintf("Apps sweep timer expired.\n\n\r");
+            #endif
 
-void apps_open_timer(Timer timer, int ID){
+            // make sure it doesnt go over voltage - stop it somehow
+            prev_voltage = get_apps_voltage(readRegister(0, 0));
 
+            MCP48FV_Set_Value_Double(prev_voltage+50, create_apps2_volt(prev_voltage+50, 1.00), DAC_SIZE_APPS, 0);
 
-    #ifdef TIMER_DEBUG
+            break;
 
-    UARTprintf("Apps open timer expired\n\n\r");
+        case SHORT_TIMER:
 
-    #endif
+            #ifdef TIMER_DEBUG
 
+            UARTprintf("Apps short timer expired\n\n\r");
 
-    uint16_t prev = get_apps_voltage(readRegister(0, 0));
-    if (prev == APPS1_MIN) MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0);
-    if (prev == APPS1_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0);
-    if (prev == APPS2_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0);
-}
-
-void apps_bse_activated_timer(Timer timer, int ID){
+            #endif
 
 
-    #ifdef TIMER_DEBUG
+            //stop timer here...
 
-    UARTprintf("Apps bse activated timer expired\n\n\r");
+            prev = get_apps_voltage(readRegister(0, 0));
+            if (prev == APPS1_MIN) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0);
+            if (prev == APPS1_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX, APPS2_MAX+20, DAC_SIZE_APPS, 0);
+            if (prev == APPS2_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX+20, DAC_SIZE_APPS, 0);
 
-    #endif
+            break;
 
+        case OPEN_TIMER:
 
+            #ifdef TIMER_DEBUG
 
+            UARTprintf("Apps open timer expired\n\n\r");
 
-
-    // sets APPS values at midpoint of valid APPS range
-    // BSE activated within bse.c
-    uint16_t apps1_volt, apps2_volt;
-    if (get_apps_voltage(readRegister(0, 0)) == APPS1_MIN){
-        apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
-        apps2_volt = create_apps2_volt(apps1_volt, 1.0);
-        MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
-    } else
-        // to be executed after apps_bse_activated()
-        // APPS sensors indicate <5% activation, regardless if BSE is still activated
-        MCP48FV_Set_Value_Double(APPS1_MIN+10, create_apps2_volt(APPS1_MIN+10, 1.00), DAC_SIZE_APPS, 0);
-
-    return;
-}
-
-void apps_sweep_timer(Timer timer, int ID){
-
-    #ifdef TIMER_DEBUG
-
-    UARTprintf("Apps sweep timer expired.\n\n\r");
-
-    #endif
+            #endif
 
 
-    // make sure it doesnt go over voltage - stop it somehow
-    int prev_voltage = get_apps_voltage(readRegister(0, 0));
-    MCP48FV_Set_Value_Double(prev_voltage+50, create_apps2_volt(prev_voltage+50, 1.00), DAC_SIZE_APPS, 0);
-    return;
+            prev = get_apps_voltage(readRegister(0, 0));
+            if (prev == APPS1_MIN) MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0);
+            if (prev == APPS1_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0);
+            if (prev == APPS2_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0);
+
+            break;
+
+        case BSE_ACTIVATED_TIMER:
+
+            #ifdef TIMER_DEBUG
+
+            UARTprintf("Apps bse activated timer expired\n\n\r");
+
+            #endif
+
+            // sets APPS values at midpoint of valid APPS range
+            // BSE activated within bse.c
+            if (get_apps_voltage(readRegister(0, 0)) == APPS1_MIN){
+                apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
+                apps2_volt = create_apps2_volt(apps1_volt, 1.0);
+                MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
+            } else
+                // to be executed after apps_bse_activated()
+                // APPS sensors indicate <5% activation, regardless if BSE is still activated
+                MCP48FV_Set_Value_Double(APPS1_MIN+10, create_apps2_volt(APPS1_MIN+10, 1.00), DAC_SIZE_APPS, 0);
+
+            break;
+
+        default:
+
+
+            UARTprintf("ERROR. APPS Timer not found\r\n");
+
+
+            break;
+
+    }//switch case
+
+    //do some ID update here...
+
 }
 
 /* TESTS NEEDING TIMERS END HERE */

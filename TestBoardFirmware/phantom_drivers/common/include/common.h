@@ -22,6 +22,22 @@ typedef enum
 
 #define SWEEP_PERIOD 500
 
+typedef enum Peripheral
+{
+    //systems with timers
+    TEST_COMPLETE = 0,
+    APPS,
+    BSE,
+
+    TSAL,
+    IMD,
+    LV,
+    VCU_COMMUNICATIONS,
+    BMS_SLAVES,
+    THERMISTOR_EXPANSION,
+    BMS_COMMUNICATIONS
+} Peripheral;
+
 
 
 

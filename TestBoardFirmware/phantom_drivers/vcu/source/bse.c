@@ -77,12 +77,15 @@ static void bse_short_circuit(){
 
 /* TESTS THE NEED TIMERS BEGIN HERE */
 
-void bse_sweep_timer(Timer sweepTimer, int ID){
+void bse_timer(Timer timer, int ID){
     // loops through values within a normal range
     // make sure it stops when it reaches the max voltage
 //    int prev_voltage = get_bse_voltage(readRegister(VOUT1, 1));
 
 //    uint8_t num_cycles =  (uint8_t) pvTimerGetTimerID(sweepTimer);
+
+
+
 
 
     #ifdef TIMER_DEBUG
@@ -100,7 +103,7 @@ void bse_sweep_timer(Timer sweepTimer, int ID){
 
     //increment cycle
 
-    setTimerID( sweepTimer, ++ID );
+    setTimerID( BSE, ++ID );
 
 
 
@@ -109,10 +112,10 @@ void bse_sweep_timer(Timer sweepTimer, int ID){
 static void bse_sweep(){
 
     //reset timer ID ( counts # of cycles)
-    setTimerID(BSE_SWEEP_TIMER, 0);
+    setTimerID(BSE, 0);
 
     //start timer
-    startTimer(BSE_SWEEP_TIMER);
+    startTimer(BSE, SWEEP_TIMER, SWEEP_PERIOD);
 }
 
 
