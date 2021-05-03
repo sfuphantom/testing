@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ///*
 // * bms_slaves.h
 // *
@@ -10,13 +11,36 @@
 //
 //#include "stdint.h"
 //#include "common.h"
+=======
+/*
+ * bms_slaves.h
+ *
+ *  Created on: Oct 25, 2020
+ *      Author: Mahmoud Ahmed
+ */
+
+#ifndef PHANTOM_DRIVERS_INCLUDE_BMS_SLAVES_H_
+#define PHANTOM_DRIVERS_INCLUDE_BMS_SLAVES_H_
+
+#include "stdint.h"
+#include "common.h"
+>>>>>>> integrate-apps-bse
 //#include "FreeRTOS.h"
 //#include "FreeRTOSConfig.h"
 //#include "os_task.h"
 //#include "os_timer.h"
+<<<<<<< HEAD
 //
 //Result_t bms_slaves_process(uint8_t state, TimerHandle_t *timerptr);
 //void bms_slaves_init();
 //
 //
 //#endif /* PHANTOM_DRIVERS_INCLUDE_BMS_SLAVES_H_ */
+=======
+
+Result_t bms_slaves_process(uint8_t state);
+void bms_slaves_init();
+
+
+#endif /* PHANTOM_DRIVERS_INCLUDE_BMS_SLAVES_H_ */
+>>>>>>> integrate-apps-bse
