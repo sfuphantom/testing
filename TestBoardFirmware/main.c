@@ -34,7 +34,7 @@ static void setPeripheralTestCases(TestBoardState_t* stateptr);
 static void createTimers();
 static void test_complete_timer(Timer, int);
 void UARTTest();
-void JSONHandler();
+static json_t JSONHandler(unsigned char *jsonstring);
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
@@ -71,10 +71,10 @@ int main(void)
 
     sciReceive(PC_UART, 10, (unsigned char *)&UARTBuffer);
 
-    //parse JSON and set states
+    // parse JSON and set states
     // tiny-json stuff
     // check formatting of string sent by GUI - may need to adjust string for compatibility
-    JSONHandler();
+    JSONHandler(UARTBuffer);
 
     //* test code *//
     setPeripheralTestCases(&testBoardState);
@@ -153,11 +153,15 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     return SUCCESS;
 }
 
-static void JSONHandler(){
-    // json_t array[]
-    // json_t = json_create()
+static json_t JSONHandler(unsigned char *jsonstring){
+
+    json_t mem[100];
+    json_t const* json = json_create( jsonstring, mem, sizeof mem / sizeof *mem );
     // error checking the JSON
-    return;
+    if(!json){
+        UARTprintf("Error creating JSON\n\r");
+    }
+    return json;
 }
 
 static void setPeripheralTestCases(TestBoardState_t *stateptr){
