@@ -28,7 +28,6 @@ typedef enum{
 
     TEST_COMPLETE_TIMER = 0,
 
-
     SWEEP_TIMER, //general vcu timer
 
     //apps timers
@@ -45,7 +44,7 @@ typedef void (*Callbackfunc)(Timer, int); //callback function signature; MUST re
 // TimerHandle Struct
 typedef struct{
 
-    char* name;
+    char* name; //used to identify peripheral when debugging
 
     Callbackfunc callback; //function that executes when timer expires
 
@@ -55,7 +54,7 @@ typedef struct{
 
     bool stop; //boolean to start/stop timer
 
-    Timer timer;
+    Timer timer; //variable holding timer of peripheral to run
 
 } TimerHandle;
 

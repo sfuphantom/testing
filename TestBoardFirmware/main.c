@@ -6,108 +6,92 @@
 #include "tiny-json.h"
 #include "main.h"
 #include "Phantom_sci.h"
-//#include "FreeRTOS.h"
-//#include "FreeRTOSConfig.h"
-//#include "os_task.h"
-//#include "os_timer.h"
-
 #include "common.h"
 
 //Drivers
 #include "bse.h"
 #include "apps.h"
-
 #include "MCP48FV_DAC_SPI.h"
-
 #include "timer.h"
-
-#define TIMER_PERIOD 1000
 
 // Static Function Declaration
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr);
 static void vcu_mode_process(TestBoardState_t *stateptr);
 static void setPeripheralTestCases(TestBoardState_t* stateptr);
-static void createTimers();
 
+//Timer functions
+static void createTimers();
 static void test_complete_timer(Timer, int);
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 static bool isTestComplete;
-
-static void createTimers();
+static bool tests_received;
 
 int main(void){
-
-
-    //TODO: Modify APPS timer functions to support new functionality of timer api.
-    //Modify rest of code for that as well.
-
 
     //initialization
 
     MCP48FV_Init();
 
-//    sciInit();
     timerInit();
-
-    createTimers();
-
 
     Result_t res = SUCCESS;
 
     res = initUARTandModeHandler(&testBoardState);
 
+    createTimers();
+
+
     // TODO: Interrupt based wait to get test mode from PC
 //    while(!initGUI) need a way to know where start and end of message is (startbyte..,.,..endbyte)
-
-    //parse JSON and set states
 
     //* test code *//
     setPeripheralTestCases(&testBoardState);
 
-
-
     isTestComplete = false;
+
+    tests_received = false;
 
     while(true){
 
-        //get test cases
+        tests_received = false;
+
+        //poll test cases from GUI
+//        while(!tests_received);
+
+        //parse JSON and set states
 
         //determine the expected state of VCU/BMS
 
-        startGlobalTimer();
+        startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms
 
-        startTimer(TEST_COMPLETE, TEST_COMPLETE_TIMER, 5000); //figure this out
+        startTimer(TEST_COMPLETE, TEST_COMPLETE_TIMER, 5000);
 
         isTestComplete = false;
 
-        switch(testBoardState.testMode)
-        {
+        switch(testBoardState.testMode){
+
             case IDLE:
-            {
-                break;
-            }
+
+                continue;
+
             case BMS_MODE:
-            {
-//                res = bms_mode_process(&testBoardState);
+
+                res = bms_mode_process(&testBoardState);
 
                 if(res != SUCCESS)
-                {
                     UARTprintf("Failed to Initialize BMS Test board\n\r");
-                    break;
-                }
-
-                int i;
 
                 testBoardState.testMode = IDLE;
                 break;
-            }
+
             case VCU_MODE:
-            {
+
                 vcu_mode_process(&testBoardState);
-            }
+                break;
+
         }//switch case
 
 
@@ -119,11 +103,9 @@ int main(void){
         //send a single pass/result to PC
 
         delayms(5000);
+
     }//superloop
 
-    //process functions for constant output vs variable output
-
-    return;
 }//main
 
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
@@ -175,32 +157,32 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr){
 //inner state machines for each BMS peripheral and three outer state machines -Meeting with Amneet
 static Result_t bms_mode_process(TestBoardState_t *stateptr)
 {
-//    Result_t ret = FAIL;
-//
-//    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
-//
-//    if(ret != SUCCESS)
-//    {
-//        UARTprintf("BMS SLAVE FAIL %d\n\r", ret);
-//        return FAIL;
-//    }
-//
-//    ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
-//
-//    if(ret != SUCCESS)
-//    {
-//        UARTprintf("THERMISTOR FAIL %d\n\r", ret);
-//        return FAIL;
-//    }
-//
-//    ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
-//
-//    if(ret == FAIL)
-//    {
-//        UARTprintf("CAN COMMUNICATIONS FAIL %d\n\r", ret);
-//        return FAIL;
-//    }
-//
+    Result_t ret = FAIL;
+
+    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
+
+    if(ret != SUCCESS)
+    {
+        UARTprintf("BMS SLAVE FAIL %d\n\r", ret);
+        return FAIL;
+    }
+
+    ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
+
+    if(ret != SUCCESS)
+    {
+        UARTprintf("THERMISTOR FAIL %d\n\r", ret);
+        return FAIL;
+    }
+
+    ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
+
+    if(ret == FAIL)
+    {
+        UARTprintf("CAN COMMUNICATIONS FAIL %d\n\r", ret);
+        return FAIL;
+    }
+
     return SUCCESS;
 }
 

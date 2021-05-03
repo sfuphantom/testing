@@ -75,7 +75,7 @@ static void bse_short_circuit(){
     return;
 }
 
-/* TESTS THE NEED TIMERS BEGIN HERE */
+/* Timer-Related Functions */
 
 void bse_timer(Timer timer, int ID){
     // loops through values within a normal range
@@ -84,18 +84,11 @@ void bse_timer(Timer timer, int ID){
 
 //    uint8_t num_cycles =  (uint8_t) pvTimerGetTimerID(sweepTimer);
 
-
-
-
-
     #ifdef TIMER_DEBUG
 
     UARTprintf("Bse sweep timer expired.\n\n\r");
 
     #endif
-
-
-
 
     int voltage = BSE_MIN + ( SWEEP_STEP * ID);
 
@@ -104,7 +97,6 @@ void bse_timer(Timer timer, int ID){
     //increment cycle
 
     setTimerID( BSE, ++ID );
-
 
 
 }
@@ -118,10 +110,7 @@ static void bse_sweep(){
     startTimer(BSE, SWEEP_TIMER, SWEEP_PERIOD);
 }
 
-
-
-
-/* TESTS THAT NEED TIMERS END HERE */
+/* End of Timer-Related Functions */
 
 static void apps_bse_activated(){
     normal_bse_on();

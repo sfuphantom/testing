@@ -84,33 +84,39 @@ static void apps_implausibility()
     return;
 }
 
-/* TESTS NEEDING TIMERS BEGIN HERE */
-
+/* Timer-Related Functions */
 
 static void apps_short_circuit()
 {
+    //reset timer ID if necessary...
+
     startTimer(APPS, SHORT_TIMER, SHORT_PERIOD);
     return;
 }
 
 static void apps_open_circuit()
 {
+    //reset timer ID if necessary...
+
     startTimer(APPS, OPEN_TIMER, OPEN_PERIOD);
     return;
 }
 
 static void apps_bse_activated()
 {
+    //reset timer ID if necessary...
+
     startTimer(APPS, BSE_ACTIVATED_TIMER, BSE_ACTIVATED_PERIOD);
     return;
 }
 
 static void apps_sweep()
 {
+    //reset timer ID if necessary...
+
     startTimer(APPS, SWEEP_TIMER, SWEEP_PERIOD);
     return;
 }
-
 
 void apps_timer(Timer timer, int ID){
 
@@ -201,11 +207,12 @@ void apps_timer(Timer timer, int ID){
 
     }//switch case
 
-    //do some ID update here...
+    //do some ID update here if necessary...
 
 }
 
-/* TESTS NEEDING TIMERS END HERE */
+/* End of Timer-Related Functions */
+
 
 // difference is the ratio difference between APPS values, 1 meaning 0% difference
 uint16_t create_apps2_volt(uint16_t apps1_volt, float difference){
