@@ -27,9 +27,6 @@
 //Figure out how to use TSAL and BSE drivers here 
 
 //Add Shutdown Tests...and other GPIOs
-
-
-// #include "hwConfig.h" (merge with hwConfig branch first)
 #include "gpio_tests.h"
 
 typedef enum operation
@@ -86,7 +83,7 @@ static void rtd_normal_procedure()
 {
  	//turn TSAL ON 
 
-    gioSetBit(TSAL_ACTIVE_PORT,TSAL_PIN,1);
+    gioSetBit(TSAL_PORT, TSAL_ACTIVE_PIN, 1);
 
 	//delay?
 

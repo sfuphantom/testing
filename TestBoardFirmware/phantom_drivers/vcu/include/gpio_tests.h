@@ -10,6 +10,7 @@
 #define PHANTOM_DRIVERS_INCLUDE_GPIOTESTS_H_
 
 #include "stdint.h"
+#include "hwConfig.h"
 
 void gpio_init();
 

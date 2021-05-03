@@ -6,15 +6,8 @@
 #include "tiny-json.h"
 #include "main.h"
 #include "Phantom_sci.h"
-<<<<<<< HEAD
-//#include "FreeRTOS.h"
-//#include "FreeRTOSConfig.h"
-#include "os_task.h"
-#include "os_timer.h"
-
-=======
->>>>>>> integrate-apps-bse
 #include "common.h"
+#include "gio.h"
 
 //Drivers
 #include "bse.h"
@@ -45,16 +38,11 @@ int main(void){
 
     timerInit();
 
-<<<<<<< HEAD
-int main(void)
-{
-
     gioInit();
 
     gioSetBit(gioPORTA,2,1);
 
-=======
->>>>>>> integrate-apps-bse
+
     Result_t res = SUCCESS;
 
     res = initUARTandModeHandler(&testBoardState);

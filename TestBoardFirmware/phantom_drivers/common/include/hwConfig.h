@@ -8,6 +8,10 @@
 #ifndef PHANTOM_DRIVERS_INCLUDE_HWCONFIG_H_
 #define PHANTOM_DRIVERS_INCLUDE_HWCONFIG_H_
 
+#include "gio.h"
+
+#include "het.h"
+#include "mibspi.h"
 
 
 /***************  VCU PINS  *********************/
