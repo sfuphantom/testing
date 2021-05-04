@@ -14,6 +14,7 @@
 #include "apps.h"
 #include "MCP48FV_DAC_SPI.h"
 #include "timer.h"
+#include "gpio_tests.h"
 
 // Static Function Declaration
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
@@ -38,9 +39,7 @@ int main(void){
 
     timerInit();
 
-    gioInit();
-
-    gioSetBit(gioPORTA,2,1);
+    gpio_init();
 
 
     Result_t res = SUCCESS;
@@ -248,6 +247,7 @@ void createTimers(){
 
                 0 // ID
              );
+
 
 
     //add more peripheral timers here...
