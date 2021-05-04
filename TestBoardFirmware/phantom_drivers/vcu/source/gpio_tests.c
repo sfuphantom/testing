@@ -7,7 +7,7 @@
  */
 
 //Pins (from hwConfig.h)
-// #define SHUTDOWN_CIRCUIT_PORT gioPORTA
+// #define SHUTDOWN_CIRCUIT_PORT gioPORTA (DONE)
 // #define BMS_FAULT_PIN         7 
 // #define IMD_FAULT_PIN         6 
 
@@ -17,7 +17,7 @@
 // #define RESET_PORT            hetPORT1
 // #define RESET_PIN             26
 
-// #define READY_TO_DRIVE_PORT   gioPORTA
+// #define READY_TO_DRIVE_PORT   gioPORTA (DONE)
 // #define READY_TO_DRIVE_PIN    2
 
 //TODO: Setup in halcogen
@@ -29,12 +29,7 @@
 //Add Shutdown Tests...and other GPIOs
 #include "gpio_tests.h"
 
-typedef enum operation
-{
-    RTD_NORMAL_PROCEDURE, //Get VCU to state RUNNING
-    RTD_LATCH,  //Simulate RTD procedure -> turn off RTD
-    RTD_INORDER, //Reverse order of RTD procedure
-} operation;
+#include "bse.h"
 
 // Static function definitions
 static void rtd_normal_procedure();
@@ -49,7 +44,7 @@ void gpio_init(){
 
 }
 
-void gpio_process(operation testcase)
+void gpio_process(uint8_t testcase)
 {
     switch(testcase)
     {
@@ -86,12 +81,17 @@ static void rtd_normal_procedure()
     gioSetBit(TSAL_PORT, TSAL_ACTIVE_PIN, 1);
 
 	//delay?
+    delayms(200);
 
 	//send bse signal ON
+    bse_process(NORMAL_BSE_ON);
 
 	//delay?
+    delayms(200);
 
 	//finally, send RTD signal 
+    gioSetBit(READY_TO_DRIVE_PORT, READY_TO_DRIVE_PIN, 1);
+
 
 
 }
@@ -105,10 +105,14 @@ static void rtd_latch_test()
 { 
 
 	//RTD procedure 
+    rtd_normal_procedure();
 
 	//delay?
+    delayms(1000);
+
 
 	//turn off RTD signal 
+    gioSetBit(READY_TO_DRIVE_PORT, READY_TO_DRIVE_PIN, 0);
 
 }
 
@@ -120,15 +124,62 @@ static void rtd_latch_test()
 static void rtd_inorder_test()
 {
 
+    //reset and turn off everything
+
+    gioSetBit(READY_TO_DRIVE_PORT, READY_TO_DRIVE_PIN, 0);
+
+    gioSetBit(TSAL_PORT, TSAL_ACTIVE_PIN, 0);
+
+    bse_process(NORMAL_BSE_OFF);
+
+    //delay?
+    delayms(100);
+
+
 	//send RTD signal 
+    gioSetBit(READY_TO_DRIVE_PORT, READY_TO_DRIVE_PIN, 1);
 
 	//delay?
+    delayms(100);
+
 
 	//send bse signal ON
+    bse_process(NORMAL_BSE_ON);
 
 	//delay?
+    delayms(100);
+
 
 	//finally, turn on TSAL
+    gioSetBit(TSAL_PORT, TSAL_ACTIVE_PIN, 1);
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
