@@ -1,8 +1,5 @@
-<<<<<<< HEAD:TestBoardFirmware/HAL_drivers/HAL_drivers.dil
-# TMS570LS1224PGE 04/08/21 21:06:08
-=======
 # TMS570LS1224PGE 04/27/21 19:25:33
->>>>>>> integrate-apps-bse:TestBoardFirmware/Testboard_HAL_drivers/Testboard_HAL_drivers.dil
+
 # 
 ARCH=TMS570LS1224PGE
 # 
