@@ -33,7 +33,6 @@ static void vcu_mode_process(TestBoardState_t *stateptr);
 static void setPeripheralTestCases(TestBoardState_t* stateptr);
 static void createTimers();
 static void test_complete_timer(Timer, int);
-void UARTTest();
 static json_t JSONHandler(unsigned char *jsonstring);
 
 // Static global variables
@@ -63,16 +62,13 @@ int main(void)
 
     res = initUARTandModeHandler(&testBoardState);
 
-    // need length - what ways could difference be handled?
     UARTprintf(" Ready to initialize GUI \n\r");
     sciReceive(PC_UART, 3, (unsigned char *)&testMode);
     UARTprintf("Mode detected: ");
     UARTSend(PC_UART, testMode);
 
-    sciReceive(PC_UART, 10, (unsigned char *)&UARTBuffer);
+    sciReceive(PC_UART, 10, (unsigned char *)&UARTBuffer); // COUNT CHARACTERS IN THE JSON AND UPDATE HERE
 
-    // parse JSON and set states
-    // tiny-json stuff
     // check formatting of string sent by GUI - may need to adjust string for compatibility
     JSONHandler(UARTBuffer);
 
@@ -171,9 +167,10 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr){
 
 
     //VCU Tests
-    stateptr->peripheralStateArray[APPS] = APPS_BSE_ACTIVATED;
-
-    stateptr->peripheralStateArray[BSE] = BSE_SWEEP;
+    json_t const* appsProperty = json_getProperty(json, "APPS"); // NEED TO PASS IN JSON OBJECT
+    stateptr->peripheralStateArray[APPS] = json_getInteger(appsProperty);//APPS_BSE_ACTIVATED; NEEDS TO BE CONVERTED TO CORRECT SIZE
+    json_t const* bseProperty = json_getProperty(json, "BSE"); // NEED TO PASS IN JSON OBJECT
+    stateptr->peripheralStateArray[BSE] = json_getInteger(bseProperty);//BSE_SWEEP; NEEDS TO BE CONVERTED TO CORRECT SIZE
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
