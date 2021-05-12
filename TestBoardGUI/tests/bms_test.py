@@ -13,10 +13,9 @@
 import json
 import pytest
 import copy
-#import serial
+import serial
 
-selectedTest_example = [{'Test Name': 'x', 'Test Case': 'x', 'Repeat': None, 'Test Index': None}, {'Test Name': 'y', 'y': 'y', 'Repeat': None, 'Test Index': None}]
-
+selectedTest_example = [{'Test Name': 'x', 'Test Case': 'y', 'Repeat': None, 'Test Index': None}, {'Test Name': 'u', 'Test Case': 'v', 'Repeat': None, 'Test Index': None}]
 # dictionary object of BMS in normal state
 normal_bms = {
 
@@ -28,15 +27,33 @@ normal_bms = {
 
 }
 
+
+
 def build_json():
     selectedJson = copy.deepcopy(normal_bms)
 
-    for x in selectedTest_example:
-        selectedJson.update({selectedTest_example[x].get('Test Name'), "TEST_ENUM"})
+    for x in range(len(selectedTest_example)):
+        selectedJson.update({selectedTest_example[x].get('Test Name'): "TEST_ENUM"})
     
-    #Serial Stuff
-
     return selectedJson
+
+def send_json():
+    
+    selectedJson = build_json()
+
+    # send UART
+    # configure Serial
+    serialPort = serial.Serial(port = "COMX", baudrate = 9600, bytesize = 8, timeout = 0, stopbits = serial.STOPBITS_ONE)
+    # send test to serial
+    serialPort.write("bms")
+    serialPort.write(json.dumps(selectedJson))
+
+    # receive UART
+    #TO DO: interperet the correct line from serial
+    receivedTest = serialPort.readline()[:-2] #trims input to get rid of new-line chars
+    testResults = json.loads(receivedTest)
+    
+    return testResults
 
 #testing functions
 def test_bms_json():
