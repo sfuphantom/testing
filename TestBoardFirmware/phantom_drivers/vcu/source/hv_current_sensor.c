@@ -7,10 +7,14 @@
 
 #include "hv_current_sensor.h"
 
-enum
+typedef enum operation
 {
-    NORMAL_HV_CS_OPERATION
-};
+    NORMAL_HV_CS_OPERATION,
+    ZERO_CURRENT, // 0 Amps 
+    MAX_CURRENT, //5V or 300Amps 
+    SWEEP,
+    CURRENT_WITHOUT_APPS
+}operation;
 
 // Static function prototypes
 static void normal_hv_cs_operation();
@@ -30,4 +34,11 @@ static void normal_hv_cs_operation()
 
 }
 
-
+/*
+* Fn: send_current
+* Purpose: helper function, user defines the current and this function converts to an voltage output  
+*/
+static float send_current(int CURRENT_VALUE)
+{
+    return 0;
+}

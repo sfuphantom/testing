@@ -4,6 +4,8 @@
 #include "stdio.h"
 #include "hwConfig.h"
 
+#include "Phantom_sci.h"
+
 void UARTSend(sciBASE_t *sci, char data[])
 {
     char *first = &data[0];
