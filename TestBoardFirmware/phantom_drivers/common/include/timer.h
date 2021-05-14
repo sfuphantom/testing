@@ -15,7 +15,7 @@
 
 #include "rti.h"
 
-#define NUM_TIMERS 6 //define more timers here...
+#define NUM_TIMERS 7 //define more timers here...
 
 /* Variables */
 
@@ -32,7 +32,10 @@ typedef enum{
     APPS_SHORT_TIMER,
     APPS_OPEN_TIMER,
     APPS_BSE_ACTIVATED_TIMER,
-    APPS_SWEEP_TIMER
+    APPS_SWEEP_TIMER,
+
+    //hv_vs timers
+    HV_VS_SWEEP_TIMER
 
     //more timers here...
 

@@ -110,7 +110,7 @@ static int getADCdigital(int battery_voltage)
 {
    int output_voltage;
    // convert accumulator voltage to ADC output in integer form
-   if (battery_voltage >=144){
+   if (battery_voltage >144){
        output_voltage = (int)(((battery_voltage *(4.99/479.99))-1.5)*8.2/2.0475*2047);
    }
    else{
@@ -160,28 +160,32 @@ static void hv_vs_at_zero()
 
 /* Sweep test with a timer */
 
-/*void hv_vs_timer(Timer timer, int ID){
+void hv_vs_sweep_timer(Timer sweepTimer, int ID){
 
     #ifdef TIMER_DEBUG
     UARTprintf("hv_vs sweep timer expired.\n\n\r");
     #endif
 
+    int input_voltage = 125;
+    ADC_output = (uint16)getADCdigital(input_voltage);
+    spiSetup(ADC_output);
+    input_voltage = input_voltage + ID;
+
+    if(input_voltage >168){
+        stopTimer(sweepTimer);
+    }
+
     //increment cycle
-
-    setTimerID( BSE, ++ID );
-
-}*/
+    setTimerID(sweepTimer, ++ID);
+}
 
 static void hv_vs_sweep()
 {
-    //Sweep test with 1V increment from 125V to 168V
-    int input_voltage = 125;
-    while(input_voltage <=168){
-        ADC_output = (uint16)getADCdigital(input_voltage);
-        spiSetup(ADC_output);
-        //startTimer(APPS, SWEEP_TIMER, hv_vs_timer_PERIOD);
-        input_voltage += 1;
-    }
+    //reset timer ID (counts # of cycles)
+    setTimerID(HV_VS_SWEEP_TIMER, 0);
+
+    //start timer
+    startTimer(HV_VS_SWEEP_TIMER);
 }
 
 static void spiSetup(uint16 voltage)

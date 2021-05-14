@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  * hv_voltage_sensor.h
  *
@@ -16,7 +15,9 @@
 #include "gio.h"
 #include "sys_vim.h"
 #include "sys_core.h"
-//#include "timer.c"
+#include "Phantom_sci.h"
+#include "hwConfig.h"
+#include "timer.h"
 
 typedef enum
 {
@@ -42,23 +43,6 @@ void hv_vs_process(uint8_t state);
 static int twosComplement(int negative_output);
 void mibspiGroupNotification(mibspiBASE_t *mibspi, uint32 group);
 void adcSlaveDataSetup();
+void hv_vs_sweep_timer(Timer timer, int ID);
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_HV_VOLTAGE_SENSOR_H_ */
-=======
-///*
-// * hv_voltage_sensor.h
-// *
-// *  Created on: Nov 10, 2020
-// *      Author: Sumreen Rattan
-// */
-//
-//#ifndef PHANTOM_DRIVERS_INCLUDE_HV_VOLTAGE_SENSOR_H_
-//#define PHANTOM_DRIVERS_INCLUDE_HV_VOLTAGE_SENSOR_H_
-//
-//#include "stdint.h"
-//
-//void hv_vs_process(uint8_t state);
-//
-//
-//#endif /* PHANTOM_DRIVERS_INCLUDE_HV_VOLTAGE_SENSOR_H_ */
->>>>>>> origin/uart-comms
