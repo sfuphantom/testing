@@ -133,6 +133,11 @@ static void hv_vs_upper_bound(){
     //sending upper bound voltage of 168
     ADC_output = (uint16)getADCdigital(168);
     spiSetup(ADC_output);
+    uint8 upper = (ADC_output >> 8) & 0xFF;
+    uint8 lower = (ADC_output & 0xFF);
+    UARTprintf("Maximum operating battery voltage level \n\r");
+    sciSend(PC_UART, 8, &upper);
+    sciSend(PC_UART, 8, &lower);
 }
 
 static void hv_vs_out_of_lowerBound()
