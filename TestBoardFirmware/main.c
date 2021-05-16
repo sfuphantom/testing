@@ -22,7 +22,7 @@ static void setPeripheralTestCases(TestBoardState_t* stateptr);
 
 //Timer functions
 static void createTimers();
-static void test_complete_timer(Timer, int);
+static void test_complete_timer(TestTimer_t, int);
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
@@ -198,7 +198,7 @@ static void vcu_mode_process(TestBoardState_t *stateptr)
 
 }
 
-static void test_complete_timer(Timer timer, int ID){
+static void test_complete_timer(TestTimer_t timer, int ID){
 
     #ifdef TIMER_DEBUG
     UARTprintf("Tests Complete!\r\n\n");

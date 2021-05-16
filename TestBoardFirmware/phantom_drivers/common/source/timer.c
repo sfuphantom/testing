@@ -38,7 +38,6 @@ void rtiNotification(uint32 notification)
     if(ticks == 100001){
         ticks = 0;
     }
-
 }
 
 void timerInit(){
@@ -112,7 +111,7 @@ void stopAllTimers(){
     }
 }
 
-void startTimer(Peripheral peripheral_timer, Timer timer, int period){
+void startTimer(Peripheral peripheral_timer, TestTimer_t timer, int period){
 
     xTimers[peripheral_timer].timer = timer;
 

@@ -118,7 +118,7 @@ static void apps_sweep()
     return;
 }
 
-void apps_timer(Timer timer, int ID){
+void apps_timer(TestTimer_t test_timer, int ID){
 
 
     uint16_t apps1_volt, apps2_volt; //bse_activated_timer
@@ -127,7 +127,7 @@ void apps_timer(Timer timer, int ID){
 
     int prev_voltage; //sweep_timer
 
-    switch(timer){
+    switch(test_timer){
 
         case SWEEP_TIMER:
 
