@@ -150,7 +150,6 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
             #endif
 
-
             //stop timer here...
 
             prev = get_apps_voltage(readRegister(0, 0));
@@ -167,7 +166,6 @@ void apps_timer(TestTimer_t test_timer, int ID){
             UARTprintf("Apps open timer expired\n\n\r");
 
             #endif
-
 
             prev = get_apps_voltage(readRegister(0, 0));
             if (prev == APPS1_MIN) MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0);

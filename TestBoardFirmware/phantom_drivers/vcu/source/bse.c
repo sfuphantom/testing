@@ -90,7 +90,7 @@ void bse_timer(TestTimer_t test_timer, int ID){
 
     #ifdef TIMER_DEBUG
 
-    UARTprintf("Bse sweep timer expired.\n\n\r");
+  //  UARTprintf("Bse sweep timer expired.\n\n\r");
 
     #endif
 
