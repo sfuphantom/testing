@@ -1472,3 +1472,10 @@ void mibspi3GetConfigValue(mibspi_config_reg_t *config_reg, config_value_type_t 
         config_reg->CONFIG_UERRCTRL   = mibspiREG3->UERRCTRL;
     }
 }
+
+
+
+
+
+
+
