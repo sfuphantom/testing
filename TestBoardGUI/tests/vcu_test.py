@@ -15,7 +15,7 @@ import copy
 import serial
 
 # example list of what might be received from front end
-selectedTest_example = [{'Test Name': 'APPS', 'Test Case': 'Test 2: 10% Difference', 'Repeat': None, 'Test Index': None}, {'Test Name': 'BSE', 'Test Case': 'Test 3: Open/Short Circuit', 'Repeat': None, 'Test Index': None}]
+selectedTest_example = [{'Test Name': 'APPS', 'Test Case': 'Test 2: 10% Difference', 'Repeat': None, 'Test Index': None, 'Enum': 2}, {'Test Name': 'BSE', 'Test Case': 'Test 3: Open/Short Circuit', 'Repeat': None, 'Test Index': None, 'Enum': 1}]
 
 # dictionary object of VCU in default state (NORMAL enums, 1 repetition for all key-value pairs) 
 normal_vcu = {
@@ -35,8 +35,10 @@ normal_vcu = {
 def build_json():
     selectedJson = copy.deepcopy(normal_vcu)
 
-    for x in selectedTest_example
-        selectedJson.update({selectedTest_example[x].get('Test Name'), "TEST_ENUM"})
+    counter = 0
+    for x in selectedTest_example:
+        selectedJson.update({selectedTest_example[counter].get('Test Name'): selectedTest_example[counter].get('Enum')})
+        counter += 1
         
     # send UART
     # serialPort = serial.Serial(port = 0, baudrate = 0, bytesize = 0, timeout = 0, stopbits = serial.STOPBITS_ONE)
@@ -50,10 +52,3 @@ def build_json():
 #beginning of tests
 def test_vcu_json():
     assert normal_vcu != build_json()
-
-def test_appsval():
-    assert "NORMAL" == normal_vcu.get("apps")
-
-def test_apps_implausibility():
-    normal_vcu.update({"apps": "IMPLAUSIBILITY"})
-    assert "IMPLAUSIBILITY" == normal_vcu.get("apps")
