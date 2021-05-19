@@ -20,14 +20,14 @@ selectedTest_example = [{'Test Name': 'APPS', 'Test Case': 'Test 2: 10% Differen
 # dictionary object of VCU in default state (NORMAL enums, 1 repetition for all key-value pairs) 
 normal_vcu = {
     "Mode": "VCU",
-    "APPS": "NORMAL",
-	"BSE": "NORMAL",
-	"IMD": "NORMAL",
-	"HV_VOLTAGE_SENSOR": "NORMAL",
-	"HV_CURRENT_SENSOR": "NORMAL",
-	"TSAL": "NORMAL",
-	"LV_POWER_SENSOR": "NORMAL",
-	"COMMUNICATIONS": "NORMAL",
+    "APPS": 0,
+	"BSE": 0,
+	"IMD": 0,
+	"HV_VOLTAGE_SENSOR": 0,
+	"HV_CURRENT_SENSOR": 0,
+	"TSAL": 0,
+	"LV_POWER_SENSOR": 0,
+	"COMMUNICATIONS": 0,
 	"repeat": 1
 
 }
@@ -40,13 +40,23 @@ def build_json():
         selectedJson.update({selectedTest_example[counter].get('Test Name'): selectedTest_example[counter].get('Enum')})
         counter += 1
         
+    # convert selectedJson to json string
+    # might have to set ensure_ascii to true
+    # might have to set separators
+    jsonStr = json.dumps(selectedJson, indent="\t")
     # send UART
-    # serialPort = serial.Serial(port = 0, baudrate = 0, bytesize = 0, timeout = 0, stopbits = serial.STOPBITS_ONE)
+    launchpad= serial.Serial(port = 'COM8', baudrate = 9600, stopbits = serial.STOPBITS_TWO)
+    launchpad.write("VCU")
+    launchpad.write(jsonStr)
+    launchpad.read() # specify number of bytes to be read or use .read_until('}')
 
     # receive UART
+    result = launchpad.read()
     # interpret response from test board
     # return result
+    launchpad.close()
 
+    # return result
     return selectedJson
 
 #beginning of tests
