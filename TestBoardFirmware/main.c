@@ -24,16 +24,17 @@
 
 static unsigned char UARTBuffer[100];
 static unsigned char testMode[3];
+static json_t mem[100];
 //static bool initGUI = false;
 
 // Static Function Declaration
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr);
 static void vcu_mode_process(TestBoardState_t *stateptr);
-static void setPeripheralTestCases(TestBoardState_t* stateptr);
+static void setPeripheralTestCases(TestBoardState_t* stateptr, json_t* json);
 static void createTimers();
 static void test_complete_timer(Timer, int);
-static json_t JSONHandler(unsigned char *jsonstring);
+static json_t * JSONHandler(unsigned char *jsonstring);
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
@@ -67,13 +68,11 @@ int main(void)
     UARTprintf("Mode detected: ");
     UARTSend(PC_UART, testMode);
 
-    sciReceive(PC_UART, 10, (unsigned char *)&UARTBuffer); // COUNT CHARACTERS IN THE JSON AND UPDATE HERE
+    sciReceive(PC_UART, 10, (unsigned char *)&UARTBuffer); // ***COUNT CHARACTERS IN THE JSON AND UPDATE HERE***
 
     // check formatting of string sent by GUI - may need to adjust string for compatibility
-    JSONHandler(UARTBuffer);
-
     //* test code *//
-    setPeripheralTestCases(&testBoardState);
+    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer)); 
 
     startAllTimers();
 
@@ -144,14 +143,13 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
     stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
 
-    stateptr->testMode = BMS_MODE;
+    stateptr->testMode = VCU_MODE;
 
     return SUCCESS;
 }
 
-static json_t JSONHandler(unsigned char *jsonstring){
-
-    json_t mem[100];
+static json_t * JSONHandler(unsigned char *jsonstring){
+    
     json_t const* json = json_create( jsonstring, mem, sizeof mem / sizeof *mem );
     // error checking the JSON
     if(!json){
@@ -160,17 +158,17 @@ static json_t JSONHandler(unsigned char *jsonstring){
     return json;
 }
 
-static void setPeripheralTestCases(TestBoardState_t *stateptr){
+static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
     //TestBoard Mode
     stateptr->testMode = VCU_MODE;
 
 
     //VCU Tests
-    json_t const* appsProperty = json_getProperty(json, "APPS"); // NEED TO PASS IN JSON OBJECT
-    stateptr->peripheralStateArray[APPS] = json_getInteger(appsProperty);//APPS_BSE_ACTIVATED; NEEDS TO BE CONVERTED TO CORRECT SIZE
-    json_t const* bseProperty = json_getProperty(json, "BSE"); // NEED TO PASS IN JSON OBJECT
-    stateptr->peripheralStateArray[BSE] = json_getInteger(bseProperty);//BSE_SWEEP; NEEDS TO BE CONVERTED TO CORRECT SIZE
+    json_t * appsProperty = json_getProperty(json, "APPS"); 
+    stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
+    json_t * bseProperty = json_getProperty(json, "BSE"); 
+    stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
@@ -233,7 +231,7 @@ static void vcu_mode_process(TestBoardState_t *stateptr)
 
     apps_process(stateptr->peripheralStateArray[APPS]);
 
-
+ UARTprintf("Successfully set peripherals \n\r");
 }
 
 static void test_complete_timer(Timer timer, int ID){
