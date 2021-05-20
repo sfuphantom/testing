@@ -30,15 +30,13 @@ static void setPeripheralTestCases(TestBoardState_t* stateptr);
 //static json_t JSONHandler(unsigned char *jsonstring);
 
 //Timer functions
-static void createTimers();
+static void initializeTimers();
 static void test_complete_timer(TestTimer_t, int);
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 static bool isTestComplete;
-static bool tests_received;
-
-int main(void){
+static bool tests_received;int main(void){
 
     //initialization
 
@@ -52,7 +50,7 @@ int main(void){
 
     res = initUARTandModeHandler(&testBoardState);
 
-    createTimers();
+    initializeTimers();
 
 
     // TODO: Interrupt based wait to get test mode from PC
@@ -64,7 +62,7 @@ int main(void){
 //    UARTprintf("Mode detected: ");
 //    UARTSend(PC_UART, testMode);
 
-    sciReceive(PC_UART, 10, (unsigned char *)&UARTBuffer); // COUNT CHARACTERS IN THE JSON AND UPDATE HERE
+//    sciReceive(PC_UART, 10, (unsigned char *)&UARTBuffer); // COUNT CHARACTERS IN THE JSON AND UPDATE HERE
 
     // check formatting of string sent by GUI - may need to adjust string for compatibility
 //    JSONHandler(UARTBuffer);
@@ -89,7 +87,7 @@ int main(void){
 
         startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms
 
-        startTimer(TEST_COMPLETE, TEST_COMPLETE_TIMER, 5000);
+        startTimer(TEST_COMPLETE, TEST_COMPLETE_TIMER, 20000);
 
         isTestComplete = false;
 
@@ -165,9 +163,10 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr){
 
 
     //VCU Tests
-    stateptr->peripheralStateArray[APPS] = APPS_SHORT_CIRCUIT;
+    stateptr->peripheralStateArray[APPS] = APPS_IMPLAUSIBILITY;
 
-    stateptr->peripheralStateArray[BSE] = BSE_SWEEP;
+    stateptr->peripheralStateArray[BSE] = NORMAL_BSE_OFF;
+
 
 //    json_t const* appsProperty = json_getProperty(json, "APPS"); // NEED TO PASS IN JSON OBJECT
 //    stateptr->peripheralStateArray[APPS] = json_getInteger(appsProperty);//APPS_BSE_ACTIVATED; NEEDS TO BE CONVERTED TO CORRECT SIZE
@@ -250,7 +249,7 @@ static void test_complete_timer(TestTimer_t timer, int ID){
 
 }
 
-void createTimers(){
+void initializeTimers(){
 
 
     xTimerSet(
