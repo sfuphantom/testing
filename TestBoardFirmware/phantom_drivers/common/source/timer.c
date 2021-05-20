@@ -21,6 +21,9 @@ static uint8_t isExpired(Peripheral peripheral_timer){
 void rtiNotification(uint32 notification)
 {
 
+//    UARTprintf("Global timer expired!\r\n");
+
+
     //check timer expirations
 
     Peripheral peripheral_timer;

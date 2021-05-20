@@ -12,7 +12,7 @@
 
 //Common defines
 #define TIMER_DEBUG
-#define SWEEP_STEP 50
+#define SWEEP_STEP 25
 #define SWEEP_PERIOD 500
 
 typedef enum

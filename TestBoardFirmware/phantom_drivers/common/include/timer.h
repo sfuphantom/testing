@@ -18,6 +18,7 @@
 
 #include "rti.h"
 #include "common.h"
+#include "Phantom_sci.h"
 
 #define NUM_TIMERS 10 //each system gets one timer if needed. reduce number of timers later...
 
@@ -61,7 +62,7 @@ typedef struct{
 
 static unsigned long long int ticks; //number of times RTI has expired in ms
 
-static TimerHandle_t xTimers[NUM_TIMERS]; //array of all timers
+static TimerHandle_t xTimers[NUM_TIMERS]; //array of all peripheral software timers
 
 /* Function Declarations */
 
