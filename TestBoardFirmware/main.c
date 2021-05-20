@@ -35,8 +35,9 @@ static void test_complete_timer(TestTimer_t, int);
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
-static bool isTestComplete;
-static bool tests_received;int main(void){
+static bool tests_received;
+
+int main(void){
 
     //initialization
 
@@ -70,8 +71,6 @@ static bool tests_received;int main(void){
     //* test code *//
     setPeripheralTestCases(&testBoardState);
 
-    isTestComplete = false;
-
     tests_received = false;
 
     while(true){
@@ -85,11 +84,7 @@ static bool tests_received;int main(void){
 
         //determine the expected state of VCU/BMS
 
-        startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms
-
-        startTimer(TEST_COMPLETE, TEST_COMPLETE_TIMER, 20000);
-
-        isTestComplete = false;
+        startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
 
         switch(testBoardState.testMode){
 
@@ -114,10 +109,9 @@ static bool tests_received;int main(void){
 
         }//switch case
 
+        while(!timers_complete()); //wait for tests to finish
 
-        while(!isTestComplete);
-
-        stopGlobalTimer();
+        stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
 
         //validate test cases (through timer and send to PC)
         //send a single pass/result to PC
@@ -163,9 +157,9 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr){
 
 
     //VCU Tests
-    stateptr->peripheralStateArray[APPS] = APPS_IMPLAUSIBILITY;
+    stateptr->peripheralStateArray[APPS] = APPS_SWEEP;
 
-    stateptr->peripheralStateArray[BSE] = NORMAL_BSE_OFF;
+    stateptr->peripheralStateArray[BSE] = BSE_SWEEP;
 
 
 //    json_t const* appsProperty = json_getProperty(json, "APPS"); // NEED TO PASS IN JSON OBJECT
@@ -237,30 +231,7 @@ static void vcu_mode_process(TestBoardState_t *stateptr)
 
 }
 
-static void test_complete_timer(TestTimer_t timer, int ID){
-
-    #ifdef TIMER_DEBUG
-    UARTprintf("Tests Complete!\r\n\n");
-    #endif
-
-    isTestComplete = true;
-
-    stopAllTimers();
-
-}
-
 void initializeTimers(){
-
-
-    xTimerSet(
-                "Test_Complete", // name
-
-                TEST_COMPLETE_TIMER, // peripheral
-
-                test_complete_timer, // callback function
-
-                0 // ID
-             );
 
     xTimerSet(
                 "BSE", // name

@@ -27,9 +27,7 @@
 // Test timer List Enum
 typedef enum{
 
-    TEST_COMPLETE_TIMER = 0,
-
-    SWEEP_TIMER, //general vcu timer
+    SWEEP_TIMER = 0, //general vcu timer
 
     //apps timers
     SHORT_TIMER,
@@ -75,6 +73,8 @@ int getTimerID(Peripheral);
 int getTimerPeriod(Peripheral);
 
 uint8_t isBlocked(Peripheral);
+
+bool timers_complete();
 
 /* Setters */
 

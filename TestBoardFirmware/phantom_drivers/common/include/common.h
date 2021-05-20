@@ -24,8 +24,7 @@ typedef enum
 typedef enum Peripheral
 {
     //systems with timers
-    TEST_COMPLETE = 0,
-    APPS,
+    APPS = 0,
     BSE,
 
     TSAL,
