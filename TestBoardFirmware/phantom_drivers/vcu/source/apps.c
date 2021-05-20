@@ -112,7 +112,7 @@ static void apps_bse_activated()
     //reset timer ID if necessary...
 
     // BSE activated
-   bse_process(NORMAL_BSE_ON);
+    bse_process(NORMAL_BSE_ON);
 
     startTimer(APPS, BSE_ACTIVATED_TIMER, BSE_ACTIVATED_PERIOD);
     return;
@@ -130,10 +130,9 @@ static void apps_sweep()
 
 void apps_timer(TestTimer_t test_timer, int ID){
 
-
     uint16_t apps1_volt, apps2_volt; //bse_activated_timer
 
-    uint16_t prev = APPS1_MIN; //short_timer, open_timer
+    uint16_t prev; //short_timer, open_timer
 
     int prev_voltage; //sweep_timer
 
@@ -151,6 +150,8 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
             //STOP CONDITION
            if(prev_voltage > APPS1_MAX){
+
+
 
                stopTimer(APPS);
 
@@ -176,7 +177,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
 //            prev = get_apps_voltage(readRegister(0, 0));
 
 
-            int prev = APPS1_MIN + ( 20 * ID);
+            prev = APPS1_MIN + ( 20 * ID);
 
             if (prev >= APPS1_MIN) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0); //short APPS1
 
