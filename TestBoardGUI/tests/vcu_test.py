@@ -48,16 +48,11 @@ def build_json():
     launchpad.write("VCU")
     time.sleep(8)
     launchpad.write(jsonStr)
-    launchpad.read() # specify number of bytes to be read or use .read_until('}')
+    launchpad.read() # this will read 1 byte. To read multiple, use read_until()
+    result = launchpad.read()
+    launchpad.close()
 
-    # receive UART
-    # result = launchpad.read()
-    # # interpret response from test board
-    # # return result
-    # launchpad.close()
-
-    # return result
-    return True
+    return result
 
 #beginning of tests
 def test_vcu_json():
