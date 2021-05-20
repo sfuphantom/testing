@@ -13,6 +13,7 @@ import pytest
 import json
 import copy
 import serial
+import time
 
 # example list of what might be received from front end
 selectedTest_example = [{'Test Name': 'APPS', 'Test Case': 'Test 2: 10% Difference', 'Repeat': None, 'Test Index': None, 'Enum': 2}, {'Test Name': 'BSE', 'Test Case': 'Test 3: Open/Short Circuit', 'Repeat': None, 'Test Index': None, 'Enum': 1}]
@@ -34,31 +35,32 @@ normal_vcu = {
 
 def build_json():
     selectedJson = copy.deepcopy(normal_vcu)
-
     counter = 0
     for x in selectedTest_example:
         selectedJson.update({selectedTest_example[counter].get('Test Name'): selectedTest_example[counter].get('Enum')})
         counter += 1
         
-    # convert selectedJson to json string
-    # might have to set ensure_ascii to true
-    # might have to set separators
     jsonStr = json.dumps(selectedJson, indent="\t")
-    # send UART
-    launchpad= serial.Serial(port = 'COM8', baudrate = 9600, stopbits = serial.STOPBITS_TWO)
+    # print("The length of the string is: " + str(len(jsonStr)))
+    # print(jsonStr)
+
+    launchpad= serial.Serial(port = 'COM8', baudrate = 9600, stopbits = serial.STOPBITS_TWO) # fix port ID
     launchpad.write("VCU")
+    time.sleep(8)
     launchpad.write(jsonStr)
     launchpad.read() # specify number of bytes to be read or use .read_until('}')
 
     # receive UART
-    result = launchpad.read()
-    # interpret response from test board
-    # return result
-    launchpad.close()
+    # result = launchpad.read()
+    # # interpret response from test board
+    # # return result
+    # launchpad.close()
 
     # return result
-    return selectedJson
+    return True
 
 #beginning of tests
 def test_vcu_json():
-    assert normal_vcu != build_json()
+    assert build_json() == True
+
+test_vcu_json()
