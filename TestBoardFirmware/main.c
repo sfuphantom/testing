@@ -68,7 +68,7 @@ int main(void)
     UARTprintf("Mode detected: ");
     UARTSend(PC_UART, testMode);
 
-    sciReceive(PC_UART, 10, (unsigned char *)&UARTBuffer); // ***COUNT CHARACTERS IN THE JSON AND UPDATE HERE***
+    sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer); // ***COUNT CHARACTERS IN THE JSON AND UPDATE HERE***
 
     // check formatting of string sent by GUI - may need to adjust string for compatibility
     //* test code *//
