@@ -35,12 +35,7 @@ void rtiNotification(uint32 notification)
         }
     }
 
-    ticks++;
-
-    //deal with overflow
-    if(ticks == 100001){
-        ticks = 0;
-    }
+    ticks++; //will overflow after ~ 49 days...
 }
 
 void timerInit(){

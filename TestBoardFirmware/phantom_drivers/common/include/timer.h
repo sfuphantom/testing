@@ -58,7 +58,7 @@ typedef struct{
 } TimerHandle_t;
 
 
-static unsigned long long int ticks; //number of times RTI has expired in ms
+static uint32_t ticks; //number of times RTI has expired in ms (will not overflow for ~ 49 days)
 
 static TimerHandle_t xTimers[NUM_TIMERS]; //array of all peripheral software timers
 
