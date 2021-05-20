@@ -114,10 +114,11 @@
 #define THERMISTOR_SPI                  mibspiREG3
 #define THERMISTOR_INIT_TRANSFER_GROUP  TransferGroup0
 #define THERMISTOR_COMM_TRANSFER_GROUP  TransferGroup1
-#define THERMISTOR_MUX_PORT             gioPORTA
-#define THERMISTOR_MUX_PIN_A            5
-#define THERMISTOR_MUX_PIN_B            6
-#define THERMISTOR_MUX_PIN_C            7
+#define TEMP_MUX_PORT             gioPORTA
+#define TEMP_MUX_PIN_1            5
+#define TEMP_MUX_PIN_0            6
+#define TEMP_MUX_PIN_3            7
+#define TEMP_MUX_PIN_2            8
 
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_HWCONFIG_H_ */

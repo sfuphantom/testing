@@ -9,6 +9,7 @@
 #include "Phantom_sci.h"
 #include "common.h"
 #include "MCP48FV_DAC_SPI.h"
+#include "hwConfig.h"
 // #include "FreeRTOS.h"
 // #include "os_timer.h"
 
@@ -18,6 +19,11 @@
 #define DEFAULT_TEMPERATURE 25
 #define NUMBER_OF_TEMPERATURE_READINGS 16
 
+// TEMP_MUX_PORT             gioPORTA
+// TEMP_MUX_PIN_1            5
+// TEMP_MUX_PIN_0            6
+// TEMP_MUX_PIN_3            7
+// TEMP_MUX_PIN_2            8
 
 enum
 {
@@ -35,10 +41,11 @@ enum
 typedef struct {
     float bmsSlaveVoltage;
     float bmsSlaveTemperatures[NUMBER_OF_TEMPERATURE_READINGS];
-} BMSSlave_t;
+} BMSSlave_t; // BMSSlave_t is like double or int
 
 // Static Global Variables
 static BMSSlave_t *bmsStruct;
+static BMSSlave_t *bmsTempFault;
 
 // Static function definitions
 static void normal_bms_operation();
@@ -50,6 +57,7 @@ static void weird_sensor_readings_voltage_test();
 static void weird_sensor_readings_temperature_test();
 static void communication_loss_voltage_test();
 static void communication_loss_temperature_test();
+static void temperature_mux(uint8_t pinSelect);
 
 Result_t bms_slaves_process(uint8_t state, TimerHandle_t *timerptr)
 {
@@ -101,7 +109,14 @@ void bms_slaves_init()
     for(i = 0; i < NUMBER_OF_TEMPERATURE_READINGS; i++) {
         bmsStruct->bmsSlaveTemperatures[i] = DEFAULT_TEMPERATURE;
     }
+    bmsTempFault->bmsSlaveTemperatures = DEFAULT_TEMPERATURE;
+    uint8_t j;
+    for(i = j; j < NUMBER_OF_TEMPERATURE_READINGS; j++) {
+        bmsTempFault->bmsSlaveTemperatures[j] = DEFAULT_TEMPERATURE;
+    }
+    bmsTempFault->bmsSlaveTemperatures[0] = DEFAULT_TEMPERATURE*3;
 }
+
 #define VOLT_MAX = 420
 #define VOLT_MIN = 320
 #define DAC_SIZE = 1024
@@ -116,8 +131,17 @@ static void normal_bms_operation()
     //set_bms_voltage
     UARTprintf("Normal BMS Operation\n\r");
     // voltage and temp at normal level
-    MCP48FV_Set_Value_Double((VOLT_MAX + VOLT_MIN)*0.5, 0, DAC_SIZE, TRANSFER_GROUP); // 0 = TEMP FOR NOW 
 
+    MCP48FV_Set_Value_Single((VOLT_MAX + VOLT_MIN)*0.5, DAC_SIZE, 0, TRANSFER_GROUP);
+
+    //setting temp on each of the 16 pins
+    for(uint8_t pinSelect = 0b00000000; pinSelect <= 00001111; pinSelect++)// for loop - iterate over each pin
+    {
+        temperature_mux(pinSelect) 
+        
+        // set the DAC
+        MCP48FV_Set_Value_Single(250, DAC_SIZE, 1, TRANSFER_GROUP); //voltage = 2.5V (unsure) * 100
+    }
 }
 
 static void minor_voltage_test()
@@ -135,6 +159,16 @@ static void minor_temperature_test()
 {
 //send a temperature voltage over the opperating region (55 degrees C)
 //send 60 C for less than 3 seconds
+
+ for(uint8_t pinSelect = 0b00000000; pinSelect <= 00001111; pinSelect++)// for loop - iterate over each pin
+    {
+
+        temperature_mux(pinSelect) 
+        
+        // set the DAC
+        MCP48FV_Set_Value_Single(bmsTempFault->bmsSlaveTemperatures[pinSelect], DAC_SIZE, 1, TRANSFER_GROUP);
+    }
+
 }
 
 static void major_voltage_test()
@@ -152,6 +186,15 @@ static void major_temperature_test()
 {
 //send a temperature voltage over the opperating region (55 degrees C)
 //send 60 C for more than 3 seconds
+
+for(uint8_t pinSelect = 0b00000000; pinSelect <= 00001111; pinSelect++)// for loop - iterate over each pin
+    {
+        temperature_mux(pinSelect) 
+        
+        // set the DAC
+        MCP48FV_Set_Value_Single(bmsTempFault->bmsSlaveTemperatures[pinSelect], DAC_SIZE, 1, TRANSFER_GROUP); 
+    }
+
 }
 
 static void communication_loss_voltage_test()
@@ -163,3 +206,22 @@ MCP48FV_Set_Value_Single(0, DAC_SIZE, 0, TRANSFER_GROUP);
 }
 // static void communication_loss_temperature_test()
 
+// *****temperature mux function (loop)*****
+static void temperature_mux(uint8_t pinSelect)
+{ 
+     // set the different mux pins
+    if (0b00000001 & pinSelect){ 
+        gioToggleBit(TEMP_MUX_PORT, TEMP_MUX_PIN_0);
+    }
+    if ((0b000010 & pinSelect) >> 1){ 
+         gioToggleBit(TEMP_MUX_PORT, TEMP_MUX_PIN_1);
+    } 
+    if ((0b000100 & pinSelect) >> 2){ 
+        gioToggleBit(TEMP_MUX_PORT, TEMP_MUX_PIN_2);
+    } 
+    if ((0b001000 & pinSelect) >> 3){ 
+        gioToggleBit(TEMP_MUX_PORT, TEMP_MUX_PIN_3);
+    } 
+
+ return 0;
+}
