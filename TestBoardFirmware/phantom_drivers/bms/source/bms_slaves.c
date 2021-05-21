@@ -8,8 +8,8 @@
 #include "stdlib.h"
 #include "Phantom_sci.h"
 #include "common.h"
-#include "FreeRTOS.h"
-#include "os_timer.h"
+//#include "FreeRTOS.h"
+//#include "os_timer.h"
 
 // BMS Slave specific definitions, not accessed outside bms_slaves.c
 #define VOLTAGE_STEP  0.04
@@ -38,7 +38,7 @@ static void normal_bms_operation();
 static void minor_overvoltage_test();
 static void minor_undervoltage_test();
 
-Result_t bms_slaves_process(uint8_t state, TimerHandle_t *timerptr)
+Result_t bms_slaves_process(uint8_t state)
 {
 
     bms_slaves_init();
