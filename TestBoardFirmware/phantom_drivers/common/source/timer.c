@@ -21,6 +21,9 @@ static uint8_t isExpired(Peripheral peripheral_timer){
 void rtiNotification(uint32 notification)
 {
 
+//    UARTprintf("Global timer expired!\r\n");
+
+
     //check timer expirations
 
     Peripheral peripheral_timer;
@@ -32,13 +35,7 @@ void rtiNotification(uint32 notification)
         }
     }
 
-    ticks++;
-
-    //deal with overflow
-    if(ticks == 100001){
-        ticks = 0;
-    }
-
+    ticks++; //will overflow after ~ 49 days...
 }
 
 void timerInit(){
@@ -72,6 +69,29 @@ int getTimerID(Peripheral peripheral_timer){
 int getTimerPeriod(Peripheral peripheral_timer){
 
     return xTimers[peripheral_timer].period;
+}
+
+bool timers_complete(){
+
+    bool timers_complete = true;
+
+    //check all status of all timers
+    Peripheral peripheral_timer;
+
+   for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++){
+
+       if( !isBlocked(peripheral_timer) )
+           timers_complete = false;
+
+   }//loop through all peripheral timers
+
+
+    #ifdef TIMER_DEBUG
+    if(timers_complete) UARTprintf("Tests Completed!\r\n\n");
+    #endif
+
+   return timers_complete;
+
 }
 
 
@@ -112,7 +132,7 @@ void stopAllTimers(){
     }
 }
 
-void startTimer(Peripheral peripheral_timer, Timer timer, int period){
+void startTimer(Peripheral peripheral_timer, TestTimer_t timer, int period){
 
     xTimers[peripheral_timer].timer = timer;
 
@@ -122,6 +142,36 @@ void startTimer(Peripheral peripheral_timer, Timer timer, int period){
 }
 
 void stopTimer(Peripheral peripheral_timer){
+
+
+    #ifdef TIMER_DEBUG
+
+    switch(peripheral_timer){
+
+        case APPS:
+
+            UARTprintf("APPS TEST FINISHED!...\r\n\n");
+
+            break;
+
+        case BSE:
+
+            UARTprintf("BSE TEST FINISHED!...\r\n\n");
+
+            break;
+
+
+        //add more peripherals for debugging here...
+
+        default:
+
+            UARTprintf("SOME TEST FINSIHED!...\r\n\n");
+
+            break;
+
+    }//switch case statement
+
+    #endif
 
     xTimers[peripheral_timer].stop = true;
 }

@@ -77,12 +77,16 @@ static void bse_short_circuit(){
 
 /* Timer-Related Functions */
 
-void bse_timer(Timer timer, int ID){
-    // loops through values within a normal range
-    // make sure it stops when it reaches the max voltage
-//    int prev_voltage = get_bse_voltage(readRegister(VOUT1, 1));
+static void bse_sweep(){
 
-//    uint8_t num_cycles =  (uint8_t) pvTimerGetTimerID(sweepTimer);
+    //reset timer ID ( counts # of cycles)
+    setTimerID(BSE, 0);
+
+    //start timer
+    startTimer(BSE, SWEEP_TIMER, SWEEP_PERIOD);
+}
+
+void bse_timer(TestTimer_t test_timer, int ID){
 
     #ifdef TIMER_DEBUG
 
@@ -92,22 +96,18 @@ void bse_timer(Timer timer, int ID){
 
     int voltage = BSE_MIN + ( SWEEP_STEP * ID);
 
+    //STOP CONDITION
+    if(voltage > BSE_MAX){
+
+        stopTimer(BSE);
+
+        voltage = BSE_MAX;
+    }
+
     MCP48FV_Set_Value_Single(voltage, DAC_SIZE_BSE, VOUT1, 1);
 
     //increment cycle
-
     setTimerID( BSE, ++ID );
-
-
-}
-
-static void bse_sweep(){
-
-    //reset timer ID ( counts # of cycles)
-    setTimerID(BSE, 0);
-
-    //start timer
-    startTimer(BSE, SWEEP_TIMER, SWEEP_PERIOD);
 }
 
 /* End of Timer-Related Functions */

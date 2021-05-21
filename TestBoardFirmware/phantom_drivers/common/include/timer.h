@@ -18,17 +18,16 @@
 
 #include "rti.h"
 #include "common.h"
+#include "Phantom_sci.h"
 
 #define NUM_TIMERS 10 //each system gets one timer if needed. reduce number of timers later...
 
 /* Variables */
 
-// Timer List Enum
+// Test timer List Enum
 typedef enum{
 
-    TEST_COMPLETE_TIMER = 0,
-
-    SWEEP_TIMER, //general vcu timer
+    SWEEP_TIMER = 0, //general vcu timer
 
     //apps timers
     SHORT_TIMER,
@@ -37,31 +36,31 @@ typedef enum{
 
     //more timers here...
 
-} Timer;
+} TestTimer_t;
 
-typedef void (*Callbackfunc)(Timer, int); //callback function signature; MUST return void and take Timer and int as parameters
+typedef void (*Callbackfunc)(TestTimer_t, int); //callback function signature; MUST return void and take Timer and int as parameters
 
-// TimerHandle Struct
+// TimerHandle_t Struct
 typedef struct{
 
     char* name; //used to identify peripheral when debugging
 
-    Callbackfunc callback; //function that executes when timer expires
+    Callbackfunc callback; //function that executes when peripheral timer expires
 
-    int ID; //timer ID; can be used to count cycles
+    int ID; //peripheral timer ID; can be used to count cycles
 
-    int period; //timer period in ms
+    int period; //peripheral timer period in ms
 
-    bool stop; //boolean to start/stop timer
+    bool stop; //boolean to start/stop peripheral timer
 
-    Timer timer; //variable holding timer of peripheral to run
+    TestTimer_t timer; //variable holding test timer to run
 
-} TimerHandle;
+} TimerHandle_t;
 
 
-static unsigned long long int ticks; //number of times RTI has expired in ms
+static uint32_t ticks; //number of times RTI has expired in ms (will not overflow for ~ 49 days)
 
-static TimerHandle xTimers[NUM_TIMERS]; //array of all timers
+static TimerHandle_t xTimers[NUM_TIMERS]; //array of all peripheral software timers
 
 /* Function Declarations */
 
@@ -75,6 +74,8 @@ int getTimerPeriod(Peripheral);
 
 uint8_t isBlocked(Peripheral);
 
+bool timers_complete();
+
 /* Setters */
 
 void xTimerSet(char*, Peripheral, Callbackfunc, int);
@@ -85,7 +86,7 @@ void stopGlobalTimer();
 
 void stopAllTimers();
 
-void startTimer(Peripheral, Timer, int);
+void startTimer(Peripheral, TestTimer_t, int);
 
 void stopTimer(Peripheral);
 

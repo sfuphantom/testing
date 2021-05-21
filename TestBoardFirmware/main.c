@@ -6,6 +6,8 @@
 #include "tiny-json.h"
 #include "main.h"
 #include "Phantom_sci.h"
+#include "hwConfig.h"
+
 #include "common.h"
 #include "gio.h"
 
@@ -16,19 +18,25 @@
 #include "timer.h"
 #include "gpio_tests.h"
 
+#define TIMER_PERIOD 1000
+
+static unsigned char UARTBuffer[100];
+//static unsigned char testMode[3];
+//static bool initGUI = false;
+
 // Static Function Declaration
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr);
 static void vcu_mode_process(TestBoardState_t *stateptr);
 static void setPeripheralTestCases(TestBoardState_t* stateptr);
+//static json_t JSONHandler(unsigned char *jsonstring);
 
 //Timer functions
-static void createTimers();
-static void test_complete_timer(Timer, int);
+static void initializeTimers();
+static void test_complete_timer(TestTimer_t, int);
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
-static bool isTestComplete;
 static bool tests_received;
 
 int main(void){
@@ -37,25 +45,36 @@ int main(void){
 
     MCP48FV_Init();
 
+   // sciInit();
     timerInit();
 
     gpio_init();
 
 
     Result_t res = SUCCESS;
+    //res = MCP48FV_Init(); 
 
     res = initUARTandModeHandler(&testBoardState);
 
-    createTimers();
+    initializeTimers();
 
 
     // TODO: Interrupt based wait to get test mode from PC
 //    while(!initGUI) need a way to know where start and end of message is (startbyte..,.,..endbyte)
 
+
+//    UARTprintf(" Ready to initialize GUI \n\r");
+//    sciReceive(PC_UART, 3, (unsigned char *)&testMode);
+//    UARTprintf("Mode detected: ");
+//    UARTSend(PC_UART, testMode);
+
+//    sciReceive(PC_UART, 10, (unsigned char *)&UARTBuffer); // COUNT CHARACTERS IN THE JSON AND UPDATE HERE
+
+    // check formatting of string sent by GUI - may need to adjust string for compatibility
+//    JSONHandler(UARTBuffer);
+
     //* test code *//
     setPeripheralTestCases(&testBoardState);
-
-    isTestComplete = false;
 
     tests_received = false;
 
@@ -70,11 +89,7 @@ int main(void){
 
         //determine the expected state of VCU/BMS
 
-        startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms
-
-        startTimer(TEST_COMPLETE, TEST_COMPLETE_TIMER, 5000);
-
-        isTestComplete = false;
+        startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
 
         switch(testBoardState.testMode){
 
@@ -99,10 +114,9 @@ int main(void){
 
         }//switch case
 
+        while(!timers_complete()); //wait for tests to finish
 
-        while(!isTestComplete);
-
-        stopGlobalTimer();
+        stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
 
         //validate test cases (through timer and send to PC)
         //send a single pass/result to PC
@@ -115,7 +129,9 @@ int main(void){
 
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
 {
-    sciInit();
+    sciInit(); // replace with UARTInit() to set baudrate
+    sciSetBaudrate(PC_UART, 9600);
+   // sciEnableNotification(PC_UART, SCI_RX_INT);
 
     UARTprintf("hello world\n\r");
 
@@ -128,6 +144,17 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     return SUCCESS;
 }
 
+//static json_t JSONHandler(unsigned char *jsonstring){
+//
+//    json_t mem[100];
+//    json_t const* json = json_create( jsonstring, mem, sizeof mem / sizeof *mem );
+//    // error checking the JSON
+//    if(!json){
+//        UARTprintf("Error creating JSON\n\r");
+//    }
+//    return json;
+//}
+
 static void setPeripheralTestCases(TestBoardState_t *stateptr){
 
     //TestBoard Mode
@@ -135,9 +162,15 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr){
 
 
     //VCU Tests
-    stateptr->peripheralStateArray[APPS] = APPS_SHORT_CIRCUIT;
+    stateptr->peripheralStateArray[APPS] = APPS_SWEEP;
 
     stateptr->peripheralStateArray[BSE] = BSE_SWEEP;
+
+
+//    json_t const* appsProperty = json_getProperty(json, "APPS"); // NEED TO PASS IN JSON OBJECT
+//    stateptr->peripheralStateArray[APPS] = json_getInteger(appsProperty);//APPS_BSE_ACTIVATED; NEEDS TO BE CONVERTED TO CORRECT SIZE
+//    json_t const* bseProperty = json_getProperty(json, "BSE"); // NEED TO PASS IN JSON OBJECT
+//    stateptr->peripheralStateArray[BSE] = json_getInteger(bseProperty);//BSE_SWEEP; NEEDS TO BE CONVERTED TO CORRECT SIZE
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
@@ -203,30 +236,7 @@ static void vcu_mode_process(TestBoardState_t *stateptr)
 
 }
 
-static void test_complete_timer(Timer timer, int ID){
-
-    #ifdef TIMER_DEBUG
-    UARTprintf("Tests Complete!\r\n\n");
-    #endif
-
-    isTestComplete = true;
-
-    stopAllTimers();
-
-}
-
-void createTimers(){
-
-
-    xTimerSet(
-                "Test_Complete", // name
-
-                TEST_COMPLETE_TIMER, // peripheral
-
-                test_complete_timer, // callback function
-
-                0 // ID
-             );
+void initializeTimers(){
 
     xTimerSet(
                 "BSE", // name
@@ -256,8 +266,3 @@ void createTimers(){
 }
 
 
-//void set_testboard_state(uint8_t *state_array, TestBoardModes_t mode)
-//{
-//    memcpy(&testBoardState.peripheralStateArray[0], state_array, sizeof(*state_array));
-//    testBoardState.testMode = mode;
-//}

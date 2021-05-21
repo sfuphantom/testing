@@ -19,7 +19,7 @@
 void apps_process(uint8_t state);
 
 //Timer Callback Functions
-void apps_timer(Timer, int);
+void apps_timer(TestTimer_t, int);
 
 enum
 {
