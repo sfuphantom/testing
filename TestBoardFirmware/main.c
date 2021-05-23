@@ -27,7 +27,7 @@ static json_t mem[100];
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr);
 static void vcu_mode_process(TestBoardState_t *stateptr);
-static void setPeripheralTestCases(TestBoardState_t* stateptr, json_t* json);
+static void setPeripheralTestCases(TestBoardState_t* stateptr);
 static json_t * JSONHandler(unsigned char *jsonstring);
 
 //Timer functions
@@ -36,6 +36,9 @@ static void initializeTimers();
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 static bool tests_received;
+
+static uint8_t APPSTest;
+static uint8_t BSETest;
 
 int main(void){
 
@@ -52,23 +55,35 @@ int main(void){
     res = initUARTandModeHandler(&testBoardState);
 
     initializeTimers();
-
+/*
     UARTprintf(" Ready to initialize GUI \n\r");
     sciReceive(PC_UART, 3, (unsigned char *)&testMode);
     UARTprintf("Mode detected: ");
     UARTSend(PC_UART, testMode);
 
     sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer); 
-
+*/
+   
     //* test code *//
-    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer)); 
+     
 
     tests_received = false;
 
     while(true){
 
         tests_received = false;
+        UARTprintf("Ready to begin testing. Please enter vcu then press enter when you are ready to begin\n\r");
+        sciReceive(PC_UART, 3, (unsigned char *)&testMode);
+        UARTprintf("Test mode detected: ");
+        UARTSend(PC_UART, testMode);
+        UARTprintf("Ready to set APPS test. Please enter the number associated with your selected test case: \n\r");
+        UARTprintf(" 0 = NORMAL_APPS_ON, 1 = NORMAL_APPS_OFF, 2 = APPS_IMPLAUSIBILITY, 3 = APPS_SHORT_CIRCUIT, 4 = APPS_OPEN_CIRCUIT, 5 = APPS_BSE_ACTIVATED,  6 = APPS_SWEEP\n\r");
+        sciReceive(PC_UART, 1, (uint8_t *)APPSTest);
+        UARTprintf("Ready to set BSE test. Please enter the number associated with your selected test case: \n\r");
+        UARTprintf("0 = NORMAL_BSE_OFF, 1 = NORMAL_BSE_ON, 2 = BSE_OPEN_CIRCUIT, 3 = BSE_SHORT_CIRCUIT, 4 = BSE_APPS_ACTIVATED, 5 = BSE_SWEEP\n\r");
+        sciReceive(PC_UART, 1, (uint8_t *)BSETest);
 
+        setPeripheralTestCases(&testBoardState);
         //poll test cases from GUI
 //        while(!tests_received);
 
@@ -141,17 +156,17 @@ static json_t * JSONHandler(unsigned char *jsonstring){
     return json;
 }
 
-static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
+static void setPeripheralTestCases(TestBoardState_t *stateptr){
 
     //TestBoard Mode
     stateptr->testMode = VCU_MODE;
 
 
     //VCU Tests
-    json_t * appsProperty = json_getProperty(json, "APPS"); 
-    stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
-    json_t * bseProperty = json_getProperty(json, "BSE"); 
-    stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
+    //json_t * appsProperty = json_getProperty(json, "APPS"); 
+    stateptr->peripheralStateArray[APPS] = APPSTest;
+    //json_t * bseProperty = json_getProperty(json, "BSE"); 
+    stateptr->peripheralStateArray[BSE] = BSETest;
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
