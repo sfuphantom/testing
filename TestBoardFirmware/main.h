@@ -12,6 +12,8 @@
 #include "thermistor_expansion.h"
 #include "communications.h"
 
+#include "common.h"
+
 typedef enum
 {
     IDLE,
@@ -35,20 +37,6 @@ typedef enum
 //    THERMISTOR_EXPANSION,
 //    BMS_COMMUNICATIONS
 //};
-
-enum
-{
-    APPS,
-    BSE,
-    TSAL,
-    IMD,
-    LV,
-    VCU_COMMUNICATIONS,
-    BMS_SLAVES,
-    THERMISTOR_EXPANSION,
-    BMS_COMMUNICATIONS
-};
-
 
 
 

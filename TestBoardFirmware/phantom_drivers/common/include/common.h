@@ -10,20 +10,31 @@
 
 #include "stdint.h"
 
+//Common defines
+#define TIMER_DEBUG
+#define SWEEP_STEP 25
+#define SWEEP_PERIOD 500
+
 typedef enum
 {
   SUCCESS,
   FAIL
 } Result_t;
 
-#define TIMER_DEBUG
+typedef enum Peripheral
+{
+    //systems with timers
+    APPS = 0,
+    BSE,
 
-#define SWEEP_STEP 50
-
-#define SWEEP_PERIOD 500
-
-
-
+    TSAL,
+    IMD,
+    LV,
+    VCU_COMMUNICATIONS,
+    BMS_SLAVES,
+    THERMISTOR_EXPANSION,
+    BMS_COMMUNICATIONS
+} Peripheral;
 
 void delayms(uint16_t ms);
 

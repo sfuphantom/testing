@@ -7,22 +7,18 @@
 #include "main.h"
 #include "Phantom_sci.h"
 #include "hwConfig.h"
-//#include "FreeRTOS.h"
-//#include "FreeRTOSConfig.h"
-//#include "os_task.h"
-//#include "os_timer.h"
 
 #include "common.h"
 
 //Drivers
 #include "bse.h"
-#include "MCP48FV_DAC_SPI.h"
 #include "apps.h"
+#include "MCP48FV_DAC_SPI.h"
 #include "timer.h"
 
 #define TIMER_PERIOD 1000
 
-static unsigned char UARTBuffer[100];
+static unsigned char UARTBuffer[200];
 static unsigned char testMode[3];
 static json_t mem[100];
 //static bool initGUI = false;
@@ -32,104 +28,91 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr);
 static void vcu_mode_process(TestBoardState_t *stateptr);
 static void setPeripheralTestCases(TestBoardState_t* stateptr, json_t* json);
-static void createTimers();
-static void test_complete_timer(Timer, int);
 static json_t * JSONHandler(unsigned char *jsonstring);
+
+//Timer functions
+static void initializeTimers();
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
-static bool isTestComplete = false;
+static bool tests_received;
 
-static void createTimers();
-
-int main(void)
-    {
+int main(void){
 
     //initialization
 
     MCP48FV_Init();
 
-
    // sciInit();
     timerInit();
-
-    createTimers();
-
 
     Result_t res = SUCCESS;
     //res = MCP48FV_Init(); 
 
-    //timerInit();
-
     res = initUARTandModeHandler(&testBoardState);
+
+    initializeTimers();
 
     UARTprintf(" Ready to initialize GUI \n\r");
     sciReceive(PC_UART, 3, (unsigned char *)&testMode);
     UARTprintf("Mode detected: ");
     UARTSend(PC_UART, testMode);
 
-    sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer); // ***COUNT CHARACTERS IN THE JSON AND UPDATE HERE***
+    sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer); 
 
-    // check formatting of string sent by GUI - may need to adjust string for compatibility
     //* test code *//
     setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer)); 
 
-    startAllTimers();
+    tests_received = false;
 
-    startGlobalTimer();
+    while(true){
 
-    isTestComplete = false;
+        tests_received = false;
 
-    //determine the expected state of VCU/BMS
+        //poll test cases from GUI
+//        while(!tests_received);
 
-    while(1)
-    {
+        //parse JSON and set states
 
-        startTimer(TEST_COMPLETE_TIMER);
+        //determine the expected state of VCU/BMS
 
-        isTestComplete = false;
+        startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
 
-        switch(testBoardState.testMode)
-        {
+        switch(testBoardState.testMode){
+
             case IDLE:
-            {
-                break;
-            }
+
+                continue;
+
             case BMS_MODE:
-            {
-//                res = bms_mode_process(&testBoardState);
+
+                res = bms_mode_process(&testBoardState);
 
                 if(res != SUCCESS)
-                {
                     UARTprintf("Failed to Initialize BMS Test board\n\r");
-                    break;
-                }
-
-                int i;
 
                 testBoardState.testMode = IDLE;
                 break;
-            }
+
             case VCU_MODE:
-            {
+
                 vcu_mode_process(&testBoardState);
-            }
-        }
+                break;
 
+        }//switch case
 
-        while(!isTestComplete);
+        while(!timers_complete()); //wait for tests to finish
 
-        stopTimer(TEST_COMPLETE_TIMER);
+        stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
 
         //validate test cases (through timer and send to PC)
         //send a single pass/result to PC
 
         delayms(5000);
 
-    }
+    }//superloop
 
-    //process functions for constant output vs variable output
-}
+}//main
 
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
 {
@@ -193,32 +176,32 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 //inner state machines for each BMS peripheral and three outer state machines -Meeting with Amneet
 static Result_t bms_mode_process(TestBoardState_t *stateptr)
 {
-//    Result_t ret = FAIL;
-//
-//    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
-//
-//    if(ret != SUCCESS)
-//    {
-//        UARTprintf("BMS SLAVE FAIL %d\n\r", ret);
-//        return FAIL;
-//    }
-//
-//    ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
-//
-//    if(ret != SUCCESS)
-//    {
-//        UARTprintf("THERMISTOR FAIL %d\n\r", ret);
-//        return FAIL;
-//    }
-//
-//    ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
-//
-//    if(ret == FAIL)
-//    {
-//        UARTprintf("CAN COMMUNICATIONS FAIL %d\n\r", ret);
-//        return FAIL;
-//    }
-//
+    Result_t ret = FAIL;
+
+    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
+
+    if(ret != SUCCESS)
+    {
+        UARTprintf("BMS SLAVE FAIL %d\n\r", ret);
+        return FAIL;
+    }
+
+    ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
+
+    if(ret != SUCCESS)
+    {
+        UARTprintf("THERMISTOR FAIL %d\n\r", ret);
+        return FAIL;
+    }
+
+    ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
+
+    if(ret == FAIL)
+    {
+        UARTprintf("CAN COMMUNICATIONS FAIL %d\n\r", ret);
+        return FAIL;
+    }
+
     return SUCCESS;
 }
 
@@ -231,104 +214,35 @@ static void vcu_mode_process(TestBoardState_t *stateptr)
 
     apps_process(stateptr->peripheralStateArray[APPS]);
 
- UARTprintf("Successfully set peripherals \n\r");
-}
-
-static void test_complete_timer(Timer timer, int ID){
-
-    #ifdef TIMER_DEBUG
-    UARTprintf("Tests Complete!\r\n\n");
-    #endif
-
-    isTestComplete = true;
-
-    stopAllTimers();
 
 }
 
-void createTimers(){
-
+void initializeTimers(){
 
     xTimerSet(
-                "Test_Complete", // name
+                "BSE", // name
 
-                TEST_COMPLETE_TIMER, // index
+                BSE, // peripheral
 
-                test_complete_timer, // callback function
-
-                10000, // period in ms
+                bse_timer, // callback function
 
                 0 // ID
              );
 
     xTimerSet(
-                "BSE_Sweep_Timer", // name
+                "APPS", // name
 
-                BSE_SWEEP_TIMER, // index
+                APPS, // peripheral
 
-                bse_sweep_timer, // callback function
-
-                TIMER_PERIOD, // period in ms
+                apps_timer, // callback function
 
                 0 // ID
              );
 
-    xTimerSet(
-                "APPS_Short_Timer", // name
 
-                APPS_SHORT_TIMER, // index
-
-                apps_short_timer, // callback function
-
-                TIMER_PERIOD, // period in ms
-
-                0 // ID
-             );
-
-    xTimerSet(
-                "APPS_Open_Timer", // name
-
-                APPS_OPEN_TIMER, // index
-
-                apps_open_timer, // callback function
-
-                TIMER_PERIOD, // period in ms
-
-                0 // ID
-             );
-
-    xTimerSet(
-               "APPS_BSE_Activated_Timer", // name
-
-               APPS_BSE_ACTIVATED_TIMER, // index
-
-               apps_bse_activated_timer, // callback function
-
-               TIMER_PERIOD, // period in ms
-
-               0 // ID
-            );
-
-    xTimerSet(
-               "APPS_Sweep_Timer", // name
-
-               APPS_SWEEP_TIMER, // index
-
-               apps_sweep_timer, // callback function
-
-               TIMER_PERIOD, // period in ms
-
-               0 // ID
-            );
-
-    //add more timers here...
+    //add more peripheral timers here...
 
 
 }
 
 
-//void set_testboard_state(uint8_t *state_array, TestBoardModes_t mode)
-//{
-//    memcpy(&testBoardState.peripheralStateArray[0], state_array, sizeof(*state_array));
-//    testBoardState.testMode = mode;
-//}
