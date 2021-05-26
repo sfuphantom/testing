@@ -133,16 +133,16 @@ static void hv_vs_upper_bound(){
     //sending upper bound voltage of 168
     ADC_output = (uint16)getADCdigital(168);
     spiSetup(ADC_output);
-    char vout[15];
-    char bit;
+    //char vout[] = {"c","a","a","a","a","a","a","a","a","a","a","a","a","a","a"};
+    //char v[] = {"a","a","a","a","a","a","a","a"};
+    uint8 v = 0x11;
     int i;
     UARTprintf("Maximum operating battery voltage level \n\r");
-    for (i=15;i>=0;i--){
+    /*for (i=15;i>=0;i--){
         vout[i]=(char) ((ADC_output >> i) & 1);
-        bit = vout[i];
-        UARTSend(PC_UART, &bit);
-    }
-
+    }*/
+    //UARTSend(PC_UART, &v);
+    sciSend(PC_UART,1,&v);
     //UARTSend(PC_UART, &vout);
     //sciSend(PC_UART, 8, &vout);
 }
@@ -172,7 +172,7 @@ static void hv_vs_at_zero()
 
 /* Sweep test with a timer */
 
-void hv_vs_sweep_timer(Timer sweepTimer, int ID){
+/*void hv_vs_sweep_timer(Timer sweepTimer, int ID){
 
     //#ifdef TIMER_DEBUG
     //UARTprintf("hv_vs sweep timer expired.\n\n\r");
@@ -189,7 +189,7 @@ void hv_vs_sweep_timer(Timer sweepTimer, int ID){
 
     //increment cycle
     setTimerID(sweepTimer, ++ID);
-}
+}*/
 
 static void hv_vs_sweep()
 {
@@ -197,7 +197,7 @@ static void hv_vs_sweep()
     setTimerID(HV_VS_SWEEP_TIMER, 0);
 
     //start timer
-    startTimer(HV_VS_SWEEP_TIMER);
+    //startTimer(HV_VS_SWEEP_TIMER);
 }
 
 static void spiSetup(uint16 voltage)

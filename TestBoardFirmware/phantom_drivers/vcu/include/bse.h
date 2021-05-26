@@ -25,9 +25,8 @@
 
 void bse_process(uint8_t state);
 
-
 //Timer Callback Functions
-void bse_sweep_timer(Timer, int);
+void bse_timer(TestTimer_t, int);
 
 
 enum

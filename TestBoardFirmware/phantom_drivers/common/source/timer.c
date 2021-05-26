@@ -8,14 +8,34 @@
 
 /* Static Functions */
 
-static void executeTimerCallback(Timer timer){
+static void executeTimerCallback(Peripheral peripheral_timer){
 
-    xTimers[timer].callback( timer, getTimerID(timer) );
+    xTimers[peripheral_timer].callback( xTimers[peripheral_timer].timer, getTimerID(peripheral_timer) );
 }
 
-static uint8_t isExpired(Timer timer){
+static uint8_t isExpired(Peripheral peripheral_timer){
 
-    return (ticks % xTimers[timer].period  == 0) && (ticks != 0);
+    return (ticks % xTimers[peripheral_timer].period  == 0) && (ticks != 0);
+}
+
+void rtiNotification(uint32 notification)
+{
+
+//    UARTprintf("Global timer expired!\r\n");
+
+
+    //check timer expirations
+
+    Peripheral peripheral_timer;
+
+    for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++){
+
+        if( isExpired(peripheral_timer) && !isBlocked(peripheral_timer) ){
+            executeTimerCallback(peripheral_timer);
+        }
+    }
+
+    ticks++; //will overflow after ~ 49 days...
 }
 
 void timerInit(){
@@ -25,69 +45,75 @@ void timerInit(){
     rtiEnableNotification(rtiNOTIFICATION_COMPARE0);
 
     _enable_IRQ();
-}
 
-void rtiNotification(uint32 notification)
-{
-/*  enter user code between the USER CODE BEGIN and USER CODE END. */
+    //initialize timers to blocked state
 
-    //check timer expirations
+    Peripheral peripheral_timer;
 
-    Timer timer;
-
-    for(timer = 0; timer < NUM_TIMERS; timer++){
-
-        if( isExpired(timer) && !isBlocked(timer) ){
-            executeTimerCallback(timer);
-        }
-    }
-
-    ticks++;
-
-    //deal with overflow
-    if(ticks == 100001){
-        ticks = 0;
-    }
-
-
+    for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++)
+           stopTimer(peripheral_timer);
 }
 
 /* Getters */
 
-uint8_t isBlocked(Timer timer){
+uint8_t isBlocked(Peripheral peripheral_timer){
 
-    return (xTimers[timer].stop);
+    return (xTimers[peripheral_timer].stop);
 }
 
-int getTimerID(Timer timer){
+int getTimerID(Peripheral peripheral_timer){
 
-    return xTimers[timer].ID;
+    return xTimers[peripheral_timer].ID;
 }
 
-int getTimerPeriod(Timer timer){
+int getTimerPeriod(Peripheral peripheral_timer){
 
-    return xTimers[timer].period;
+    return xTimers[peripheral_timer].period;
+}
+
+bool timers_complete(){
+
+    bool timers_complete = true;
+
+    //check all status of all timers
+    Peripheral peripheral_timer;
+
+   for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++){
+
+       if( !isBlocked(peripheral_timer) )
+           timers_complete = false;
+
+   }//loop through all peripheral timers
+
+
+    #ifdef TIMER_DEBUG
+    if(timers_complete) UARTprintf("Tests Completed!\r\n\n");
+    #endif
+
+   return timers_complete;
+
 }
 
 
 /* Setters */
 
-void xTimerSet(char* name, Timer timer, Callbackfunc callback, int period,int ID){
+void xTimerSet(char* name, Peripheral peripheral_timer, Callbackfunc callback, int ID){
 
-    xTimers[timer].name = name;
+    setTimerID(peripheral_timer, ID);
 
-    setTimerID(timer, ID);
+    setTimerPeriod(peripheral_timer, 0);
 
-    setTimerPeriod(timer, period);
+    stopTimer(peripheral_timer);
 
-    stopTimer(timer);
+    xTimers[peripheral_timer].name = name;
 
-    xTimers[timer].callback = callback;
+    xTimers[peripheral_timer].callback = callback;
 
-    xTimers[timer].stop = true;
+    xTimers[peripheral_timer].timer = 0; //default
 }
 
 void startGlobalTimer(){
+
     ticks = 0;
     rtiStartCounter(rtiCOUNTER_BLOCK0);
 }
@@ -97,44 +123,66 @@ void stopGlobalTimer(){
     rtiStopCounter(rtiCOUNTER_BLOCK0);
 }
 
-//test functions
-
-void startAllTimers(){
-
-    Timer timer;
-
-    for(timer = 0; timer < NUM_TIMERS; timer++){
-        startTimer(timer);
-    }
-}
-
 void stopAllTimers(){
 
-    Timer timer;
+    Peripheral peripheral_timer;
 
-    for(timer = 0; timer < NUM_TIMERS; timer++){
-        stopTimer(timer);
+    for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++){
+        stopTimer(peripheral_timer);
     }
 }
 
-//end of test functions
+void startTimer(Peripheral peripheral_timer, TestTimer_t timer, int period){
 
-void startTimer(Timer timer){
+    xTimers[peripheral_timer].timer = timer;
 
-    xTimers[timer].stop = false;
+    setTimerPeriod(peripheral_timer, period);
+
+    xTimers[peripheral_timer].stop = false;
 }
 
-void stopTimer(Timer timer){
+void stopTimer(Peripheral peripheral_timer){
 
-    xTimers[timer].stop = true;
+
+    #ifdef TIMER_DEBUG
+
+    switch(peripheral_timer){
+
+        case APPS:
+
+            UARTprintf("APPS TEST FINISHED!...\r\n\n");
+
+            break;
+
+        case BSE:
+
+            UARTprintf("BSE TEST FINISHED!...\r\n\n");
+
+            break;
+
+
+        //add more peripherals for debugging here...
+
+        default:
+
+            UARTprintf("SOME TEST FINSIHED!...\r\n\n");
+
+            break;
+
+    }//switch case statement
+
+    #endif
+
+    xTimers[peripheral_timer].stop = true;
 }
 
-void setTimerID(Timer timer,int ID){
+void setTimerID(Peripheral peripheral_timer, int ID){
 
-    xTimers[timer].ID = ID;
+    xTimers[peripheral_timer].ID = ID;
 }
 
-void setTimerPeriod(Timer timer,int period){
-    xTimers[timer].period = period;
+void setTimerPeriod(Peripheral peripheral_timer,int period){
+
+    xTimers[peripheral_timer].period = period;
 }
 
