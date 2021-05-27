@@ -59,7 +59,7 @@ static void communication_loss_voltage_test();
 static void communication_loss_temperature_test();
 static void temperature_mux(uint8_t pinSelect);
 
-Result_t bms_slaves_process(uint8_t state, TimerHandle_t *timerptr)
+Result_t bms_slaves_process(uint8_t state)
 {
 
     bms_slaves_init();

@@ -12,6 +12,8 @@
 #include "thermistor_expansion.h"
 #include "communications.h"
 
+#include "common.h"
+
 typedef enum
 {
     IDLE,
@@ -19,22 +21,24 @@ typedef enum
     VCU_MODE
 } TestBoardModes_t;
 
-enum VCUPeripheralPosition
-{
-    APPS,
-    BSE,
-    TSAL,
-    IMD,
-    LV,
-    VCU_COMMUNICATIONS
-};
+//enum VCUPeripheralPosition
+//{
+//    APPS,
+//    BSE,
+//    TSAL,
+//    IMD,
+//    LV,
+//    VCU_COMMUNICATIONS
+//};
+//
+//enum BMSPeripheralPosition
+//{
+//    BMS_SLAVES,
+//    THERMISTOR_EXPANSION,
+//    BMS_COMMUNICATIONS
+//};
 
-enum BMSPeripheralPosition
-{
-    BMS_SLAVES,
-    THERMISTOR_EXPANSION,
-    BMS_COMMUNICATIONS
-};
+
 
 typedef struct
 {
