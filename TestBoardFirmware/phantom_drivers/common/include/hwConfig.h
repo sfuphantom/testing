@@ -119,7 +119,7 @@
 #define THERMISTOR_MIX_HET_PORT             hetPORTB
 #define THERMISTOR_MUX_PIN_0            18 //configure in halcogen
 #define THERMISTOR_MUX_PIN_1            20 //configure in halcogen
-#define THERMISTOR_MUX_PIN_2            1 //configure in halcogen
+#define THERMISTOR_MUX_PIN_2            1 //configure in halcogen HET PORT
 #define THERMISTOR_MUX_PIN_3            16 //configure in halcogen
 
 
