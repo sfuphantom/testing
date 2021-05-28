@@ -5,13 +5,22 @@
  */
 
 #include "hv_current_sensor.h"
+#include "MCP48FV_DAC_SPI.h"
+
+#define VOUT1 1
+#define DAC_SIZE_HVCT 0xFF
+
+const int MAX_VOUT = 438;
+const int MIN_VOUT = 63;
 
 enum operation 
 {  
-    INTERVAL_HV_CT_RANGE //send range of voltages at .125V intervals
+    INTERVAL_HV_CT_RANGE, //send range of voltages at .125V intervals
     GRANULAR_HV_CT_RANGE, //send range of voltages at .001V intervals
     OFFLINE_HV_CT, //send 0V
-    PROPORTIONAL_APPS, //send voltages at .125 intervals, alongside APPS readings
+    PROPORTIONAL_APPS, //send voltages at .1V intervals, alongside APPS readings
+    LOW_APPS, //same as proportional_apps, but apps is too low
+    HIGH_APPS //same as proportional_apps, but apps is too high
 };
 
 //Test function prototypes
@@ -22,33 +31,25 @@ static void proportional_apps();
 static void low_apps();
 static void high_apps();
 
-//Other function prototypes
-static float send_hvct_current(int a);
-static float send_apps_current(int a);
-
-//Variable notes
-    //The voltages can be stored as ints, where the range is from 0 to 3750, corrosponding to .625 - 4.375V.
-
+//ignore this test
 //Test 1
 void interval_hv_ct_range()
 {
-    int currentInt = 0;
+    uint16_t current = 63;
     for(int i = 0; i<30;i++)
     {
-        currentInt = i*125;
-        send_hvct_current(currentInt);
+        current += i*;
+        MCP48FV_Set_Value_Single(current, DAC_SIZE_HVCT, VOUT1, 1);
     }
 }
 
 //Test 2
 void granular_hv_ct_range()
 {
-    int currentInt = 0;
-    for(int i = 0; i<3750;i++)
-    {
-        currentInt = i*125;
-        send_hvct_current(currentInt);
-    }
+    //test goes from .63V to 4.3V
+    uint16_t current = MIN_VOUT;
+    for( ; current<MAX_VOUT; current++)
+        MCP48FV_Set_Value_Single(current, DAC_SIZE_HVCT, VOUT1, 1);
     //for this one, make sure to make .csv files to graph the the values after, and they should be roughly proportional
     //max uncertainty can be 4amps 
 }
@@ -56,55 +57,47 @@ void granular_hv_ct_range()
 //Test 3
 void offline_hv_ct()
 {
-    send_hvct_current(0);
+    MCP48FV_Set_Value_Single(0, DAC_SIZE_HVCT, VOUT1, 1);
 }
 
 //Test 4
 void proportional_apps()
 {
-    int currentInt = 0;
-    for(int i = 0; i<30;i++)
+    int current = MIN_VOUT;
+    int i = 0;
+    while (current<MAX_VOUT)
     {
-        currentInt = i*125;
-        send_hvct_current(currentInt);
-        send_apps_current(currentInt);
+        MCP48FV_Set_Value_Single(current, DAC_SIZE_HVCT, VOUT1, 1);
+        //send_apps_current(current);
+        i += 10;
+        current += i;
     }
 }
 
 //Test 5
 void low_apps()
 {
-    int currentInt = 0;
-    for(int i = 0; i<30;i++)
+    int current = MIN_VOUT;
+    int i = 0;
+    while (current<MAX_VOUT)
     {
-        currentInt = i*125;
-        send_hvct_current(currentInt);
-        send_apps_current(currentInt-125);
+        MCP48FV_Set_Value_Single(current, DAC_SIZE_HVCT, VOUT1, 1);
+        //send_apps_current(current-10);
+        i += 10;
+        current += i;
     }
 }
 
 //Test 6
 void high_apps()
 {
-    int currentInt = 0;
-    for(int i = 0; i<30;i++)
+    int current = MIN_VOUT;
+    int i = 0;
+    while (current<MAX_VOUT)
     {
-        currentInt = i*125;
-        send_hvct_current(currentInt);
-        send_apps_current(currentInt+125);
+        MCP48FV_Set_Value_Single(current, DAC_SIZE_HVCT, VOUT1, 1);
+        //send_apps_current(current+10);
+        i += 10;
+        current += i;
     }
-}
-
-//Other functions
-void send_hvct_current(int currentInt)
-{
-    currentInt = currentInt*.001 + .625
-    //convert int to float
-    //send the current to the VCU
-}
-
-void send_apps_current(int currentInt)
-{
-    //convert int to what the APPS should be. ie, with 200A, there should be x amount of the pedal pushed down.
-    //send the apps value to the VCU
 }
