@@ -116,7 +116,7 @@
 #define THERMISTOR_EXP_INIT_TRANSFER_GROUP  TransferGroup0 //configure in halcogen
 #define THERMISTOR_EXP_COMM_TRANSFER_GROUP  TransferGroup1 //configure in halcogen
 #define THERMISTOR_MUX_GIO_PORT             gioPORTB //configure in halcogen
-#define THERMISTOR_MUX_HET_PORT             hetPORTB
+#define THERMISTOR_MUX_HET_PORT             hetPORT1
 #define THERMISTOR_MUX_PIN_0            18 //configure in halcogen
 #define THERMISTOR_MUX_PIN_1            20 //configure in halcogen
 #define THERMISTOR_MUX_PIN_2            1 //configure in halcogen GIO PORT
