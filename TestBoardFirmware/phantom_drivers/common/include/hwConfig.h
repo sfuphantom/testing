@@ -112,13 +112,15 @@
 
 // Thermistor Board Pins
 
-#define THERMISTOR_SPI                  mibspiREG3 //configure in halcogen
-#define THERMISTOR_INIT_TRANSFER_GROUP  TransferGroup0 //configure in halcogen
-#define THERMISTOR_COMM_TRANSFER_GROUP  TransferGroup1 //configure in halcogen
-#define THERMISTOR_MUX_PORT             gioPORTA //configure in halcogen
-#define THERMISTOR_MUX_PIN_A            5 //configure in halcogen
-#define THERMISTOR_MUX_PIN_B            6 //configure in halcogen
-#define THERMISTOR_MUX_PIN_C            7 //configure in halcogen
+#define THERMISTOR_EXP_SPI                  mibspiREG3 //configure in halcogen
+#define THERMISTOR_EXP_INIT_TRANSFER_GROUP  TransferGroup0 //configure in halcogen
+#define THERMISTOR_EXP_COMM_TRANSFER_GROUP  TransferGroup1 //configure in halcogen
+#define THERMISTOR_MUX_GIO_PORT             gioPORTB //configure in halcogen
+#define THERMISTOR_MIX_HET_PORT             hetPORTB
+#define THERMISTOR_MUX_PIN_0            18 //configure in halcogen
+#define THERMISTOR_MUX_PIN_1            20 //configure in halcogen
+#define THERMISTOR_MUX_PIN_2            1 //configure in halcogen
+#define THERMISTOR_MUX_PIN_3            16 //configure in halcogen
 
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_HWCONFIG_H_ */

@@ -7,7 +7,8 @@
 #include "main.h"
 #include "Phantom_sci.h"
 #include "hwConfig.h"
-
+#include "gio.h"
+#include "het.h"
 #include "common.h"
 
 //Drivers
@@ -40,7 +41,9 @@ static bool tests_received;
 int main(void){
 
     //initialization
-
+    gioInit();
+    gioSetDirection(hetPORT1, 0xFFFFFFFF);
+    
     MCP48FV_Init();
 
    // sciInit();
