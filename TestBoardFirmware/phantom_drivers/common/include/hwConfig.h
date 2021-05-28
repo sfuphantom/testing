@@ -106,6 +106,7 @@
 #define WAKEUP_PIN              0 //configure in halcogen
 #define FAULT_PORT              gioPORTA //configure in halcogen
 #define FAULT_PIN               1 //configure in halcogen
+#define DAC_SIZE_BMS            0x3FF
 
 // Debug UART
 #define PC_UART                 scilinREG

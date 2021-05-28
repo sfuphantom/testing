@@ -22,16 +22,16 @@
 #define DEFAULT_VOLTAGE 84
 #define DEFAULT_TEMPERATURE 25
 #define NUMBER_OF_TEMPERATURE_READINGS 16
-#define DAC_SIZE_BMS = 0x3FF
+
 #define TRANSFER_GROUP = 2
 
 // THESE VALUES NEED TO BE CHECKED - all must be an INT
-#define TEMP_MAX_VOLT = 113.1 // 1.131 == 55 degrees
-#define TEMP_MIN_VOLT = 268.2 // 2.682 = 0 degrees
-#define TEMP_HIGH_VOLT = 67 //66.83 // 0.6683 = 76 degrees
-#define TEMP_LOW_VOLT = 270 // 2.70 = 0 degrees
-#define VOLT_MIN = 76.08 // 0.7608 * 100
-#define VOLT_MAX = 99.85 // 0.9985 * 100
+#define TEMP_MAX_VOLT  113.1 // 1.131 == 55 degrees
+#define TEMP_MIN_VOLT  268.2 // 2.682 = 0 degrees
+#define TEMP_HIGH_VOLT  67 //66.83 // 0.6683 = 76 degrees
+#define TEMP_LOW_VOLT 270 // 2.70 = 0 degrees
+#define VOLT_MIN  76.08 // 0.7608 * 100
+#define VOLT_MAX  99.85 // 0.9985 * 100
 
 enum
 {
