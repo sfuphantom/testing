@@ -20,16 +20,14 @@
 #define DEFAULT_VOLTAGE 84
 #define DEFAULT_TEMPERATURE 25
 #define NUMBER_OF_TEMPERATURE_READINGS 16
-#define DAC_SIZE = 1024
+#define DAC_SIZE_BSE = 0x3FF
 #define TRANSFER_GROUP = 2
 
-// THESE VALUES NEED TO BE CHECKED
+// THESE VALUES NEED TO BE CHECKED - all must be an INT
 #define TEMP_MAX_VOLT = 113.1 // 1.131 == 55 degrees
 #define TEMP_MIN_VOLT = 268.2 // 2.682 = 0 degrees
-#define TEMP_MIDDLE_VOLT = 196.9 // 1.969 = 26 degrees
-#define TEMP_HIGH_VOLT = 66.83 // 0.6683 = 76 degrees
+#define TEMP_HIGH_VOLT = 67//66.83 // 0.6683 = 76 degrees
 #define TEMP_LOW_VOLT = 270 // 2.70 = 0 degrees
-
 #define VOLT_MIN = 76.08 // 0.7608 * 100
 #define VOLT_MAX = 99.85 // 0.9985 * 100
 
@@ -42,8 +40,7 @@ enum
     MAJOR_TEMPERATURE_FAULT,
     WEIRD_SENSOR_READINGS_VOLTAGE,
     WEIRD_SENSOR_READINGS_TEMPERATURE,
-    COMMUNICATION_LOSS_VOLTAGE,
-    COMMUNICATION_LOSS_TEMPERATURE,
+    COMMUNICATION_LOSS,
 };
 
 typedef struct {
@@ -63,8 +60,7 @@ static void major_voltage_test();
 static void major_temperature_test();
 static void weird_sensor_readings_voltage_test();
 static void weird_sensor_readings_temperature_test();
-static void communication_loss_voltage_test();
-static void communication_loss_temperature_test();
+static void communication_loss_test();
 static void temperature_mux(uint8_t pinSelect);
 
 Result_t bms_slaves_process(uint8_t state)
@@ -97,11 +93,8 @@ Result_t bms_slaves_process(uint8_t state)
         case WEIRD_SENSOR_READINGS_TEMPERATURE:
             weird_sensor_readings_temperature_test();
             break;
-        case COMMUNICATION_LOSS_VOLTAGE:
-            communication_loss_voltage_test();
-            break;
-        case COMMUNICATION_LOSS_TEMPERATURE:
-            communication_loss_temperature_test();
+        case COMMUNICATION_LOSS:
+            communication_loss_test();
             break;
     }
 
@@ -110,13 +103,15 @@ Result_t bms_slaves_process(uint8_t state)
 
 void bms_slaves_init()
 {
+    gioSetBit(HV_ACTIVE_PORT, HV_ACTIVE_PIN, 1);
+    
     bmsStruct->bmsSlaveVoltage =  DEFAULT_VOLTAGE;
     uint8_t i;
     for(i = 0; i < NUMBER_OF_TEMPERATURE_READINGS; i++) {
         bmsStruct->bmsSlaveTemperatures[i] = DEFAULT_TEMPERATURE;
     }
     bmsTempFault->bmsSlaveVoltage = DEFAULT_VOLTAGE;
-    uint8_t j;
+    uint8_t j = 0;
     for(i = j; j < NUMBER_OF_TEMPERATURE_READINGS; j++) {
         bmsTempFault->bmsSlaveTemperatures[j] = DEFAULT_TEMPERATURE;
     }
@@ -130,14 +125,14 @@ static void normal_bms_operation()
     UARTprintf("Normal BMS Operation\n\r");
     // voltage and temp at normal level
 
-    MCP48FV_Set_Value_Single((VOLT_MAX + VOLT_MIN)*0.5, DAC_SIZE, 0, TRANSFER_GROUP);
-
+    MCP48FV_Set_Value_Single(TEMP_HIGH_VOLT, DAC_SIZE_BSE, 0, 2);
+    uint8_t pinSelect = 0;
     //setting temp on each of the 16 pins
-    for(uint8_t pinSelect = 0b00000000; pinSelect <= 00001111; pinSelect++)// for loop - iterate over each pin
+    for( ; pinSelect <= 00001111; pinSelect++)// for loop - iterate over each pin
     {
         temperature_mux(pinSelect); 
         // set the DAC
-        MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE, 1, TRANSFER_GROUP); //voltage = 2.5V (unsure) * 100
+        MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE_BSE, 1, TRANSFER_GROUP); //voltage = 2.5V (unsure) * 100
     }
 }
 
@@ -145,16 +140,16 @@ static void minor_voltage_test()
 {
     //send a voltage over the opperating region (3.2-4.2)
     //send 4.7V for less than 3 seconds
-    MCP48FV_Set_Value_Single(VOLT_MAX, DAC_SIZE, 0, TRANSFER_GROUP);
+    MCP48FV_Set_Value_Single(VOLT_MAX, DAC_SIZE_BSE, 0, TRANSFER_GROUP);
 
     //send a voltage under the opperating region (3.2-4.2)
     //send 2.7V for less than 3 seconds
-    MCP48FV_Set_Value_Single(VOLT_MIN, DAC_SIZE, 0, TRANSFER_GROUP);
-
-    for(uint8_t pinSelect = 0b00000000; pinSelect <= 00001111; pinSelect++){// for loop - iterate over each pin
+    MCP48FV_Set_Value_Single(VOLT_MIN, DAC_SIZE_BSE, 0, TRANSFER_GROUP);
+    uint8_t pinSelect = 0;
+    for( ; pinSelect <= 00001111; pinSelect++){// for loop - iterate over each pin
         temperature_mux(pinSelect); 
         // set the DAC
-        MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE, 1, TRANSFER_GROUP);
+        MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE_BSE, 1, TRANSFER_GROUP);
     }
 }
 
@@ -163,12 +158,12 @@ static void minor_temperature_test()
     //send a temperature voltage over the opperating region (55 degrees C)
     //send 60 C for less than 3 seconds
 
-    MCP48FV_Set_Value_Single((VOLT_MAX + VOLT_MIN)*0.5, DAC_SIZE, 0, TRANSFER_GROUP);
-
-    for(uint8_t pinSelect = 0b00000000; pinSelect <= 00001111; pinSelect++){// for loop - iterate over each pin
+    MCP48FV_Set_Value_Single((VOLT_MAX + VOLT_MIN)*0.5, DAC_SIZE_BSE, 0, TRANSFER_GROUP);
+    uint8_t pinSelect = 0;
+    for( ; pinSelect <= 00001111; pinSelect++){// for loop - iterate over each pin
         temperature_mux(pinSelect);
         // set the DAC
-        MCP48FV_Set_Value_Single(bmsTempFault->bmsSlaveTemperatures[pinSelect], DAC_SIZE, 1, TRANSFER_GROUP);
+        MCP48FV_Set_Value_Single(bmsTempFault->bmsSlaveTemperatures[pinSelect], DAC_SIZE_BSE, 1, TRANSFER_GROUP);
     }
 }
 
@@ -176,16 +171,16 @@ static void major_voltage_test()
 {
     //send a voltage over the opperating region (3.2-4.2)
     //send 4.7V for more than 3 seconds
-    MCP48FV_Set_Value_Single(VOLT_MAX, DAC_SIZE, 0, TRANSFER_GROUP);
+    MCP48FV_Set_Value_Single(VOLT_MAX, DAC_SIZE_BSE, 0, TRANSFER_GROUP);
 
     //send a voltage under the opperating region (3.2-4.2)
     //send 2.7V for more than 3 seconds
-    MCP48FV_Set_Value_Single(VOLT_MIN, DAC_SIZE, 0, TRANSFER_GROUP);
-
-    for(uint8_t pinSelect = 0b00000000; pinSelect <= 00001111; pinSelect++){// for loop - iterate over each pin
+    MCP48FV_Set_Value_Single(VOLT_MIN, DAC_SIZE_BSE, 0, TRANSFER_GROUP);
+    uint8_t pinSelect = 0;
+    for( ; pinSelect <= 00001111; pinSelect++){// for loop - iterate over each pin
         temperature_mux(pinSelect);
         // set the DAC
-        MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE, 1, TRANSFER_GROUP);
+        MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE_BSE, 1, TRANSFER_GROUP);
     } 
 }
 
@@ -194,16 +189,16 @@ static void major_temperature_test()
     //send a temperature voltage over the opperating region (55 degrees C)
     //send 60 C for more than 3 seconds
 
-    MCP48FV_Set_Value_Single((VOLT_MAX + VOLT_MIN)*0.5, DAC_SIZE, 0, TRANSFER_GROUP);
-
-    for(uint8_t pinSelect = 0b00000000; pinSelect <= 00001111; pinSelect++){// for loop - iterate over each pin
+    MCP48FV_Set_Value_Single((VOLT_MAX + VOLT_MIN)*0.5, DAC_SIZE_BSE, 0, TRANSFER_GROUP);
+    uint8_t pinSelect = 0;
+    for( ; pinSelect <= 0b00001111; pinSelect++){// for loop - iterate over each pin
         temperature_mux(pinSelect); 
         // set the DAC
-        MCP48FV_Set_Value_Single(bmsTempFault->bmsSlaveTemperatures[pinSelect], DAC_SIZE, 1, TRANSFER_GROUP); 
+        MCP48FV_Set_Value_Single(bmsTempFault->bmsSlaveTemperatures[pinSelect], DAC_SIZE_BSE, 1, TRANSFER_GROUP); 
     }
 }
 
-static void communication_loss_voltage_test()
+static void communication_loss_test()
 { 
     // send nothing 
     // "what is timing out of messages"
@@ -215,10 +210,6 @@ static void communication_loss_voltage_test()
     //     // set the DAC
     //     MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE, 1, TRANSFER_GROUP);
     // }
-    return;
-}
-
-static void communication_loss_temperature_test(){
     return;
 }
 

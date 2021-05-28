@@ -122,5 +122,8 @@
 #define THERMISTOR_MUX_PIN_2            1 //configure in halcogen GIO PORT
 #define THERMISTOR_MUX_PIN_3            16 //configure in halcogen
 
+#define HV_ACTIVE_PORT      gioPORTB
+#define HV_ACTIVE_PIN       0
+
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_HWCONFIG_H_ */
