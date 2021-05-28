@@ -101,24 +101,24 @@
 
 /***************  BMS PINS  *********************/
 
-#define BMS_UART                sciREG
-#define WAKEUP_PORT             gioPORTA
-#define WAKEUP_PIN              0
-#define FAULT_PORT              gioPORTA
-#define FAULT_PIN               1
+#define BMS_UART                sciREG //configure in halcogen
+#define WAKEUP_PORT             gioPORTA //configure in halcogen
+#define WAKEUP_PIN              0 //configure in halcogen
+#define FAULT_PORT              gioPORTA //configure in halcogen
+#define FAULT_PIN               1 //configure in halcogen
 
 // Debug UART
 #define PC_UART                 scilinREG
 
 // Thermistor Board Pins
-#define THERMISTOR_SPI                  mibspiREG3
-#define THERMISTOR_INIT_TRANSFER_GROUP  TransferGroup0
-#define THERMISTOR_COMM_TRANSFER_GROUP  TransferGroup1
-#define TEMP_MUX_PORT             gioPORTA
-#define TEMP_MUX_PIN_1            5
-#define TEMP_MUX_PIN_0            6
-#define TEMP_MUX_PIN_3            7
-#define TEMP_MUX_PIN_2            8
+
+#define THERMISTOR_SPI                  mibspiREG3 //configure in halcogen
+#define THERMISTOR_INIT_TRANSFER_GROUP  TransferGroup0 //configure in halcogen
+#define THERMISTOR_COMM_TRANSFER_GROUP  TransferGroup1 //configure in halcogen
+#define THERMISTOR_MUX_PORT             gioPORTA //configure in halcogen
+#define THERMISTOR_MUX_PIN_A            5 //configure in halcogen
+#define THERMISTOR_MUX_PIN_B            6 //configure in halcogen
+#define THERMISTOR_MUX_PIN_C            7 //configure in halcogen
 
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_HWCONFIG_H_ */
