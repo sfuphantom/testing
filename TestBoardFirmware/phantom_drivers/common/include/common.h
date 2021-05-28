@@ -30,6 +30,7 @@ typedef enum Peripheral
     TSAL,
     IMD,
     LV,
+    HV_VS,
     VCU_COMMUNICATIONS,
     BMS_SLAVES,
     THERMISTOR_EXPANSION,

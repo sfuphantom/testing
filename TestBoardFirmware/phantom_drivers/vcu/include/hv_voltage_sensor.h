@@ -43,6 +43,6 @@ void hv_vs_process(uint8_t state);
 static int twosComplement(int negative_output);
 void mibspiGroupNotification(mibspiBASE_t *mibspi, uint32 group);
 void adcSlaveDataSetup();
-//void hv_vs_sweep_timer(Timer timer, int ID);
+void hv_vs_timer(TestTimer_t test_timer, int ID);
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_HV_VOLTAGE_SENSOR_H_ */

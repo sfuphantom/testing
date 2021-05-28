@@ -14,6 +14,7 @@
 
 #define TransferGroup0 0
 #define TransferGroup1 1
+#define min_voltage 125
 
 uint16 ADC_output;
 
@@ -136,7 +137,7 @@ static void hv_vs_upper_bound(){
     //char vout[] = {"c","a","a","a","a","a","a","a","a","a","a","a","a","a","a"};
     //char v[] = {"a","a","a","a","a","a","a","a"};
     uint8 v = 0x11;
-    int i;
+    //int i;
     UARTprintf("Maximum operating battery voltage level \n\r");
     /*for (i=15;i>=0;i--){
         vout[i]=(char) ((ADC_output >> i) & 1);
@@ -172,32 +173,32 @@ static void hv_vs_at_zero()
 
 /* Sweep test with a timer */
 
-/*void hv_vs_sweep_timer(Timer sweepTimer, int ID){
-
-    //#ifdef TIMER_DEBUG
-    //UARTprintf("hv_vs sweep timer expired.\n\n\r");
-    //#endif
-
-    int input_voltage = 125;
-    ADC_output = (uint16)getADCdigital(input_voltage);
-    spiSetup(ADC_output);
-    input_voltage = input_voltage + ID;
-
-    if(input_voltage >168){
-        stopTimer(sweepTimer);
-    }
-
-    //increment cycle
-    setTimerID(sweepTimer, ++ID);
-}*/
-
 static void hv_vs_sweep()
 {
     //reset timer ID (counts # of cycles)
-    setTimerID(HV_VS_SWEEP_TIMER, 0);
+    setTimerID(HV_VS, 0);
 
     //start timer
-    //startTimer(HV_VS_SWEEP_TIMER);
+    startTimer(HV_VS, SWEEP_TIMER, SWEEP_PERIOD);
+}
+
+void hv_vs_timer(TestTimer_t test_timer, int ID){
+
+    #ifdef TIMER_DEBUG
+    UARTprintf("hv_vs sweep timer expired.\n\n\r");
+    #endif
+
+    int input_voltage = min_voltage + ID;
+    ADC_output = (uint16)getADCdigital(input_voltage);
+    spiSetup(ADC_output);
+
+    //Stop condition
+    if(input_voltage >168){
+        stopTimer(HV_VS);
+    }
+
+    //increment cycle
+    setTimerID(HV_VS, ++ID);
 }
 
 static void spiSetup(uint16 voltage)
