@@ -35,6 +35,7 @@
 #define VOLT_MIN = 76.08 // 0.7608 * 100
 #define VOLT_MAX = 99.85 // 0.9985 * 100
 
+
 enum
 {
     NORMAL_BMS_OPERATION,
@@ -206,39 +207,49 @@ static void major_temperature_test()
     }
 }
 
-/*static void communication_loss_voltage_test()
+static void communication_loss_voltage_test()
 { 
     // send nothing 
     // "what is timing out of messages"
 
-    MCP48FV_Set_Value_Single(0, DAC_SIZE, 0, TRANSFER_GROUP);
+    // MCP48FV_Set_Value_Single(0, DAC_SIZE, 0, TRANSFER_GROUP);
 
-    for(uint8_t pinSelect = 0b00000000; pinSelect <= 00001111; pinSelect++){// for loop - iterate over each pin
-        temperature_mux(pinSelect) 
-        // set the DAC
-        MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE, 1, TRANSFER_GROUP);
-    }
-}*/
+    // for(uint8_t pinSelect = 0b00000000; pinSelect <= 00001111; pinSelect++){// for loop - iterate over each pin
+    //     temperature_mux(pinSelect) 
+    //     // set the DAC
+    //     MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE, 1, TRANSFER_GROUP);
+    // }
+    return;
+}
 
-// static void communication_loss_temperature_test()
-
+static void communication_loss_temperature_test(){
+    return;
+}
 
 // *****temperature mux function (loop)*****
 static void temperature_mux(uint8_t pinSelect)
 { 
      // set the different mux pins
     if (0b00000001 & pinSelect){ 
-        gioToggleBit(TEMP_MUX_PORT, TEMP_MUX_PIN_0);
+        gioSetBit(THERMISTOR_MUX_HET_PORT, THERMISTOR_MUX_PIN_0, 1);
+    } else {
+        gioSetBit(THERMISTOR_MUX_HET_PORT, THERMISTOR_MUX_PIN_0, 0);
     }
     if ((0b000010 & pinSelect) >> 1){ 
-         gioToggleBit(TEMP_MUX_PORT, TEMP_MUX_PIN_1);
-    } 
+        gioSetBit(THERMISTOR_MUX_HET_PORT, THERMISTOR_MUX_PIN_1, 1);
+    } else {
+        gioSetBit(THERMISTOR_MUX_HET_PORT, THERMISTOR_MUX_PIN_1, 0);
+    }
     if ((0b000100 & pinSelect) >> 2){ 
-        gioToggleBit(TEMP_MUX_PORT, TEMP_MUX_PIN_2);
-    } 
+        gioSetBit(THERMISTOR_MUX_GIO_PORT, THERMISTOR_MUX_PIN_2, 1);
+    } else {
+        gioSetBit(THERMISTOR_MUX_GIO_PORT, THERMISTOR_MUX_PIN_2, 0);
+    }
     if ((0b001000 & pinSelect) >> 3){ 
-        gioToggleBit(TEMP_MUX_PORT, TEMP_MUX_PIN_3);
-    } 
+        gioSetBit(THERMISTOR_MUX_HET_PORT, THERMISTOR_MUX_PIN_3, 1);
+    } else {
+        gioSetBit(THERMISTOR_MUX_HET_PORT, THERMISTOR_MUX_PIN_3, 0);
+    }
 
  return 0;
 }
