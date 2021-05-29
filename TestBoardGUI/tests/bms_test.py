@@ -2,7 +2,7 @@
 
 #   Written by:
 #   Khail Alibhai & Courtenay Huffman
-#   Date: Mary 28 2021
+#   Date: May 28 2021
 
 import copy
 import serial
