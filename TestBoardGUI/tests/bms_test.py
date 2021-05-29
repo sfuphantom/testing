@@ -1,34 +1,30 @@
-#File to hold unit tests for the BMS using pytest
-
-#TO DO:
-# pip install pytest 
-# update README.md with above
-
-#include pytest in file: import pytest
-# to run tests, call pytest.main() to run as if called on the commandline.
-# can pass pytest.main() arguments - used to pass selected tests 
-
-#implement tests as an integration test or test fully encompassing all vcu states to create a json
-
 import json
 import pytest
 import copy
 import serial
+import time
 
+# Constants to be changed based on Launchpad Settings
+PORT = "COM3"
+BAUDRATE = 115200
+TIMEOUT = 0.1
+
+#Example of Tests to be chosen by UI
 selectedTest_example = [{'Test Name': 'x', 'Test Case': 'y', 'Repeat': None, 'Test Index': None}, {'Test Name': 'u', 'Test Case': 'v', 'Repeat': None, 'Test Index': None}]
-# dictionary object of BMS in normal state
-normal_bms = {
 
+# Dictionary object of BMS in normal state
+normal_bms = {
     "Mode": "BMS",
 	"bms_slave": "NORMAL",
 	"thermistor_exp": "NORMAL",
 	"communications": "NORMAL",
 	"repeat": 1
-
 }
 
+# Initalize Serial
+serialPort = serial.Serial(port = PORT, baudrate = BAUDRATE, timeout = TIMEOUT)
 
-
+# Build Test Information to be Sent to Launchpad
 def build_json():
     selectedJson = copy.deepcopy(normal_bms)
 
@@ -37,28 +33,44 @@ def build_json():
     
     return selectedJson
 
-def send_json():
-    
+# Encode and Send Test Information to Launchpad, Receive Response
+def send_and_receive(selectedJson):
+
+    # Encode Test Information and Send it to Launchpad
+    # (Arduino is Setup to Use '\n' to know when the message is done, that's why it is added to the end of the string below)
+    serialPort.write(bytes(str(selectedJson)+'\n', 'utf-8'))
+
+    # Wait 50 milliseconds for a response
+    time.sleep(.05)
+
+    # Read the most recent line of the Serial, return it as bytes
+    receivedLine = serialPort.readline()
+    return receivedLine
+
+# Receive Response from Launchpad containing Test Results
+def decode_results():
+
+    # Prepare Test Infomation
     selectedJson = build_json()
 
-    # send UART
-    # configure Serial
-    serialPort = serial.Serial(port = "COMX", baudrate = 9600, bytesize = 8, timeout = 0, stopbits = serial.STOPBITS_ONE)
-    # send test to serial
-    serialPort.write("bms")
-    serialPort.write(json.dumps(selectedJson))
-
-    # receive UART
-    #TO DO: interperet the correct line from serial
-    receivedTest = serialPort.readline()[:-2] #trims input to get rid of new-line chars
-    testResults = json.loads(receivedTest)
+    # Prepare Launchpad to Receive BMS test Information
+    serialPort.write(bytes('bms', 'utf-8'))
+    time.sleep(1)
+    # Repeatedly Send Test Info to Launchpad until Test Results are Received
+    data = b''
+    while data == b'':
+        data = send_and_receive(build_json())
+        #data = send_and_receive(normal_bms)
     
-    return testResults
+    # Decode Test Results and Return Test Results as String
+    data_str = data.decode('utf-8')[:-1]
+    return data_str
 
-#testing functions
+# Test Function for PyTest Use, Passed: Test Results match Normal BMS State, Failed: Test Results do not match Normal BMS State
 def test_bms_json():
-    assert normal_bms != build_json()
 
+    # Compare Test Results to Normal BMS State
+    assert str(normal_bms) == decode_results()
 
 
 
