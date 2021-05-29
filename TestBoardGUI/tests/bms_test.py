@@ -1,5 +1,9 @@
-import json
-import pytest
+# File to hold unit tests for the BMS using pytest
+
+#   Written by:
+#   Khail Alibhai
+#   Date: March 28 2021
+
 import copy
 import serial
 import time
@@ -59,7 +63,7 @@ def decode_results():
     # Repeatedly Send Test Info to Launchpad until Test Results are Received
     data = b''
     while data == b'':
-        data = send_and_receive(build_json())
+        data = send_and_receive(selectedJson)
         #data = send_and_receive(normal_bms)
     
     # Decode Test Results and Return Test Results as String
