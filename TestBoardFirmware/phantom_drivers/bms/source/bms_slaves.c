@@ -88,10 +88,10 @@ Result_t bms_slaves_process(uint8_t state)
             major_temperature_test();
             break;
         case WEIRD_SENSOR_READINGS_VOLTAGE:
-            weird_sensor_readings_voltage_test();
+            //weird_sensor_readings_voltage_test();
             break;
         case WEIRD_SENSOR_READINGS_TEMPERATURE:
-            weird_sensor_readings_temperature_test();
+            //weird_sensor_readings_temperature_test();
             break;
         case COMMUNICATION_LOSS:
             communication_loss_test();
