@@ -14,7 +14,7 @@ BAUDRATE = 115200
 TIMEOUT = 0.1
 
 #Example of Tests to be chosen by UI
-selectedTest_example = [{'Test Name': 'x', 'Test Case': 'y', 'Repeat': None, 'Test Index': None}, {'Test Name': 'u', 'Test Case': 'v', 'Repeat': None, 'Test Index': None}]
+selectedTest_example = [{'Test Name': 'communications', 'Test Case': 'y', 'Repeat': None, 'Test Index': None, 'Enum': 0}, {'Test Name': 'thermistor_exp', 'Test Case': 'v', 'Repeat': None, 'Test Index': None, 'Enum': 0}]
 
 # Dictionary object of BMS in normal state
 normal_bms = {
@@ -32,8 +32,10 @@ serialPort = serial.Serial(port = PORT, baudrate = BAUDRATE, timeout = TIMEOUT)
 def build_json():
     selectedJson = copy.deepcopy(normal_bms)
 
-    for x in range(len(selectedTest_example)):
-        selectedJson.update({selectedTest_example[x].get('Test Name'): "TEST_ENUM"})
+    counter = 0
+    for x in selectedTest_example:
+        selectedJson.update({selectedTest_example[counter].get('Test Name'): selectedTest_example[counter].get('Enum')})
+        counter += 1
     
     return selectedJson
 
@@ -60,6 +62,7 @@ def decode_results():
     # Prepare Launchpad to Receive BMS test Information
     serialPort.write(bytes('bms', 'utf-8'))
     time.sleep(1)
+
     # Repeatedly Send Test Info to Launchpad until Test Results are Received
     data = b''
     while data == b'':
@@ -76,7 +79,6 @@ def test_bms_json():
     # Compare Test Results to Normal BMS State
     assert str(normal_bms) == decode_results()
 
-
-
+decode_results()
 
 
