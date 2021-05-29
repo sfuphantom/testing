@@ -1,7 +1,7 @@
 # File to hold unit tests for the BMS using pytest
 
 #   Written by:
-#   Khail Alibhai
+#   Khail Alibhai & Courtenay Huffman
 #   Date: May 28 2021
 
 import copy
