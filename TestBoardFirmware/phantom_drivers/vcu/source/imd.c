@@ -19,15 +19,15 @@ unsigned char duty_data[8];
 const float f_HCLK = 160.00;
 */
 
-enum operation
+typedef enum operation
 {
-    NORMAL_IMD_OPERATION // When Duty Cycle 5-10%
+    NORMAL_IMD_OPERATION, // When Duty Cycle 5-10%
     ISOLATION_FAILURE, //When Duty Cycle is 90-95%
     DEVICE_FAILURE, // 50% Duty Cycle, 40hz Frequency  
     OUT_OF_RANGE, // Duty Cycle is outside of range (below 5% or above 95%)
     DEVICE_SWEEP, // 0-50hz Frequency, Expected corresponding duty cycle 
     ISOLATION_SWEEP, //10hz Frequency, 5-95% duty cycle 
-};
+}operation;
 
 // Static function definitions
 static void normal_imd_operation();
@@ -55,6 +55,8 @@ void imd_process(uint8_t state)
 */
 static void normal_imd_operation()
 {
+
+    return;
     // initalize + configure pin
     // set duty cycle and freq 
     // output values to pin     
@@ -167,15 +169,18 @@ static void initalize_IMD()
 void serialSendData() {
 	 // adding this 0.5 and then typecasting to an int (truncating all decimals)
     // basically acts as rounding the float to the nearest integer
-    freq_value = (unsigned int) (frequency + 0.5);
-    duty_value = (unsigned int) (duty_cycle*100.0 + 0.5);
 
-    NumberofCharsFreq = ltoa(freq_value, (char*) freq_data);
-    NumberofCharsDuty = ltoa(duty_value, (char*) duty_data);
+    return;
 
-    sciSend(scilinREG, NumberofCharsFreq, freq_data);
-    sciSend(scilinREG, 4, (unsigned char*)" Hz ");
-
-    sciSend(scilinREG, NumberofCharsDuty, duty_data);
-    sciSend(scilinREG, 4, (unsigned char*)" %\r\n");
+//    freq_value = (unsigned int) (frequency + 0.5);
+//    duty_value = (unsigned int) (duty_cycle*100.0 + 0.5);
+//
+//    NumberofCharsFreq = ltoa(freq_value, (char*) freq_data);
+//    NumberofCharsDuty = ltoa(duty_value, (char*) duty_data);
+//
+//    sciSend(scilinREG, NumberofCharsFreq, freq_data);
+//    sciSend(scilinREG, 4, (unsigned char*)" Hz ");
+//
+//    sciSend(scilinREG, NumberofCharsDuty, duty_data);
+//    sciSend(scilinREG, 4, (unsigned char*)" %\r\n");
 }
