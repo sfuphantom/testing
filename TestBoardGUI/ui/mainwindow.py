@@ -56,6 +56,15 @@ class MainWindow(QObject):
             QComboBox, 'deviceSelection')
         self.deviceCombobox.currentTextChanged.connect(
             lambda: self._device_selected(self.deviceCombobox.currentIndex()))
+        self.portNumComboBox = self.mainwindow.findChild(
+            QComboBox, 'portNumber')
+
+        port_num = ['223', '5000']
+        self.portNumComboBox.setPlaceholderText('Select')
+        self.portNumComboBox.addItems(port_num)
+
+        self.portNumComboBox.currentTextChanged.connect( #creates a signal
+            lambda: self.get_port_num(self.portNumComboBox.currentText()))
 
         # LineEdits
         self.boardName = self.mainwindow.findChild(
@@ -108,6 +117,9 @@ class MainWindow(QObject):
 
         # Show ui when application runs
         self.mainwindow.show()
+
+    def get_port_num(self, num):
+            self.portnum = num
 
     # Load ui file
     def _load_ui(self, file):

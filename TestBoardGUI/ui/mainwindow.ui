@@ -65,6 +65,16 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Port Number:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="portNumber"/>
+       </item>
+       <item>
         <widget class="QLabel" name="boardNameLabel">
          <property name="text">
           <string>Board Name:</string>
