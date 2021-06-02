@@ -73,7 +73,22 @@ int main(void){
 
     tests_received = false;
 
-    hv_vs_process(HV_VS_UPPER_BOUND);
+    //Positive test cases
+    /*hv_vs_process(HV_VS_UPPER_BOUND);
+    UARTprintf("HV VT testing done \n\r");
+    hv_vs_process(HV_VS_OUT_OF_UPPERBOUND);
+    UARTprintf("HV VT testing done \n\r");*/
+
+    //Zero value test case
+    /*hv_vs_process(HV_VS_AT_ZERO);
+    UARTprintf("HV VT testing done \n\r");*/
+
+    //Negative test cases
+    hv_vs_process(HV_VS_LOWER_BOUND);
+    UARTprintf("HV VT testing done \n\r");
+    hv_vs_process(HV_VS_OUT_OF_LOWERBOUND);
+    UARTprintf("HV VT testing done \n\r");
+
     while(true){
 
         tests_received = false;
@@ -81,7 +96,6 @@ int main(void){
         //poll test cases from GUI
 //        while(!tests_received);
 
-    //hv_vs_process(HV_VS_UPPER_BOUND);
 
     while(1)
     {

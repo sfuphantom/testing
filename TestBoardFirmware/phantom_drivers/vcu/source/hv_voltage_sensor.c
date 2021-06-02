@@ -126,26 +126,36 @@ static int getADCdigital(int battery_voltage)
 static void hv_vs_lower_bound()
 {
     //sending lower bound voltage of 125
+    //should send -1643 to SPI
     ADC_output = (uint16)getADCdigital(125);
     spiSetup(ADC_output);
+    UARTprintf("Minimum operating battery voltage level \n\r");
+        int i;
+        for (i=15;i>=0;i--){
+           uint8 v=(int) ((ADC_output >> i) & 1);
+           if (v == 0){
+               UARTprintf("0");
+           }
+           sciSend(PC_UART,1,&v);
+        }
+        UARTprintf("\n\r");
 }
 
 static void hv_vs_upper_bound(){
     //sending upper bound voltage of 168
-    ADC_output = (uint16)getADCdigital(168);
+    //should send value of 2021 to SPI
+    ADC_output = (uint16_t)getADCdigital(168);
     spiSetup(ADC_output);
-    //char vout[] = {"c","a","a","a","a","a","a","a","a","a","a","a","a","a","a"};
-    //char v[] = {"a","a","a","a","a","a","a","a"};
-    uint8 v = 0x11;
-    //int i;
     UARTprintf("Maximum operating battery voltage level \n\r");
-    /*for (i=15;i>=0;i--){
-        vout[i]=(char) ((ADC_output >> i) & 1);
-    }*/
-    //UARTSend(PC_UART, &v);
-    sciSend(PC_UART,1,&v);
-    //UARTSend(PC_UART, &vout);
-    //sciSend(PC_UART, 8, &vout);
+    int i;
+    for (i=15;i>=0;i--){
+       uint8 v=(int) ((ADC_output >> i) & 1);
+       if (v == 0){
+           UARTprintf("0");
+       }
+       sciSend(PC_UART,1,&v);
+    }
+    UARTprintf("\n\r");
 }
 
 static void hv_vs_out_of_lowerBound()
@@ -154,13 +164,34 @@ static void hv_vs_out_of_lowerBound()
     //sending ADC output voltage below the lower bound voltage of 125V
     ADC_output = (uint16)getADCdigital(120);
     spiSetup(ADC_output);
+    UARTprintf("120V voltage level \n\r");
+        int i;
+        for (i=15;i>=0;i--){
+           uint8 v=(int) ((ADC_output >> i) & 1);
+           if (v == 0){
+               UARTprintf("0");
+           }
+           sciSend(PC_UART,1,&v);
+        }
+        UARTprintf("\n\r");
 }
 
 static void hv_vs_out_of_upperBound()
 {
     //sending ADC output voltage above the upper bound voltage of 168V
+    //should send value of 2191 to SPI
     ADC_output = (uint16)getADCdigital(170);
     spiSetup(ADC_output);
+    UARTprintf("170V voltage level \n\r");
+            int i;
+            for (i=15;i>=0;i--){
+               uint8 v=(int) ((ADC_output >> i) & 1);
+               if (v == 0){
+                   UARTprintf("0");
+               }
+               sciSend(PC_UART,1,&v);
+            }
+            UARTprintf("\n\r");
 }
 
 static void hv_vs_at_zero()
@@ -169,6 +200,16 @@ static void hv_vs_at_zero()
     // sending ADC output voltage of 0
     ADC_output = (uint16)0;
     spiSetup(ADC_output);
+    UARTprintf("0V voltage level \n\r");
+               int i;
+               for (i=15;i>=0;i--){
+                  uint8 v=(int) ((ADC_output >> i) & 1);
+                  if (v == 0){
+                      UARTprintf("0");
+                  }
+                  sciSend(PC_UART,1,&v);
+               }
+               UARTprintf("\n\r");
 }
 
 /* Sweep test with a timer */

@@ -37,8 +37,6 @@ typedef enum{
     APPS_BSE_ACTIVATED_TIMER,
     APPS_SWEEP_TIMER,
 
-    //hv_vs timers
-    HV_VS_SWEEP_TIMER,
     SHORT_TIMER,
     OPEN_TIMER,
     BSE_ACTIVATED_TIMER,
