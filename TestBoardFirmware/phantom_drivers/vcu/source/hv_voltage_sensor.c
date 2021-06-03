@@ -64,15 +64,22 @@ void hv_vs_process(uint8_t state)
 static int twosComplement(int negative_output){
     negative_output=negative_output*(-1);
     int carry = 1;
-    int binary[]={1,0,0,0,0,0,0,0,0,0,0,0};
-    int twoscomplement=0;
     int i;
+    int binary[12] ={};
+    binary[0] =1;
 
     // converting to a binary value in ones complement form
     for (i=11;negative_output>0;i--){
         binary[i]=negative_output%2;
+        uint8 v = binary[i];
         negative_output=negative_output/2;
+
+        if (v == 0){
+            UARTprintf("0");
+        }
+        sciSend(PC_UART,1,&v);
     }
+    UARTprintf("\n\r");
 
     // converting to ones'complement
     for (i=1;i<=11;i++){
@@ -82,10 +89,16 @@ static int twosComplement(int negative_output){
         else if(binary[i]==1){
             binary[i]=0;
         }
-    }
+        uint8 v = binary[i];
+        if (v == 0){
+                    UARTprintf("0");
+                }
+                sciSend(PC_UART,1,&v);
+            }
+        UARTprintf("\n\r");
 
     // converting to twos'complement
-    for (i=11;i>0;i--){
+    for (i=11;i>=0;i--){
         if(binary[i] == 1 && carry == 1){
             binary[i] = 0;
         }
@@ -96,16 +109,30 @@ static int twosComplement(int negative_output){
         else{
             binary[i] = binary[i];
         }
+        uint8 v = binary[i];
+        if (v == 0){
+                UARTprintf("0");
+                            }
+            sciSend(PC_UART,1,&v);
     }
+    UARTprintf("\n\r");
 
     // converting back to an unsigned decimal
+    int t = (binary[0]*pow(2,11)+binary[1]*pow(2,10)+binary[2]*pow(2,9)+binary[3]*pow(2,8)+binary[4]*pow(2,7)
+            +binary[5]*pow(2,6)+binary[6]*pow(2,5)+binary[7]*pow(2,4)+binary[8]*pow(2,3)+binary[9]*pow(2,2)+
+            binary[10]*pow(2,1)+binary[11]*pow(2,0));
+
     for (i=11;i>=0;i--){
-        int exp =0;
-        twoscomplement = twoscomplement+binary[i]*pow(2,exp);
-        exp +=1;
+               uint8 v=(int) ((t >> i) & 1);
+               if (v == 0){
+                   UARTprintf("0");
+               }
+               sciSend(PC_UART,1,&v);
+            }
+            UARTprintf("\n\r");
+
+    return t;
     }
-    return twoscomplement;
-}
 
 static int getADCdigital(int battery_voltage)
 {
@@ -232,9 +259,18 @@ void hv_vs_timer(TestTimer_t test_timer, int ID){
     int input_voltage = min_voltage + ID;
     ADC_output = (uint16)getADCdigital(input_voltage);
     spiSetup(ADC_output);
+    int i;
+    for (i=15;i>=0;i--){
+        uint8 v=(int) ((ADC_output >> i) & 1);
+        if (v == 0){
+            UARTprintf("0");
+        }
+        sciSend(PC_UART,1,&v);
+    }
+    UARTprintf("\n\r");
 
     //Stop condition
-    if(input_voltage >168){
+    if(input_voltage >=168){
         stopTimer(HV_VS);
     }
 

@@ -84,10 +84,13 @@ int main(void){
     UARTprintf("HV VT testing done \n\r");*/
 
     //Negative test cases
-    hv_vs_process(HV_VS_LOWER_BOUND);
-    UARTprintf("HV VT testing done \n\r");
-    hv_vs_process(HV_VS_OUT_OF_LOWERBOUND);
-    UARTprintf("HV VT testing done \n\r");
+    //hv_vs_process(HV_VS_LOWER_BOUND);
+    //UARTprintf("HV VT testing done \n\r");
+    //hv_vs_process(HV_VS_OUT_OF_LOWERBOUND);
+    //UARTprintf("HV VT testing done \n\r");
+
+    //Sweep test case
+    hv_vs_process(HV_VS_SWEEP);
 
     while(true){
 
