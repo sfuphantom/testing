@@ -10,7 +10,6 @@
 #include "mibspi.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 #define TransferGroup0 0
 #define TransferGroup1 1
@@ -118,9 +117,9 @@ static int twosComplement(int negative_output){
     UARTprintf("\n\r");
 
     // converting back to an unsigned decimal
-    int t = (binary[0]*pow(2,11)+binary[1]*pow(2,10)+binary[2]*pow(2,9)+binary[3]*pow(2,8)+binary[4]*pow(2,7)
-            +binary[5]*pow(2,6)+binary[6]*pow(2,5)+binary[7]*pow(2,4)+binary[8]*pow(2,3)+binary[9]*pow(2,2)+
-            binary[10]*pow(2,1)+binary[11]*pow(2,0));
+    int t = (binary[0]*2048+binary[1]*1024+binary[2]*512+binary[3]*256+binary[4]*128
+            +binary[5]*64+binary[6]*32+binary[7]*16+binary[8]*8+binary[9]*4+
+            binary[10]*2+binary[11]);
 
     for (i=11;i>=0;i--){
                uint8 v=(int) ((t >> i) & 1);
@@ -153,7 +152,7 @@ static int getADCdigital(int battery_voltage)
 static void hv_vs_lower_bound()
 {
     //sending lower bound voltage of 125
-    //should send -1643 to SPI
+    //should send -1644 to SPI
     ADC_output = (uint16)getADCdigital(125);
     spiSetup(ADC_output);
     UARTprintf("Minimum operating battery voltage level \n\r");
@@ -188,8 +187,8 @@ static void hv_vs_upper_bound(){
 static void hv_vs_out_of_lowerBound()
 {
     // HV_VS doesn't operate outside normal operating range between 125V and 168V
-    //sending ADC output voltage below the lower bound voltage of 125V
-    ADC_output = (uint16)getADCdigital(120);
+    //should send value of 0x0000 to SPI
+    ADC_output = 0x0000;
     spiSetup(ADC_output);
     UARTprintf("120V voltage level \n\r");
         int i;
@@ -206,10 +205,10 @@ static void hv_vs_out_of_lowerBound()
 static void hv_vs_out_of_upperBound()
 {
     //sending ADC output voltage above the upper bound voltage of 168V
-    //should send value of 2191 to SPI
-    ADC_output = (uint16)getADCdigital(170);
+    //should send value of 0xFFFF to SPI
+    ADC_output = 0xFFFF;
     spiSetup(ADC_output);
-    UARTprintf("170V voltage level \n\r");
+    UARTprintf("out of upper bound voltage level \n\r");
             int i;
             for (i=15;i>=0;i--){
                uint8 v=(int) ((ADC_output >> i) & 1);
@@ -225,7 +224,7 @@ static void hv_vs_at_zero()
 {
     // HV_VS indicate 0 voltage
     // sending ADC output voltage of 0
-    ADC_output = (uint16)0;
+    ADC_output = 0x0000;
     spiSetup(ADC_output);
     UARTprintf("0V voltage level \n\r");
                int i;
