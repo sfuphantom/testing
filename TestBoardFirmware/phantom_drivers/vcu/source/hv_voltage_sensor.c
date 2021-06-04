@@ -142,7 +142,7 @@ static int getADCdigital(int battery_voltage)
        output_voltage = (int)(((battery_voltage *(4.99/479.99))-1.5)*8.2/2.0475*2047);
    }
    else{
-       output_voltage = (int)((1.5-(battery_voltage *(4.99/479.99)))*8.2/(-2.0475)*2047);
+       output_voltage = (int)((1.5-(battery_voltage *(4.99/479.99)))*8.2/(-2.0475)*2048);
        if(output_voltage<0){
            output_voltage = twosComplement(output_voltage);
        }
