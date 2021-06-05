@@ -2,6 +2,7 @@ import sys
 import os
 import json
 from datetime import date
+import pytest
 
 from PySide2.QtWidgets import (QApplication, QPushButton, QLineEdit,
                                QTabWidget, QTreeWidget, QComboBox,
@@ -231,6 +232,7 @@ class MainWindow(QObject):
         Excecute run code here
 
         '''
+
         # Temporary assigning results to selected test cases
         # sort results by their Test Name for heirachical structure
         results = sorted(self.selectedTests,key = lambda i: i['Test Name'])
