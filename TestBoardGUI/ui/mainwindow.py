@@ -2,6 +2,7 @@ import sys
 import os
 import json
 from datetime import date
+import pytest
 
 from PySide2.QtWidgets import (QApplication, QPushButton, QLineEdit,
                                QTabWidget, QTreeWidget, QComboBox,
@@ -232,6 +233,8 @@ class MainWindow(QObject):
         Excecute run code here
 
         '''
+        pytest.main()
+
         # Emit selectedTests to runsignal
         self.runsignal.emit(self.selectedTests)
         # Switch to result page
