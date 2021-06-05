@@ -5,32 +5,40 @@
                 {
                     "Case": "Test 1: Standard Operation (12V)",
                     "Repeat": "",
-                    "Description": "To check FW runs correctly in ideal conditions"
+                    "Description": "To check FW runs correctly in ideal conditions",
+                    "em": "enum1",
+                    "enum2": "enum2",
+                    "enum3": "en"
                 },
                 {
                     "Case": "Test 2: Power Rail Undervoltage",
                     "Repeat": "",
-                    "Description": "Check how FW reacts to receiving not enough voltage" 
+                    "Description": "Check how FW reacts to receiving not enough voltage",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 3:  Power Rail Overvoltage",
                     "Repeat": "",
-                    "Description": "Check how FW reacts to receiving too much voltage" 
+                    "Description": "Check how FW reacts to receiving too much voltage", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 4: Power Draw Test",
                     "Repeat": "",
-                    "Description": "Read input current of VCU" 
+                    "Description": "Read input current of VCU", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 5: High Current Signal",
                     "Repeat": "",
-                    "Description": "Check case for when devices being powered by the VCU shorts" 
+                    "Description": "Check case for when devices being powered by the VCU shorts", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 6: Sustained High Current",
                     "Repeat": "",
-                    "Description": "Check case when LV system draws and unexpected amount of power" 
+                    "Description": "Check case when LV system draws and unexpected amount of power", 
+                    "enum": "enum1"
                 }
             ]
         },
@@ -39,37 +47,44 @@
                 {
                     "Case": "Test 1: Normal Acceleration",
                     "Repeat": "",
-                    "Description": "Ensure normal operation handled correctly" 
+                    "Description": "Ensure normal operation handled correctly", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 2: 10% Difference",
                     "Repeat": "",
-                    "Description": "Implausibility condition" 
+                    "Description": "Implausibility condition", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 3: Open/Short Circuit",
                     "Repeat": "",
-                    "Description": "Check for condition of no response/sensors unplugged" 
+                    "Description": "Check for condition of no response/sensors unplugged", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 4: 25% Pedal Travel + Brakes",
                     "Repeat": "",
-                    "Description": "If breaks activated & APPS shows more than 25% travel, must shut down ***must be demonstrated when motor controller is under load***" 
+                    "Description": "If breaks activated & APPS shows more than 25% travel, must shut down ***must be demonstrated when motor controller is under load***",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 5: Pedal & Breaks, Post Shutdown",
                     "Repeat": "",
-                    "Description": "After test 4, must remain off until APPS signals less than 5% travel" 
+                    "Description": "After test 4, must remain off until APPS signals less than 5% travel", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 6: Sweep Test",
                     "Repeat": "",
-                    "Description": "Check signals throughout range" 
+                    "Description": "Check signals throughout range", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 7: Integration Test",
                     "Repeat": "",
-                    "Description": "If APPS signal aligns with VCU reading" 
+                    "Description": "If APPS signal aligns with VCU reading", 
+                    "enum": "enum1"
                 }
             ]
         },
@@ -78,27 +93,32 @@
                 {
                     "Case": "Test 1: Normal Breaking",
                     "Repeat": "",
-                    "Description": "Ensure normal operation handled correctly" 
+                    "Description": "Ensure normal operation handled correctly",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 2: Implausibility for more than 100ms",
                     "Repeat": "",
-                    "Description": "Check for values outside of normal range for 100ms" 
+                    "Description": "Check for values outside of normal range for 100ms",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 3: Open/Short Circuit",
                     "Repeat": "",
-                    "Description": "Check for condition of no response, sensor unplugged, etc." 
+                    "Description": "Check for condition of no response, sensor unplugged, etc.",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 4: Sweep Test",
                     "Repeat": "",
-                    "Description": "Check signals throughout normal range" 
+                    "Description": "Check signals throughout normal range",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 5: Integration Test",
                     "Repeat": "",
-                    "Description": "Check if BSE signal measured by VCU matches" 
+                    "Description": "Check if BSE signal measured by VCU matches",
+                    "enum": "enum1"
                 }
             ]
         },
@@ -107,32 +127,38 @@
                 {
                     "Case": "Test 1: <3.3 V Output",
                     "Repeat": "",
-                    "Description": "See how the VCU will interpret this less than expected signal" 
+                    "Description": "See how the VCU will interpret this less than expected signal",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 2: >3.3 V Output",
                     "Repeat": "",
-                    "Description": "See how the VCU will interpret this greater than expected signal" 
+                    "Description": "See how the VCU will interpret this greater than expected signal",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 3: 3.3 V Input with BMS ",
                     "Repeat": "",
-                    "Description": "Input the expected signal but with BMS faults" 
+                    "Description": "Input the expected signal but with BMS faults",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 4: Pulsing Input",
                     "Repeat": "",
-                    "Description": "Find frequency where the VCU does not work properly" 
+                    "Description": "Find frequency where the VCU does not work properly",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 5: Test Accumulator Manage System",
                     "Repeat": "",
-                    "Description": "See if the AMS is active when the TSAL is active (EV.6.1.1). Input expected signal (3.3V)" 
+                    "Description": "See if the AMS is active when the TSAL is active (EV.6.1.1). Input expected signal (3.3V)",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 6: No TSAL, No Breaks",
                     "Repeat": "",
-                    "Description": "See if the VCU ever tells the breaks to go off while the TSAL is inactive (EV.8.2.9)" 
+                    "Description": "See if the VCU ever tells the breaks to go off while the TSAL is inactive (EV.8.2.9)",
+                    "enum": "enum1"
                 }
             ]
         },
@@ -141,37 +167,44 @@
                 {
                     "Case": "Test 1: Generate Various Frequency Outputs",
                     "Repeat": "",
-                    "Description": "To test the IMD State recognition on the VCU" 
+                    "Description": "To test the IMD State recognition on the VCU",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 2: Generate Various Duty Cycle Outputs",
                     "Repeat": "",
-                    "Description": "To test the Isolation State recognition on the VCU" 
+                    "Description": "To test the Isolation State recognition on the VCU",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 3: Random Combinations of Frequencies and Duty Cycles",
                     "Repeat": "",
-                    "Description": "Send a random combination of frequencies and duty cycles to test the IMD & Isolation State recognition on the VCU" 
+                    "Description": "Send a random combination of frequencies and duty cycles to test the IMD & Isolation State recognition on the VCU",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 4: Send 0Hz and 100Hz",
                     "Repeat": "",
-                    "Description": "To test how the VCU reacts to frequencies which are out of range" 
+                    "Description": "To test how the VCU reacts to frequencies which are out of range",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 5: Change Duty Cycles & Frequency on the Fly",
                     "Repeat": "",
-                    "Description": "To test if the VCU updates the IMD states on the fly" 
+                    "Description": "To test if the VCU updates the IMD states on the fly", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 6: Send 0% Duty Cycle and 100% Duty Cycle",
                     "Repeat": "",
-                    "Description": "" 
+                    "Description": "", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 7: Don't Send Anything ",
                     "Repeat": "",
-                    "Description": "" 
+                    "Description": "", 
+                    "enum": "enum1"
                 }
             ]
         },
@@ -185,42 +218,50 @@
                 {
                     "Case": "Test 1: CT Signal at 0A (2.5V)",
                     "Repeat": "",
-                    "Description": "To check if VCU identifies the correct current level and state" 
+                    "Description": "To check if VCU identifies the correct current level and state",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 2: CT Signal Shorted to GND",
                     "Repeat": "",
-                    "Description": "To check if VCU identifies the correct current level and state" 
+                    "Description": "To check if VCU identifies the correct current level and state",
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 3: CT Signal Shorted to 5V",
                     "Repeat": "",
-                    "Description": "To check if VCU identifies the correct current level and state" 
+                    "Description": "To check if VCU identifies the correct current level and state", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 4: CT Signal Unplugged",
                     "Repeat": "",
-                    "Description": "To check if VCU identifies the correct current level and state" 
+                    "Description": "To check if VCU identifies the correct current level and state", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 5: CT Signal at 50A, 100A, 150A, 200A (& negative values)",
                     "Repeat": "",
-                    "Description": "" 
+                    "Description": "", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 6: CT Signal at Overcurrent for Different Amounts of Time",
                     "Repeat": "",
-                    "Description": "" 
+                    "Description": "", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 7: CT Signal at Negative Current, Undercurrent Faults",
                     "Repeat": "",
-                    "Description": "" 
+                    "Description": "", 
+                    "enum": "enum1"
                 },
                 {
                     "Case": "Test 8: Send Positive Current without Throttling the APPS",
                     "Repeat": "",
-                    "Description": "" 
+                    "Description": "", 
+                    "enum": "enum1"
                 }
             ]
         }
