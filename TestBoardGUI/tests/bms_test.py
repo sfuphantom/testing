@@ -58,7 +58,7 @@ def send_and_receive(selectedJson, serialPort):
 def main():
     
     # Initalize Serial
-    serialPort = serial.Serial(port = PORT, baudrate = BAUDRATE, timeout = TIMEOUT)
+    serialPort = serial.Serial(port = PORT, baudrate = BAUDRATE, timeout = TIMEOUT, stopbits = serial.STOPBITS_TWO)
 
     # Prepare Test Infomation
     selectedJson = build_json()
