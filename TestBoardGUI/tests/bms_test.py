@@ -23,7 +23,7 @@ normal_bms = {
     "Mode": "BMS",
 	"BMS/VCU CAN": 0,
 	"Thermistor Expansion": 0,
-	"BMS Slave Voltages & Temperatures": 0,
+	"BMS_SLAVES": 0,
 	"repeat": 1
 }
 
