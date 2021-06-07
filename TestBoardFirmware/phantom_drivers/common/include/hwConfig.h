@@ -106,18 +106,25 @@
 #define WAKEUP_PIN              0 //configure in halcogen
 #define FAULT_PORT              gioPORTA //configure in halcogen
 #define FAULT_PIN               1 //configure in halcogen
+#define DAC_SIZE_BMS            0x3FF
 
 // Debug UART
 #define PC_UART                 scilinREG
 
 // Thermistor Board Pins
-#define THERMISTOR_SPI                  mibspiREG3 //configure in halcogen
-#define THERMISTOR_INIT_TRANSFER_GROUP  TransferGroup0 //configure in halcogen
-#define THERMISTOR_COMM_TRANSFER_GROUP  TransferGroup1 //configure in halcogen
-#define THERMISTOR_MUX_PORT             gioPORTA //configure in halcogen
-#define THERMISTOR_MUX_PIN_A            5 //configure in halcogen
-#define THERMISTOR_MUX_PIN_B            6 //configure in halcogen
-#define THERMISTOR_MUX_PIN_C            7 //configure in halcogen
+
+#define THERMISTOR_EXP_SPI                  mibspiREG3 //configure in halcogen
+#define THERMISTOR_EXP_INIT_TRANSFER_GROUP  TransferGroup0 //configure in halcogen
+#define THERMISTOR_EXP_COMM_TRANSFER_GROUP  TransferGroup1 //configure in halcogen
+#define THERMISTOR_MUX_GIO_PORT             gioPORTB //configure in halcogen
+#define THERMISTOR_MUX_HET_PORT             hetPORT1
+#define THERMISTOR_MUX_PIN_0            18 //configure in halcogen
+#define THERMISTOR_MUX_PIN_1            20 //configure in halcogen
+#define THERMISTOR_MUX_PIN_2            1 //configure in halcogen GIO PORT
+#define THERMISTOR_MUX_PIN_3            16 //configure in halcogen
+
+#define HV_ACTIVE_PORT      gioPORTB
+#define HV_ACTIVE_PIN       0
 
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_HWCONFIG_H_ */
