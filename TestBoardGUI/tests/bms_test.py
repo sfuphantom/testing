@@ -12,7 +12,7 @@ import json
 
 # Constants to be changed based on Launchpad Settings
 PORT = "COM3"
-BAUDRATE = 115200
+BAUDRATE = 9600
 TIMEOUT = 0.1
 
 #Example of Tests to be chosen by UI
