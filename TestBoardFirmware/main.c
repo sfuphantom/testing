@@ -67,12 +67,12 @@ int main(void){
     UARTprintf("Mode detected: ");
     UARTSend(PC_UART, testMode);
     if (testMode == "BMS"){
-        sciReceive(PC_UART, 100, (unsigned char *)&UARTBuffer); // change 100 to actual value
+        sciReceive(PC_UART, 141, (unsigned char *)&UARTBuffer); // change 100 to actual value
     
     } 
-    else (testMode == "VCU") {
+    else if (testMode == "VCU") {
         sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer);
-    }
+    } 
 
     //* test code *//
     setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer)); 
