@@ -79,20 +79,7 @@ int main(void){
     //* test code *//
     setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
-//    tests_received = false;
-
     while(true){
-
-//        tests_received = false;
-
-        bool passed = false;
-
-        //poll test cases from GUI
-//        while(!tests_received);
-
-        //parse JSON and set states
-
-        //determine the expected state of VCU/BMS
 
         startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
 
@@ -111,7 +98,8 @@ int main(void){
 
                 testBoardState.testMode = IDLE;
 
-                passed = is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
+                //read bms shutdown pin; display results
+                is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
 
                 break;
 
@@ -126,7 +114,7 @@ int main(void){
 
         stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
 
-        //send a single pass/result to PC
+        //send a single pass/result to PC (for CLI, uncomment VALID_DEBUG in common.h to display results)
 
 
         delayms(5000);
