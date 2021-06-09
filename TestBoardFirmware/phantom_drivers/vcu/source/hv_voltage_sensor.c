@@ -136,7 +136,7 @@ static int twosComplement(int negative_output){
 static int getADCdigital(int battery_voltage)
 {
    int output_voltage;
-   // convert accumulator voltage to ADC output in integer form
+   // convert accumulator voltage to ADC output in 2's complement form
    if (battery_voltage >144){
        output_voltage = (int)(((battery_voltage *(4.99/479.99))-1.5)*8.2/2.0475*2047);
    }
@@ -230,7 +230,8 @@ void hv_vs_timer(TestTimer_t test_timer, int ID){
     setTimerID(HV_VS, ++ID);
 }
 
-static void UARTtesting(uint16 test_value){
+static void UARTtesting(uint16 test_value)
+{
     // function for checking values to be sent using UART communication.
     int i;
     for (i=15;i>=0;i--){
