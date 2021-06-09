@@ -29,21 +29,21 @@ typedef enum
     HV_VS_SWEEP
 } testcases_name;
 
-// Static function prototypes
-static void hv_vs_both_bounds();
-static void hv_vs_out_of_lowerBound();
-static void hv_vs_out_of_upperBound();
-static void hv_vs_lower_bound();
-static void hv_vs_upper_bound();
-static void hv_vs_at_zero();
-static void hv_vs_sweep();
-static int getADCdigital(int battery_voltage);
-static void spiSetup(uint16 voltage);
+//function prototypes
+void hv_vs_both_bounds();
+void hv_vs_out_of_lowerBound();
+void hv_vs_out_of_upperBound();
+void hv_vs_lower_bound();
+void hv_vs_upper_bound();
+void hv_vs_at_zero();
+void hv_vs_sweep();
+void hv_vs_timer(TestTimer_t test_timer, int ID);
+void spiSetup(uint16 voltage);
 void hv_vs_process(uint8_t state);
-static int twosComplement(int negative_output);
+int twosComplement(int negative_output);
+int getADCdigital(int battery_voltage);
 void mibspiGroupNotification(mibspiBASE_t *mibspi, uint32 group);
 void adcSlaveDataSetup();
-void hv_vs_timer(TestTimer_t test_timer, int ID);
-static void UARTtesting(uint16 test_value);
+void UARTtesting(uint16 test_value);
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_HV_VOLTAGE_SENSOR_H_ */
