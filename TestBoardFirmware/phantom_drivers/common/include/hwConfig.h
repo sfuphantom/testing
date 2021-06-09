@@ -46,7 +46,7 @@
 ///*********   HV CURRENT APPS/BSE   ****************/
 #define DAC_SPI_PORT          mibspiREG1 // APPS1/2, BSE, HVCURRENT //configure in halcogen
 #define INVERTER_PORT         adcREG1
-#define INVERTER_PIN          adcGROUP1 //configure in halcogen (input/output? on pin 15)
+#define INVERTER_PIN          adcGROUP1 //configure in halcogen (input on pin 15)
 
 /***************  IMD  *********************/
 #define IMD_PORT              hetRAM1   //configure in halcogen
