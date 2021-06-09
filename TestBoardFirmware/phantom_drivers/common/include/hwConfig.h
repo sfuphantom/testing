@@ -9,6 +9,8 @@
 #define PHANTOM_DRIVERS_INCLUDE_HWCONFIG_H_
 
 
+#include "het.h"
+#include "gio.h"
 
 /***************  VCU PINS  *********************/
 
@@ -104,8 +106,8 @@
 #define BMS_UART                sciREG //configure in halcogen
 #define WAKEUP_PORT             gioPORTA //configure in halcogen
 #define WAKEUP_PIN              0 //configure in halcogen
-#define FAULT_PORT              gioPORTA //configure in halcogen
-#define FAULT_PIN               1 //configure in halcogen
+#define BMS_SHUTDOWN_PORT       hetPORT1 //double check? this is on a signal breakout connector which the test board nor the car has access to...
+#define BMS_SHUTDOWN_PIN        25
 #define DAC_SIZE_BMS            0x3FF
 
 // Debug UART

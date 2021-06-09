@@ -18,6 +18,8 @@
 #include "timer.h"
 #include "bms_slaves.h"
 
+#include "validation.h"
+
 #define TIMER_PERIOD 1000
 
 static unsigned char UARTBuffer[200];
@@ -77,11 +79,13 @@ int main(void){
     //* test code *//
     setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer)); 
 
-    tests_received = false;
+//    tests_received = false;
 
     while(true){
 
-        tests_received = false;
+//        tests_received = false;
+
+        bool passed = false;
 
         //poll test cases from GUI
 //        while(!tests_received);
@@ -106,6 +110,11 @@ int main(void){
                     UARTprintf("Failed to Initialize BMS Test board\n\r");
 
                 testBoardState.testMode = IDLE;
+
+
+
+                passed = is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
+
                 break;
 
             case VCU_MODE:
@@ -119,8 +128,8 @@ int main(void){
 
         stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
 
-        //validate test cases (through timer and send to PC)
         //send a single pass/result to PC
+
 
         delayms(5000);
 

@@ -33,19 +33,7 @@
 #define VOLT_MIN  76 // 0.7608 * 100
 #define VOLT_MAX  100 // 0.9985 * 100
 
-enum
-{
-    NORMAL_BMS_OPERATION = 0, //only not fault condition
-    OVER_VOLTAGE_FAULT,
-    UNDER_VOLTAGE_FAULT,
-    OVER_TEMPERATURE_FAULT,
-    UNDER_TEMPERATURE_FAULT,
-    WEIRD_SENSOR_READINGS_VOLTAGE,
-    WEIRD_SENSOR_READINGS_TEMPERATURE,
-    COMMUNICATION_LOSS,
-};
-
-const uint8_t[] BMS_FAULT_LUT = {   }
+//const uint8_t[] BMS_FAULT_LUT = {   }
 
 
 typedef struct {
