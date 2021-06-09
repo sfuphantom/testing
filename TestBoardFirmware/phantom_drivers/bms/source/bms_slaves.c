@@ -35,7 +35,7 @@
 
 enum
 {
-    NORMAL_BMS_OPERATION,
+    NORMAL_BMS_OPERATION = 0, //only not fault condition
     OVER_VOLTAGE_FAULT,
     UNDER_VOLTAGE_FAULT,
     OVER_TEMPERATURE_FAULT,
@@ -44,6 +44,9 @@ enum
     WEIRD_SENSOR_READINGS_TEMPERATURE,
     COMMUNICATION_LOSS,
 };
+
+const uint8_t[] BMS_FAULT_LUT = {   }
+
 
 typedef struct {
     float bmsSlaveVoltage;
