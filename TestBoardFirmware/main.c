@@ -73,25 +73,6 @@ int main(void){
 
     tests_received = false;
 
-    //Positive test cases
-    hv_vs_process(HV_VS_UPPER_BOUND);
-    UARTprintf("HV VT testing done \n\r");
-    hv_vs_process(HV_VS_OUT_OF_UPPERBOUND);
-    UARTprintf("HV VT testing done \n\r");
-
-    //Zero value test case
-    /*hv_vs_process(HV_VS_AT_ZERO);
-    UARTprintf("HV VT testing done \n\r");*/
-
-    //Negative test cases
-    hv_vs_process(HV_VS_LOWER_BOUND);
-    UARTprintf("HV VT testing done \n\r");
-    hv_vs_process(HV_VS_OUT_OF_LOWERBOUND);
-    UARTprintf("HV VT testing done \n\r");
-
-    //Sweep test case
-    //hv_vs_process(HV_VS_SWEEP);
-
     while(true){
 
         tests_received = false;

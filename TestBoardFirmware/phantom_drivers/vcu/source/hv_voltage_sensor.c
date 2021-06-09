@@ -152,96 +152,57 @@ static int getADCdigital(int battery_voltage)
 static void hv_vs_lower_bound()
 {
     //sending lower bound voltage of 125
-    //should send -1644 to SPI
+    //should send -1644 in 2's complement form to MibSPI3
     ADC_output = (uint16)getADCdigital(125);
     spiSetup(ADC_output);
-    UARTprintf("Minimum operating battery voltage level \n\r");
-        int i;
-        for (i=15;i>=0;i--){
-           uint8 v=(int) ((ADC_output >> i) & 1);
-           if (v == 0){
-               UARTprintf("0");
-           }
-           sciSend(PC_UART,1,&v);
-        }
-        UARTprintf("\n\r");
+    UARTprintf("Minimum operating battery voltage level of 168V \n\r");
+    UARTtesting(ADC_output);
 }
 
 static void hv_vs_upper_bound(){
     //sending upper bound voltage of 168
-    //should send value of 2021 to SPI
+    //should send value of 2021 to MibSPI3
     ADC_output = (uint16_t)getADCdigital(168);
     spiSetup(ADC_output);
-    UARTprintf("Maximum operating battery voltage level \n\r");
-    int i;
-    for (i=15;i>=0;i--){
-       uint8 v=(int) ((ADC_output >> i) & 1);
-       if (v == 0){
-           UARTprintf("0");
-       }
-       sciSend(PC_UART,1,&v);
-    }
-    UARTprintf("\n\r");
+    UARTprintf("Maximum operating battery voltage level of 125V \n\r");
+    UARTtesting(ADC_output);
 }
 
 static void hv_vs_out_of_lowerBound()
 {
-    // HV_VS doesn't operate outside normal operating range between 125V and 168V
-    //should send value of 0x0000 to SPI
-    ADC_output = 0x0000;
+    //sending ADC output voltage below the lower bound voltage of 125V
+    //should send value of 0x0800 to MibSPI3
+    ADC_output = 0x0800;
     spiSetup(ADC_output);
-    UARTprintf("120V voltage level \n\r");
-        int i;
-        for (i=15;i>=0;i--){
-           uint8 v=(int) ((ADC_output >> i) & 1);
-           if (v == 0){
-               UARTprintf("0");
-           }
-           sciSend(PC_UART,1,&v);
-        }
-        UARTprintf("\n\r");
+    UARTprintf("out of lower bound voltage level \n\r");
+    UARTtesting(ADC_output);
 }
 
 static void hv_vs_out_of_upperBound()
 {
     //sending ADC output voltage above the upper bound voltage of 168V
-    //should send value of 0xFFFF to SPI
-    ADC_output = 0xFFFF;
+    //should send value of 0x07FF to MibSPI3
+    ADC_output = 0x07FF;
     spiSetup(ADC_output);
     UARTprintf("out of upper bound voltage level \n\r");
-            int i;
-            for (i=15;i>=0;i--){
-               uint8 v=(int) ((ADC_output >> i) & 1);
-               if (v == 0){
-                   UARTprintf("0");
-               }
-               sciSend(PC_UART,1,&v);
-            }
-            UARTprintf("\n\r");
+    UARTtesting(ADC_output);
 }
 
 static void hv_vs_at_zero()
 {
     // HV_VS indicate 0 voltage
-    // sending ADC output voltage of 0
+    // sending ADC output voltage of 0 to MibSPI3
     ADC_output = 0x0000;
     spiSetup(ADC_output);
     UARTprintf("0V voltage level \n\r");
-               int i;
-               for (i=15;i>=0;i--){
-                  uint8 v=(int) ((ADC_output >> i) & 1);
-                  if (v == 0){
-                      UARTprintf("0");
-                  }
-                  sciSend(PC_UART,1,&v);
-               }
-               UARTprintf("\n\r");
+    UARTtesting(ADC_output);
 }
 
 /* Sweep test with a timer */
 
 static void hv_vs_sweep()
 {
+    //testing the entire operating range (125V-168V with an increment of 1V)
     //reset timer ID (counts # of cycles)
     setTimerID(HV_VS, 0);
 
@@ -258,15 +219,7 @@ void hv_vs_timer(TestTimer_t test_timer, int ID){
     int input_voltage = min_voltage + ID;
     ADC_output = (uint16)getADCdigital(input_voltage);
     spiSetup(ADC_output);
-    int i;
-    for (i=15;i>=0;i--){
-        uint8 v=(int) ((ADC_output >> i) & 1);
-        if (v == 0){
-            UARTprintf("0");
-        }
-        sciSend(PC_UART,1,&v);
-    }
-    UARTprintf("\n\r");
+    UARTtesting(ADC_output);
 
     //Stop condition
     if(input_voltage >=168){
@@ -275,6 +228,19 @@ void hv_vs_timer(TestTimer_t test_timer, int ID){
 
     //increment cycle
     setTimerID(HV_VS, ++ID);
+}
+
+static void UARTtesting(uint16 test_value){
+    // function for checking values to be sent using UART communication.
+    int i;
+    for (i=15;i>=0;i--){
+        uint8 v=(int) ((test_value >> i) & 1);
+        if (v == 0){
+            UARTprintf("0");
+        }
+        sciSend(PC_UART,1,&v);
+    }
+    UARTprintf("\n\r");
 }
 
 static void spiSetup(uint16 voltage)

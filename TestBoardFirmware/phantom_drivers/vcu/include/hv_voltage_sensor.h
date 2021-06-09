@@ -44,5 +44,6 @@ static int twosComplement(int negative_output);
 void mibspiGroupNotification(mibspiBASE_t *mibspi, uint32 group);
 void adcSlaveDataSetup();
 void hv_vs_timer(TestTimer_t test_timer, int ID);
+static void UARTtesting(uint16 test_value);
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_HV_VOLTAGE_SENSOR_H_ */
