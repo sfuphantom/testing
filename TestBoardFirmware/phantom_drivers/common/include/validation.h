@@ -11,6 +11,8 @@
 #include "hwConfig.h"
 #include "common.h"
 #include "bms_slaves.h"
+#include "Phantom_sci.h"
+
 
 uint8_t is_bms_slave_test_passed(uint8_t test_case);
 

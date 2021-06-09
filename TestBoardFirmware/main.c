@@ -70,14 +70,14 @@ int main(void){
     UARTSend(PC_UART, testMode);
     if (testMode == "BMS"){
         sciReceive(PC_UART, 141, (unsigned char *)&UARTBuffer); // change 100 to actual value
-    
-    } 
+
+    }
     else if (testMode == "VCU") {
         sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer);
-    } 
+    }
 
     //* test code *//
-    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer)); 
+    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
 //    tests_received = false;
 
@@ -110,8 +110,6 @@ int main(void){
                     UARTprintf("Failed to Initialize BMS Test board\n\r");
 
                 testBoardState.testMode = IDLE;
-
-
 
                 passed = is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
 
