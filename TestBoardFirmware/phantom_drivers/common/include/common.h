@@ -10,10 +10,15 @@
 
 #include "stdint.h"
 
+
+#define TIMER_DEBUG //print expirations of all active timers
+#define VALID_DEBUG //print received signals from Device Under Test; print expected and actual results
+
 //Common defines
-#define TIMER_DEBUG
 #define SWEEP_STEP 25
 #define SWEEP_PERIOD 500
+
+
 
 typedef enum
 {
