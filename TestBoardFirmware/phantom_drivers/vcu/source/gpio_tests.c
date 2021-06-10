@@ -87,7 +87,7 @@ static void rtd_normal_procedure()
     bse_process(NORMAL_BSE_ON);
 
 	//delay?
-    delayms(200);
+    delayms(1000);
 
 	//finally, send RTD signal 
     gioSetBit(READY_TO_DRIVE_PORT, READY_TO_DRIVE_PIN, 1);
@@ -99,7 +99,7 @@ static void rtd_normal_procedure()
 /*
 * Fn: rtd_latch_test
 * Purpose: Simulates RTD procedure then turns off RTD to check if VCU latches signal (shouldn't)
-* Resulting State: TS_ON/OFF   
+* Resulting State: TS_ON
 */
 static void rtd_latch_test()
 { 
@@ -133,21 +133,21 @@ static void rtd_inorder_test()
     bse_process(NORMAL_BSE_OFF);
 
     //delay?
-    delayms(100);
+    delayms(500);
 
 
 	//send RTD signal 
     gioSetBit(READY_TO_DRIVE_PORT, READY_TO_DRIVE_PIN, 1);
 
 	//delay?
-    delayms(100);
+    delayms(500);
 
 
 	//send bse signal ON
     bse_process(NORMAL_BSE_ON);
 
 	//delay?
-    delayms(100);
+    delayms(500);
 
 
 	//finally, turn on TSAL
