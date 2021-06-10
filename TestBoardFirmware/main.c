@@ -10,12 +10,16 @@
 #include "gio.h"
 #include "het.h"
 #include "common.h"
+#include "gio.h"
 
 //Drivers
 #include "bse.h"
 #include "apps.h"
 #include "MCP48FV_DAC_SPI.h"
 #include "timer.h"
+
+#include "gpio_tests.h"
+
 #include "bms_slaves.h"
 
 #define TIMER_PERIOD 1000
@@ -49,6 +53,9 @@ int main(void){
 
    // sciInit();
     timerInit();
+
+    gpio_init();
+
 
     Result_t res = SUCCESS;
     //res = MCP48FV_Init(); 
@@ -249,6 +256,7 @@ void initializeTimers(){
 
                 0 // ID
              );
+
 
 
     //add more peripheral timers here...

@@ -26,6 +26,7 @@ typedef enum Peripheral
     //systems with timers
     APPS = 0,
     BSE,
+    GPIO,
 
     TSAL,
     IMD,
