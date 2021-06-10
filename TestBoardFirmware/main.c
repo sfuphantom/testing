@@ -10,7 +10,6 @@
 #include "gio.h"
 #include "het.h"
 #include "common.h"
-#include "gio.h"
 
 //Drivers
 #include "bse.h"
@@ -117,7 +116,18 @@ int main(void){
 
             case VCU_MODE:
 
+                //reset VCU state
+                gioSetBit(RESET_PORT, RESET_PIN, 1);
+
+                delayms(500);
+
+                gioSetBit(RESET_PORT, RESET_PIN, 0);
+
+                //put VCU into state running
+                gpio_process(RTD_NORMAL_PROCEDURE);
+
                 vcu_mode_process(&testBoardState);
+
                 break;
 
         }//switch case
