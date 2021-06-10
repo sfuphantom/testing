@@ -186,11 +186,7 @@ void muxInit(void){
     
     pinMuxReg->PINMMR8 =    PINMUX_PIN_39_SCITX | PINMUX_PIN_40_MIBSPI1NCS_2 | PINMUX_PIN_41_MIBSPI1NCS_4;
     
-<<<<<<< HEAD
-    pinMuxReg->PINMMR9 = ((~(pinMuxReg->PINMMR9 >> 18U) & 0x00000001U ) << 18U) | PINMUX_PIN_54_MIBSPI3NENA | PINMUX_PIN_55_GIOB_2;
-=======
     pinMuxReg->PINMMR9 = ((~(pinMuxReg->PINMMR9 >> 18U) & 0x00000001U ) << 18U) | PINMUX_PIN_54_MIBSPI3NCS_5 | PINMUX_PIN_55_MIBSPI3NCS_0;
->>>>>>> master
     
     pinMuxReg->PINMMR10 =   PINMUX_PIN_86_AD1EVT;
     

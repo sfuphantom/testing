@@ -20,7 +20,8 @@ void gpio_process(uint8_t state);
 
 
 //Timer Functions
-void gpio_timer(Timer, int);
+void apps_timer(TestTimer_t, int);
+
 
 enum
 {
