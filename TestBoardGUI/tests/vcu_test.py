@@ -13,47 +13,49 @@ import pytest
 import json
 import copy
 import serial
+import time
 
 # example list of what might be received from front end
-selectedTest_example = [{'Test Name': 'APPS', 'Test Case': 'Test 2: 10% Difference', 'Repeat': None, 'Test Index': None}, {'Test Name': 'BSE', 'Test Case': 'Test 3: Open/Short Circuit', 'Repeat': None, 'Test Index': None}]
+selectedTest_example = [{'Test Name': 'APPS', 'Test Case': 'Test 2: 10% Difference', 'Repeat': None, 'Test Index': None, 'Enum': 2}, {'Test Name': 'BSE', 'Test Case': 'Test 3: Open/Short Circuit', 'Repeat': None, 'Test Index': None, 'Enum': 1}]
 
 # dictionary object of VCU in default state (NORMAL enums, 1 repetition for all key-value pairs) 
 normal_vcu = {
     "Mode": "VCU",
-    "APPS": "NORMAL",
-	"BSE": "NORMAL",
-	"IMD": "NORMAL",
-	"HV_VOLTAGE_SENSOR": "NORMAL",
-	"HV_CURRENT_SENSOR": "NORMAL",
-	"TSAL": "NORMAL",
-	"LV_POWER_SENSOR": "NORMAL",
-	"COMMUNICATIONS": "NORMAL",
+    "APPS": 0,
+	"BSE": 0,
+	"IMD": 0,
+	"HV_VOLTAGE_SENSOR": 0,
+	"HV_CURRENT_SENSOR": 0,
+	"TSAL": 0,
+	"LV_POWER_SENSOR": 0,
+	"COMMUNICATIONS": 0,
 	"repeat": 1
 
 }
 
 def build_json():
     selectedJson = copy.deepcopy(normal_vcu)
-
-    for x in selectedTest_example
-        selectedJson.update({selectedTest_example[x].get('Test Name'), "TEST_ENUM"})
+    counter = 0
+    for x in selectedTest_example:
+        selectedJson.update({selectedTest_example[counter].get('Test Name'): selectedTest_example[counter].get('Enum')})
+        counter += 1
         
-    # send UART
-    # serialPort = serial.Serial(port = 0, baudrate = 0, bytesize = 0, timeout = 0, stopbits = serial.STOPBITS_ONE)
+    jsonStr = json.dumps(selectedJson, indent="\t")
+    # print("The length of the string is: " + str(len(jsonStr)))
+    # print(jsonStr)
 
-    # receive UART
-    # interpret response from test board
-    # return result
+    launchpad= serial.Serial(port = 'COM8', baudrate = 9600, stopbits = serial.STOPBITS_TWO) # fix port ID
+    launchpad.write("VCU")
+    time.sleep(8)
+    launchpad.write(jsonStr)
+    launchpad.read() # this will read 1 byte. To read multiple, use read_until()
+    result = launchpad.read()
+    launchpad.close()
 
-    return selectedJson
+    return result
 
 #beginning of tests
 def test_vcu_json():
-    assert normal_vcu != build_json()
+    assert build_json() == True
 
-def test_appsval():
-    assert "NORMAL" == normal_vcu.get("apps")
-
-def test_apps_implausibility():
-    normal_vcu.update({"apps": "IMPLAUSIBILITY"})
-    assert "IMPLAUSIBILITY" == normal_vcu.get("apps")
+test_vcu_json()

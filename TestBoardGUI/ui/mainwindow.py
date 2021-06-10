@@ -5,41 +5,31 @@ from datetime import date
 
 from PySide2.QtWidgets import (QApplication, QPushButton, QLineEdit,
                                QTabWidget, QTreeWidget, QComboBox,
-                               QWidget, QStackedWidget, QCommandLinkButton,
+                               QStackedWidget, QCommandLinkButton,
                                QStatusBar, QTreeWidgetItem, QAbstractItemView)
-from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt,
-                            QAbstractItemModel, QItemSelectionModel)
+from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
 from PySide2.QtUiTools import (QUiLoader)
-from PySide2.QtGui import (QBrush, QColor, QStandardItemModel,
-                           QStandardItem)
+from PySide2.QtGui import (QBrush, QColor)
 
 
 # Set-up/Connect mainwindow
 class MainWindow(QObject):
-    # When run button is clicked, it sends a signal with
-    # the selected tests to be used by tests handler
-    runsignal = Signal(list)
 
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        self._load_ui("mainwindow.ui")
 
-        # Instantiate required objects
-
-        # ResultsWriter displays results on the gui
-        self.resultsWriter = ResultsWriter()
-        # Dummy test results generator. To be replaced by real tests handler.
-        self.testdummy = TestDummy()
-
-        # Connect sisgnal emitted by run button to test handler.
-        self.runsignal.connect(self.testdummy.poppulate_results)
-        # Connect results signal from "dummy" test hander to ResultWriter
-        self.testdummy.results.connect(self.resultsWriter.writeResults)
-
+        # Pre-define instances
+        self.mainwindow = self._load_ui("mainwindow.ui")
+        self.device = None
         # Initialize Check-In information dictionary to be filled
         self.checkin_info = {'device': '', 'board_name': '',
                              'board_version': '', 'testID': '',
                              'team_member': '', 'date': str(date.today())}
+
+
+        # Instantiate required objects
+        # ResultsWriter displays results on the gui
+        self.resultsWriter = ResultsWriter()
 
         # Connect Python to ui features
 
@@ -51,11 +41,11 @@ class MainWindow(QObject):
         # Pass resultsTree to resultsWriter
         self.resultsWriter.get_results_tree(self.resultsTree)
 
-        # Combobox
-        self.deviceCombobox = self.mainwindow.findChild(
+        # ComboBox
+        self.deviceComboBox = self.mainwindow.findChild(
             QComboBox, 'deviceSelection')
-        self.deviceCombobox.currentTextChanged.connect(
-            lambda: self._device_selected(self.deviceCombobox.currentIndex()))
+        # self.deviceCombobox.currentTextChanged.connect(
+        #     lambda: self._device_selected(self.deviceCombobox.currentIndex()))
         self.portNumComboBox = self.mainwindow.findChild(
             QComboBox, 'portNumber')
 
@@ -65,6 +55,8 @@ class MainWindow(QObject):
 
         self.portNumComboBox.currentTextChanged.connect( #creates a signal
             lambda: self.get_port_num(self.portNumComboBox.currentText()))
+        self.deviceComboBox.currentTextChanged.connect(
+            lambda: self._device_selected(self.deviceComboBox.currentIndex()))
 
         # LineEdits
         self.boardName = self.mainwindow.findChild(
@@ -127,10 +119,11 @@ class MainWindow(QObject):
         path = os.path.join(os.path.dirname(__file__), file)
         ui_file = QFile(path)
         ui_file.open(QFile.ReadOnly)
-        self.mainwindow = loader.load(ui_file)
+        mainwindow = loader.load(ui_file)
         ui_file.close()
+        return mainwindow
 
-    # Enable test selection tab according to selected device
+    # Actions to take when a device is selected
     def _device_selected(self, index: int):
         # Disable both tabs
         self.tabWidget.setTabEnabled(0, False)
@@ -141,7 +134,7 @@ class MainWindow(QObject):
         self.tabWidget.setTabEnabled(index, True)
 
         # Get selected device
-        self.device = self.deviceCombobox.currentText()
+        self.device = self.deviceComboBox.currentText()
 
         # Define selected tree based on selected device
         if self.device == 'VCU':
@@ -172,14 +165,18 @@ class MainWindow(QObject):
                 parent.setFlags(parent.flags() & ~Qt.ItemIsSelectable)
                 # Populate children (test cases)
                 for case in test_cases:
-                    column_0 = case['Case']
-                    column_1 = case['Repeat']
-                    column_2 = case['Description']
-                    child = QTreeWidgetItem([column_0, column_1, column_2])
+                    # column_0 = case['Case']
+                    # column_1 = case['Repeat']
+                    # column_2 = case['Description']
+                    # column_3 = case['enum']
+                    # child = QTreeWidgetItem([column_0, column_1, column_2, column_3])
+                    row = case.values()
+                    child = QTreeWidgetItem(list(row))
                     parent.addChild(child)
                     # Make children editable
                     child.setFlags(child.flags() | Qt.ItemIsEditable
                                    | Qt.ItemIsEnabled | Qt.ItemIsSelectable)
+                self.selectedTree.expandItem(parent)
 
     # Get test attributes from testcases.JSON for selected device
     def _get_json_attributes(self, device: str):
@@ -203,6 +200,10 @@ class MainWindow(QObject):
         test_item['Test Name'] = item.parent().text(0)
         test_item['Test Case'] = item.text(0)
         test_item['Repeat'] = item.text(1)
+        # Edit the following lines to match enum attributes
+        test_item['enum'] = item.text(3)
+        test_item['a'] = item.text(4)
+        test_item['b'] = item.text(5)
         return test_item
 
     # Retrieve check-in information
@@ -220,7 +221,7 @@ class MainWindow(QObject):
         # Diable run button
         self.runPushButton.setEnabled(mode)
         # Disable combobox
-        self.deviceCombobox.setEnabled(mode)
+        self.deviceComboBox.setEnabled(mode)
         # Disable calibration test button
         self.calibrationTestButton.setEnabled(mode)
         # Disable all line edits\
@@ -244,8 +245,10 @@ class MainWindow(QObject):
         Excecute run code here
 
         '''
-        # Emit selectedTests to runsignal
-        self.runsignal.emit(self.selectedTests)
+        # Temporary assigning results to selected test cases
+        # sort results by their Test Name for heirachical structure
+        results = sorted(self.selectedTests,key = lambda i: i['Test Name'])
+        self.resultsWriter.writeResults(results)
         # Switch to result page
         self.stackedWidget.setCurrentIndex(1)
 
@@ -302,47 +305,30 @@ class ResultsWriter(QObject):
         colour = "#196F3D" if stat else "#FF0000"
         child.setText(1, status)
         child.setForeground(1, QBrush(QColor(colour)))
-
-    # Write status and message for each test item
-    @ Slot(list)
-    def writeResults(self, results: list):
-        self._fill_tree(results)
-
-    def _fill_tree(self, data):
+    
+    def writeResults(self, data: list):
+        # This list keeps track of the parents to avoid
+        # having multiple parents with the same name
+        parents = ['']
         for item in data:
-            parent = QTreeWidgetItem([item['Test Name']])
+            root = item['Test Name']
+            print(parents[-1])
+            # check if a top level has already been added
+            if root != parents[-1]:
+                parents.pop()
+                parents.append(root)
+                # Create new parent QTreewidgetItem
+                parent = QTreeWidgetItem([root])
+                self.resultsTree.addTopLevelItems([parent])
             parent.setFlags(parent.flags() & ~Qt.ItemIsSelectable)
-            self.resultsTree.addTopLevelItems([parent])
             self.resultsTree.expandItem(parent)
             column_0 = item['Test Case']
-            column_2 = item['Message']
-            child = QTreeWidgetItem([column_0, '', column_2])
+            child = QTreeWidgetItem([column_0, '',''])
+            # column_2 = item['Message']
+            # child = QTreeWidgetItem([column_0, '', column_2])
             parent.addChild(child)
-            self._fill_status(item['Status'], child)
+            # self._fill_status(item['Status'], child)
             child.setFlags(child.flags() & ~Qt.ItemIsSelectable)
-
-
-# Dont mind me. Just a dummy test handler.
-# Used for generating fake results for testing ResultsWriter
-class TestDummy(QObject):
-    results = Signal(list)
-
-    def __init__(self):
-        super(TestDummy, self).__init__()
-
-    # Just fake test results.
-    @Slot(list)
-    def poppulate_results(self, tests):
-        # self.results.emit('testdummy')
-        num = 0
-        dummy_status = True
-        dummy_message = "Message"
-        for test in tests:
-            test['Status'] = dummy_status
-            test['Message'] = dummy_message + str(num)
-            num += 1
-            dummy_status = not dummy_status
-        self.results.emit(tests)
 
 
 if __name__ == '__main__':
