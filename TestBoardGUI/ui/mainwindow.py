@@ -2,6 +2,7 @@ import sys
 import os
 import json
 from datetime import date
+import serial.tools.list_ports
 
 from PySide2.QtWidgets import (QApplication, QPushButton, QLineEdit,
                                QTabWidget, QTreeWidget, QComboBox,
@@ -49,7 +50,13 @@ class MainWindow(QObject):
         self.portNumComboBox = self.mainwindow.findChild(
             QComboBox, 'portNumber')
 
-        port_num = ['223', '5000']
+        #Retrieve COM ports from device and display in dropdown menu of GUI
+        comlist = serial.tools.list_ports.comports()
+        connected = []
+        for element in comlist:
+            connected.append(element.device)
+        port_num = connected
+
         self.portNumComboBox.setPlaceholderText('Select')
         self.portNumComboBox.addItems(port_num)
 
