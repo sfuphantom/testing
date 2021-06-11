@@ -33,6 +33,9 @@
 #define VOLT_MIN  76 // 0.7608 * 100
 #define VOLT_MAX  100 // 0.9985 * 100
 
+// CHANGE THIS VALUE TO
+#define VOLT_TEST 0 //102 = 84.5
+
 //const uint8_t[] BMS_FAULT_LUT = {   }
 
 
@@ -126,7 +129,7 @@ static void normal_bms_operation(){
     // set_bms_voltage and temp at normal levels
     UARTprintf("Normal BMS Operation\n\r");
 
-    MCP48FV_Set_Value_Single(TEMP_HIGH_VOLT, DAC_SIZE_BMS, 0, 2);
+    MCP48FV_Set_Value_Single(VOLT_TEST, DAC_SIZE_BMS, 0, 2);
 
     uint8_t pinSelect = 0;
     //setting temp on each of the 16 pins

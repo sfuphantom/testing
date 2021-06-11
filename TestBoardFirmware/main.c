@@ -10,6 +10,7 @@
 #include "gio.h"
 #include "het.h"
 #include "common.h"
+#include "string.h"
 
 //Drivers
 #include "bse.h"
@@ -24,13 +25,14 @@
 
 static unsigned char UARTBuffer[200];
 static unsigned char testMode[3];
-static json_t mem[100];
+static json_t mem[200];
 //static bool initGUI = false;
 
 // Static Function Declaration
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr);
 static void vcu_mode_process(TestBoardState_t *stateptr);
+//static void setPeripheralTestCases(TestBoardState_t* stateptr);
 static void setPeripheralTestCases(TestBoardState_t* stateptr, json_t* json);
 static json_t * JSONHandler(unsigned char *jsonstring);
 
@@ -59,25 +61,39 @@ int main(void){
 
     initializeTimers();
 
+    
     UARTprintf(" Ready to initialize GUI \n\r");
     sciReceive(PC_UART, 3, (unsigned char *)&testMode);
-    if (testMode == 'BMS'){
+    if (!strncmp(testMode, "BMS", 3 * sizeof(char))){
+        //UARTprintf("we have a mode");
         testBoardState.testMode = BMS_MODE;
     } else {
         testBoardState.testMode = VCU_MODE;
     }
     UARTprintf("Mode detected: ");
-    UARTSend(PC_UART, testMode);
-    if (testMode == "BMS"){
-        sciReceive(PC_UART, 141, (unsigned char *)&UARTBuffer); // change 100 to actual value
 
+    //UARTSend(PC_UART, testMode);
+
+    UARTprintf(testMode);
+
+    if (!strncmp(testMode, "BMS", 3 * sizeof(char))){
+        //UARTprintf("WE ARE IN BMS MODE YAY");
+        sciReceive(PC_UART, 97, (unsigned char *)&UARTBuffer); // change 100 to actual value
     }
-    else if (testMode == "VCU") {
+    else if (!strncmp(testMode, "VCU", 3 * sizeof(char))) {
         sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer);
     }
+    
+    // sciReceive(PC_UART, 141, (unsigned char *)&UARTBuffer);
+    // UARTprintf("received json");
 
     //* test code *//
     setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
+
+    // ################################################################### ANDREI'S ANTI GUI TEST CODE ###################################################################
+    //testBoardState.testMode = BMS_MODE;
+    //setPeripheralTestCases(&testBoardState);
+
 
     while(true){
 
@@ -152,6 +168,7 @@ static json_t * JSONHandler(unsigned char *jsonstring){
 
 static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
+    /*
     //VCU Tests
     json_t * appsProperty = json_getProperty(json, "APPS"); 
     stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
@@ -165,11 +182,13 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
     stateptr->peripheralStateArray[LV] = 0;
 
     stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = 0;
-
+    */
 
     //BMS Tests
     json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
     stateptr->peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
+
+    //stateptr->peripheralStateArray[BMS_SLAVES] = 0; //THIS ONE SETS TEST MODE *************************************************************************
 
     stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 
