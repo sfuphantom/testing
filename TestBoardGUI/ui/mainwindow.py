@@ -185,12 +185,12 @@ class MainWindow(QObject):
     def _parse_tests(self, item):
         test_item = dict()
         test_item['Test Name'] = item.parent().text(0)
-        test_item['Test Case'] = item.text(0)
+       # test_item['Test Case'] = item.text(0)
         test_item['Repeat'] = item.text(1)
         # Edit the following lines to match enum attributes
         test_item['enum'] = item.text(3)
-        test_item['a'] = item.text(4)
-        test_item['b'] = item.text(5)
+        #test_item['a'] = item.text(4)
+        #test_item['b'] = item.text(5)
         return test_item
 
     # Retrieve check-in information
@@ -232,11 +232,13 @@ class MainWindow(QObject):
         Excecute run code here
 
         '''
+        # pytest.main()
+        pytest.main(["-k \"vcu" , self.selectedTests])
 
         # Temporary assigning results to selected test cases
         # sort results by their Test Name for heirachical structure
         results = sorted(self.selectedTests,key = lambda i: i['Test Name'])
-        self.resultsWriter.writeResults(results)
+        # self.resultsWriter.writeResults(results)
         # Switch to result page
         self.stackedWidget.setCurrentIndex(1)
 
