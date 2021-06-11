@@ -32,8 +32,8 @@ static json_t mem[200];
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
 static Result_t bms_mode_process(TestBoardState_t *stateptr);
 static void vcu_mode_process(TestBoardState_t *stateptr);
-//static void setPeripheralTestCases(TestBoardState_t* stateptr);
-static void setPeripheralTestCases(TestBoardState_t* stateptr, json_t* json);
+static void setPeripheralTestCases(TestBoardState_t* stateptr);
+//static void setPeripheralTestCases(TestBoardState_t* stateptr, json_t* json);
 static json_t * JSONHandler(unsigned char *jsonstring);
 
 //Timer functions
@@ -61,7 +61,7 @@ int main(void){
 
     initializeTimers();
 
-    
+    /*
     UARTprintf(" Ready to initialize GUI \n\r");
     sciReceive(PC_UART, 3, (unsigned char *)&testMode);
     if (!strncmp(testMode, "BMS", 3 * sizeof(char))){
@@ -87,12 +87,12 @@ int main(void){
     // sciReceive(PC_UART, 141, (unsigned char *)&UARTBuffer);
     // UARTprintf("received json");
 
-    //* test code *//
-    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
+    //* test code */
+    //setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
     // ################################################################### ANDREI'S ANTI GUI TEST CODE ###################################################################
-    //testBoardState.testMode = BMS_MODE;
-    //setPeripheralTestCases(&testBoardState);
+    testBoardState.testMode = BMS_MODE;
+    setPeripheralTestCases(&testBoardState);
 
 
     while(true){
@@ -166,7 +166,7 @@ static json_t * JSONHandler(unsigned char *jsonstring){
     return json;
 }
 
-static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
+static void setPeripheralTestCases(TestBoardState_t *stateptr){
 
     /*
     //VCU Tests
@@ -184,11 +184,12 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
     stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = 0;
     */
 
-    //BMS Tests
-    json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
-    stateptr->peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
+    //BMS Tests JSON
+    //json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
+    //stateptr->peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
 
-    //stateptr->peripheralStateArray[BMS_SLAVES] = 0; //THIS ONE SETS TEST MODE *************************************************************************
+    // BMS Tests HARDCODE
+    stateptr->peripheralStateArray[BMS_SLAVES] = 0; //THIS ONE SETS TEST MODE *************************************************************************
 
     stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 

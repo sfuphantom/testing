@@ -34,7 +34,7 @@
 #define VOLT_MAX  100 // 0.9985 * 100
 
 // CHANGE THIS VALUE TO
-#define VOLT_TEST 0 //102 = 84.5
+#define VOLT_TEST 101  //101 = 83.65
 
 //const uint8_t[] BMS_FAULT_LUT = {   }
 
