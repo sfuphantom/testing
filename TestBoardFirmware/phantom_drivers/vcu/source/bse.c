@@ -6,8 +6,6 @@
  */
 
 #include "bse.h"
-#include "hwConfig.h"
-#include "MCP48FV_DAC_SPI.h"
 
 #define BSE_MAX 430
 #define BSE_MIN 150
@@ -15,16 +13,6 @@
 #define BSE_SHORT 500
 #define VOUT1 1
 #define DAC_SIZE_BSE 0xFF
-
-enum
-{
-    NORMAL_BSE_OFF,
-    NORMAL_BSE_ON,
-    BSE_OPEN_CIRCUIT, //0V reading
-    BSE_SHORT_CIRCUIT, //5V reading
-    APPS_BSE_ACTIVATED, // APPS sensor indicates >25% activation while BSE applied
-    BSE_SWEEP
-};
 
 // Static function prototypes
 static void normal_bse_off();
@@ -36,6 +24,7 @@ static void bse_sweep();
 uint16_t get_bse_voltage(uint16_t dac_val);
 
 void bse_process(uint8_t state){
+
     switch(state)
     {
         case NORMAL_BSE_ON:
@@ -50,7 +39,7 @@ void bse_process(uint8_t state){
         case BSE_SWEEP:
             bse_sweep();
             break;
-        case APPS_BSE_ACTIVATED:
+        case BSE_APPS_ACTIVATED:
             apps_bse_activated();
             break;
         default:
@@ -61,41 +50,65 @@ void bse_process(uint8_t state){
 
 static void normal_bse_off(){
     //sets BSE value at minimum of its range as though the pedal is not being pressed
-    MCP48FV_Set_Value_Single(BSE_MIN, DAC_SIZE_BSE, VOUT1, 1);
+   MCP48FV_Set_Value_Single(BSE_MIN, DAC_SIZE_BSE, VOUT1, 1);
     return;
 }
 
 static void normal_bse_on(){
     // sets BSE value at midpoint of operating range
     uint16_t bse_volt = ((BSE_MAX-BSE_MIN)/2)+BSE_MIN;
-    MCP48FV_Set_Value_Single(bse_volt, DAC_SIZE_BSE, VOUT1, 1);
+   MCP48FV_Set_Value_Single(bse_volt, DAC_SIZE_BSE, VOUT1, 1);
     return;
 }
 
 static void bse_open_circuit(){
     // bse sensor reads an open circuit (0V)
-    MCP48FV_Set_Value_Single(BSE_OPEN, DAC_SIZE_BSE, VOUT1, 1);
+   MCP48FV_Set_Value_Single(BSE_OPEN, DAC_SIZE_BSE, VOUT1, 1);
     return;
 }
 
 static void bse_short_circuit(){
     // bse sensor reads a short circuit (5V)
-    MCP48FV_Set_Value_Single(BSE_SHORT, DAC_SIZE_BSE, VOUT1, 1);
+   MCP48FV_Set_Value_Single(BSE_SHORT, DAC_SIZE_BSE, VOUT1, 1);
     return;
 }
 
-/* TESTS THE NEED TIMERS BEGIN HERE */
+/* Timer-Related Functions */
 
 static void bse_sweep(){
-    // loops through values within a normal range
-    // make sure it stops when it reaches the max voltage
-    int prev_voltage = get_bse_voltage(readRegister(VOUT1, 1));
-    MCP48FV_Set_Value_Single(prev_voltage+50, DAC_SIZE_BSE, VOUT1, 1);
 
-    return;
+    //reset timer ID ( counts # of cycles)
+    setTimerID(BSE, 0);
+
+    //start timer
+    startTimer(BSE, SWEEP_TIMER, SWEEP_PERIOD);
 }
 
-/* TESTS THAT NEED TIMERS END HERE */
+void bse_timer(TestTimer_t test_timer, int ID){
+
+    #ifdef TIMER_DEBUG
+
+    UARTprintf("Bse sweep timer expired.\n\n\r");
+
+    #endif
+
+    int voltage = BSE_MIN + ( SWEEP_STEP * ID);
+
+    //STOP CONDITION
+    if(voltage > BSE_MAX){
+
+        stopTimer(BSE);
+
+        voltage = BSE_MAX;
+    }
+
+    MCP48FV_Set_Value_Single(voltage, DAC_SIZE_BSE, VOUT1, 1);
+
+    //increment cycle
+    setTimerID( BSE, ++ID );
+}
+
+/* End of Timer-Related Functions */
 
 static void apps_bse_activated(){
     normal_bse_on();

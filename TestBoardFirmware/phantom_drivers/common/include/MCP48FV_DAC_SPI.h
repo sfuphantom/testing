@@ -12,8 +12,12 @@
 #ifndef INCLUDE_DAC_SPI_MCP48FV_DAC_SPI_H_
 #define INCLUDE_DAC_SPI_MCP48FV_DAC_SPI_H_
 
-#include <../../../include/mibspi.h> 
+#include "mibspi.h"
 #include "stdbool.h"
+
+#define TRANSFERGROUP_APPS 0
+#define TRANSFERGROUP_BSE_HV 1
+#define TRANSFERGROUP_BMS 2
 
 bool MCP48FV_Init();
 
