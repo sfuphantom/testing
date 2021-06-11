@@ -241,41 +241,25 @@
                     "Case": "Test 5: CT Signal at 50A, 100A, 150A, 200A (& negative values)",
                     "Repeat": "",
                     "Description": "", 
-<<<<<<< HEAD
                     "enum": "0"
-=======
-                    "enum": 0
->>>>>>> 8074849d0215c1397c982281d10fcbe7c588a014
                 },
                 {
                     "Case": "Test 6: CT Signal at Overcurrent for Different Amounts of Time",
                     "Repeat": "",
                     "Description": "", 
-<<<<<<< HEAD
                     "enum": "0"
-=======
-                    "enum": 0
->>>>>>> 8074849d0215c1397c982281d10fcbe7c588a014
                 },
                 {
                     "Case": "Test 7: CT Signal at Negative Current, Undercurrent Faults",
                     "Repeat": "",
                     "Description": "", 
-<<<<<<< HEAD
                     "enum": "0"
-=======
-                    "enum": 0
->>>>>>> 8074849d0215c1397c982281d10fcbe7c588a014
                 },
                 {
                     "Case": "Test 8: Send Positive Current without Throttling the APPS",
                     "Repeat": "",
                     "Description": "", 
-<<<<<<< HEAD
                     "enum": "0"
-=======
-                    "enum": 0
->>>>>>> 8074849d0215c1397c982281d10fcbe7c588a014
                 }
             ]
         }
