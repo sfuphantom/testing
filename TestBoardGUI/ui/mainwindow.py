@@ -51,7 +51,7 @@ class MainWindow(QObject):
             QComboBox, 'portNumber')
 
         self.portNumComboBox.setPlaceholderText('Select')
-        self.portNumComboBox.addItems(self.port_num())
+        self.portNumComboBox.addItems(self._port_num())
 
         self.portNumComboBox.currentTextChanged.connect( #creates a signal
             lambda: self.get_port_num(self.portNumComboBox.currentText()))
@@ -231,7 +231,7 @@ class MainWindow(QObject):
         self.teamMember.setEnabled(mode)
 
     # Retrieve list of COM ports
-    def port_num (self):
+    def _port_num (self):
         comlist = serial.tools.list_ports.comports()
         port_num = []
         for element in comlist:
