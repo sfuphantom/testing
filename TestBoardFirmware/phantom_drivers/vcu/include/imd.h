@@ -10,7 +10,6 @@
 
 #include "stdint.h"
 
-
 void imd_process(uint8_t state);
 
 

@@ -28,7 +28,7 @@ typedef enum
 //    TSAL,
 //    IMD,
 //    LV,
-//    VCU_COMMUNICATIONS
+//    VCU_COMMUNICATIONS,
 //};
 //
 //enum BMSPeripheralPosition

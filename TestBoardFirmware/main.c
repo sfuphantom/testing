@@ -16,6 +16,7 @@
 #include "apps.h"
 #include "MCP48FV_DAC_SPI.h"
 #include "timer.h"
+#include "hv_voltage_sensor.h"
 
 #include "gpio_tests.h"
 
@@ -45,6 +46,13 @@ static bool tests_received;
 int main(void){
 
     //initialization
+    _enable_IRQ();
+
+
+    /* Slave Data */
+    adcSlaveDataSetup();
+
+
     gioInit();
     gioSetDirection(hetPORT1, 0xFFFFFFFF);
     
@@ -81,17 +89,14 @@ int main(void){
     } 
 
     //* test code *//
-    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer)); 
+    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
     tests_received = false;
 
-    while(true){
 
-        tests_received = false;
-
-        //poll test cases from GUI
-//        while(!tests_received);
-
+    while(1)
+    {
+        //startTimer(TEST_COMPLETE_TIMER);
         //parse JSON and set states
 
         //determine the expected state of VCU/BMS
@@ -143,6 +148,7 @@ int main(void){
 
     }//superloop
 
+
 }//main
 
 static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
@@ -162,6 +168,7 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     return SUCCESS;
 }
 
+
 static json_t * JSONHandler(unsigned char *jsonstring){
     
     json_t const* json = json_create( jsonstring, mem, sizeof mem / sizeof *mem );
@@ -179,6 +186,8 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
     stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
     json_t * bseProperty = json_getProperty(json, "BSE"); 
     stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
+    json_t * hv_vsProperty = json_getProperty(json, "HV_VS");
+    stateptr->peripheralStateArray[HV_VS] = (uint8_t) json_getInteger(hv_vsProperty);
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
@@ -193,9 +202,9 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
     json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
     stateptr->peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
 
-    stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
+    //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 
-    stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+    //stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
 
 }
 
@@ -267,6 +276,16 @@ void initializeTimers(){
                 0 // ID
              );
 
+    xTimerSet(
+
+                 "HV_VS", // name
+
+                 HV_VS, // peripheral
+
+                 hv_vs_timer, // callback function
+
+                 0 // ID
+             );
 
 
     //add more peripheral timers here...

@@ -5,19 +5,6 @@
  *      Author: Sumreen Rattan
  */
 #include "imd.h"
-/*
-// Global Variables
-float frequency, duty_cycle
-// need to figure out how we can adjust the frequency and duty cycle of the IMD pin on the fly
-// for actual IMD testing, we used HALOCOGEN to change the parameters of the pin everytime  
-// gabe will show sumreen how to do this 
-
-// SCI variables
-unsigned int NumberofCharsFreq, freq_value, NumberofCharsDuty, duty_value;
-unsigned char freq_data[8];
-unsigned char duty_data[8];
-const float f_HCLK = 160.00;
-*/
 
 typedef enum operation
 {
@@ -31,12 +18,6 @@ typedef enum operation
 
 // Static function definitions
 static void normal_imd_operation();
-static void isolation_failure();
-static void device_failure();
-static void out_of_range();
-static void device_sweep();
-static void isolation_sweep();
-
 
 void imd_process(uint8_t state)
 {
@@ -48,11 +29,6 @@ void imd_process(uint8_t state)
     }
 }
 
-/*
-* Fn: normal_imd_operation
-* Purpose: Sends a square wave to the VCU that indicates normal IMD operation
-* ex. 8% Duty Cycle, 10hz frequency  
-*/
 static void normal_imd_operation()
 {
 

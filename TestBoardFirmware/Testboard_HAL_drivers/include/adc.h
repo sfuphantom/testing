@@ -56,7 +56,7 @@ extern "C" {
 #endif
 
 /* USER CODE BEGIN (0) */
-///* USER CODE END */
+/* USER CODE END */
 
 /* ADC General Definitions */
 
@@ -190,7 +190,7 @@ enum adc2HwTriggerSource
 };
 
 /* USER CODE BEGIN (1) */
-///* USER CODE END */
+/* USER CODE END */
 
 /** @struct adcData
 *   @brief ADC Conversion data structure
@@ -208,7 +208,7 @@ typedef struct adcData
 
 
 /* USER CODE BEGIN (2) */
-///* USER CODE END */
+/* USER CODE END */
 
 typedef struct adc_config_reg
 {           
@@ -277,7 +277,7 @@ uint32 adcGetEVTPin(adcBASE_t *adc);
 void adcNotification(adcBASE_t *adc, uint32 group);
 
 /* USER CODE BEGIN (3) */
-///* USER CODE END */
+/* USER CODE END */
 
 /**@}*/
 #ifdef __cplusplus

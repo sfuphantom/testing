@@ -18,7 +18,6 @@ typedef enum operation
 
 // Static function prototypes
 static void normal_hv_cs_operation();
-static float send_current(int CURRENT_VALUE);
 
 void hv_cs_process(uint8_t state)
 {
@@ -30,11 +29,6 @@ void hv_cs_process(uint8_t state)
     }
 }
 
-
-/*
-* Fn: normal_hv_cs_operation
-* Purpose:   
-*/
 static void normal_hv_cs_operation()
 {
 
