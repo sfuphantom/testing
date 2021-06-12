@@ -7,7 +7,8 @@
 #include "main.h"
 #include "Phantom_sci.h"
 #include "hwConfig.h"
-
+#include "gio.h"
+#include "het.h"
 #include "common.h"
 
 //Drivers
@@ -16,6 +17,10 @@
 #include "MCP48FV_DAC_SPI.h"
 #include "timer.h"
 #include "hv_voltage_sensor.h"
+
+#include "gpio_tests.h"
+
+#include "bms_slaves.h"
 
 #define TIMER_PERIOD 1000
 
@@ -43,16 +48,21 @@ int main(void){
     //initialization
     _enable_IRQ();
 
-    mibspiInit();
 
     /* Slave Data */
     adcSlaveDataSetup();
 
 
+    gioInit();
+    gioSetDirection(hetPORT1, 0xFFFFFFFF);
+    
     MCP48FV_Init();
 
    // sciInit();
     timerInit();
+
+    gpio_init();
+
 
     Result_t res = SUCCESS;
     //res = MCP48FV_Init(); 
@@ -62,11 +72,21 @@ int main(void){
     initializeTimers();
 
     UARTprintf(" Ready to initialize GUI \n\r");
-    /*sciReceive(PC_UART, 3, (unsigned char *)&testMode);
+    sciReceive(PC_UART, 3, (unsigned char *)&testMode);
+    if (testMode == 'BMS'){
+        testBoardState.testMode = BMS_MODE;
+    } else {
+        testBoardState.testMode = VCU_MODE;
+    }
     UARTprintf("Mode detected: ");
     UARTSend(PC_UART, testMode);
-
-    sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer); */
+    if (testMode == "BMS"){
+        sciReceive(PC_UART, 141, (unsigned char *)&UARTBuffer); // change 100 to actual value
+    
+    } 
+    else if (testMode == "VCU") {
+        sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer);
+    } 
 
     //* test code *//
     setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
@@ -101,7 +121,18 @@ int main(void){
 
             case VCU_MODE:
 
+                //reset VCU state
+                gioSetBit(RESET_PORT, RESET_PIN, 1);
+
+                delayms(500);
+
+                gioSetBit(RESET_PORT, RESET_PIN, 0);
+
+                //put VCU into state running
+                gpio_process(RTD_NORMAL_PROCEDURE);
+
                 vcu_mode_process(&testBoardState);
+
                 break;
 
         }//switch case
@@ -150,10 +181,6 @@ static json_t * JSONHandler(unsigned char *jsonstring){
 
 static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
-    //TestBoard Mode
-    stateptr->testMode = VCU_MODE;
-
-
     //VCU Tests
     json_t * appsProperty = json_getProperty(json, "APPS"); 
     stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
@@ -172,7 +199,8 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
 
     //BMS Tests
-    stateptr->peripheralStateArray[BMS_SLAVES] = 0;
+    json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
+    stateptr->peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
 
     //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 
@@ -258,6 +286,7 @@ void initializeTimers(){
 
                  0 // ID
              );
+
 
     //add more peripheral timers here...
 
