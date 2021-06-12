@@ -50,15 +50,8 @@ class MainWindow(QObject):
         self.portNumComboBox = self.mainwindow.findChild(
             QComboBox, 'portNumber')
 
-        #Retrieve COM ports from device and display in dropdown menu of GUI
-        comlist = serial.tools.list_ports.comports()
-        connected = []
-        for element in comlist:
-            connected.append(element.device)
-        port_num = connected
-
         self.portNumComboBox.setPlaceholderText('Select')
-        self.portNumComboBox.addItems(port_num)
+        self.portNumComboBox.addItems(self.port_num())
 
         self.portNumComboBox.currentTextChanged.connect( #creates a signal
             lambda: self.get_port_num(self.portNumComboBox.currentText()))
@@ -236,6 +229,14 @@ class MainWindow(QObject):
         self.testID.setEnabled(mode)
         self.boardVersion.setEnabled(mode)
         self.teamMember.setEnabled(mode)
+
+    # Retrieve list of COM ports
+    def port_num (self):
+        comlist = serial.tools.list_ports.comports()
+        port_num = []
+        for element in comlist:
+            port_num.append(element.device)
+        return port_num
 
     # Run tests
     @Slot()
