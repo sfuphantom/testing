@@ -69,16 +69,9 @@ int main(void){
     sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer); */
 
     //* test code *//
-    //setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
+    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
     tests_received = false;
-
-    while(true){
-
-        tests_received = false;
-
-        //poll test cases from GUI
-//        while(!tests_received);
 
 
     while(1)
@@ -124,7 +117,6 @@ int main(void){
 
     }//superloop
 
-    }
 
 }//main
 
@@ -167,6 +159,8 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
     stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
     json_t * bseProperty = json_getProperty(json, "BSE"); 
     stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
+    json_t * hv_vsProperty = json_getProperty(json, "HV_VS");
+    stateptr->peripheralStateArray[HV_VS] = (uint8_t) json_getInteger(hv_vsProperty);
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
