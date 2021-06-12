@@ -30,20 +30,9 @@ typedef enum
 } testcases_name;
 
 //function prototypes
-void hv_vs_both_bounds();
-void hv_vs_out_of_lowerBound();
-void hv_vs_out_of_upperBound();
-void hv_vs_lower_bound();
-void hv_vs_upper_bound();
-void hv_vs_at_zero();
-void hv_vs_sweep();
 void hv_vs_timer(TestTimer_t test_timer, int ID);
-void spiSetup(uint16 voltage);
 void hv_vs_process(uint8_t state);
-int twosComplement(int negative_output);
-int getADCdigital(int battery_voltage);
-void mibspiGroupNotification(mibspiBASE_t *mibspi, uint32 group);
 void adcSlaveDataSetup();
-void UARTtesting(uint16 test_value);
+
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_HV_VOLTAGE_SENSOR_H_ */

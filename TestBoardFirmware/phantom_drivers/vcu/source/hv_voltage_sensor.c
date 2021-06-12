@@ -17,6 +17,17 @@
 
 uint16 ADC_output;
 
+static int getADCdigital(int battery_voltage);
+static int twosComplement(int negative_output);
+static void hv_vs_lower_bound();
+static void hv_vs_upper_bound();
+static void hv_vs_out_of_lowerBound();
+static void hv_vs_out_of_upperBound();
+static void hv_vs_at_zero();
+static void hv_vs_sweep();
+static void UARTtesting(uint16 test_value);
+static void spiSetup(uint16 voltage);
+
 /* Transfer Group 0 */
 /* Initial data to be sent the very first time on power up to the ADC
  * NOTE: May or may not need to be changed
@@ -251,40 +262,6 @@ static void spiSetup(uint16 voltage)
     mibspiTransfer(mibspiREG3,TransferGroup1);
 }
 
-void mibspiGroupNotification(mibspiBASE_t *mibspi, uint32 group)
-{
-
-    if (mibspi == mibspiREG1 && group == TransferGroup0)
-     {
-         mibspiDisableGroupNotification(mibspiREG1, TransferGroup0);
-         mibspiGetData(mibspi, group, RX_Data_Master);
-         tx_master = true;
-     }
-
-    if (mibspi == mibspiREG1 && group == TransferGroup1)
-    {
-        mibspiDisableGroupNotification(mibspiREG1, TransferGroup1);
-        mibspiGetData(mibspi, group, RX_Yash_Master);
-        tx_master = true;
-    }
-
-    /**********************************
-     *  TESTING FOR SLAVE FUNCTIONALITY
-     ***********************************/
-
-        if (mibspi == mibspiREG3 && group == TransferGroup1)
-        {
-            mibspiDisableGroupNotification(mibspiREG3, TransferGroup1);
-            mibspiGetData(mibspi, group, RX_ADS7044_Slave);
-            TX_AVAILABLE = true;
-        }
-
-        if (mibspi == mibspiREG3 && group == TransferGroup0)
-        {
-            mibspiDisableGroupNotification(mibspiREG3, TransferGroup0);
-            TX_AVAILABLE = true;
-        }
-}
 
 /*****************************************************************************
  *                 ADC SLAVE SETUP FUNCTIONS - DO NOT MODIFY
