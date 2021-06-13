@@ -242,14 +242,17 @@ static void hv_vs_sweep()
 
 void hv_vs_timer(TestTimer_t test_timer, int ID){
 
-    #ifdef TIMER_DEBUG
-    UARTprintf("hv_vs sweep timer expired.\n\n\r");
-    #endif
-
     int input_voltage = min_voltage + ID;
     ADC_output = (uint16)getADCdigital(input_voltage);
     spiSetup(ADC_output);
+
+   #ifdef TIMER_DEBUG
+   UARTprintf("hv_vs sweep timer expired.\n\n\r");
+   #endif
+
+    #ifdef HV_VS_DEBUG
     UARTtesting(ADC_output);
+    #endif
 
     //Stop condition
     if(input_voltage >=168){
