@@ -61,8 +61,8 @@ static void over_voltage_test();
 static void under_voltage_test();
 static void over_temperature_test();
 static void under_temperature_test();
-static void weird_sensor_readings_voltage_test();
-static void weird_sensor_readings_temperature_test();
+//static void weird_sensor_readings_voltage_test();
+//static void weird_sensor_readings_temperature_test();
 static void communication_loss_test();
 static void temperature_mux(uint8_t pinSelect);
 
@@ -244,5 +244,5 @@ static void temperature_mux(uint8_t pinSelect){
         gioSetBit(THERMISTOR_MUX_HET_PORT, THERMISTOR_MUX_PIN_3, 0);
     }
 
-    return 0;
+    return;
  }
