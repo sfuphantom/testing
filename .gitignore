@@ -75,3 +75,7 @@
 .jxbrowser-data/Cache/f_00000b
 .jxbrowser-data/Cache/f_00000c
 >>>>>>> e8fc56b84fc4b7a7114fe16e577c8d3df3d90f73
+
+env
+.vscode
+__pycache__/
