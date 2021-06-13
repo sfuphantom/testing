@@ -25,8 +25,12 @@ static void hv_vs_out_of_lowerBound();
 static void hv_vs_out_of_upperBound();
 static void hv_vs_at_zero();
 static void hv_vs_sweep();
-static void UARTtesting(uint16 test_value);
 static void spiSetup(uint16 voltage);
+
+#ifdef HV_VS_DEBUG
+static void UARTtesting(uint16 test_value);
+#endif
+
 
 /* Transfer Group 0 */
 /* Initial data to be sent the very first time on power up to the ADC
@@ -241,6 +245,8 @@ void hv_vs_timer(TestTimer_t test_timer, int ID){
     setTimerID(HV_VS, ++ID);
 }
 
+#ifdef HV_VS_DEBUG
+
 static void UARTtesting(uint16 test_value)
 {
     // function for checking values to be sent using UART communication.
@@ -254,6 +260,7 @@ static void UARTtesting(uint16 test_value)
     }
     UARTprintf("\n\r");
 }
+#endif
 
 static void spiSetup(uint16 voltage)
 {

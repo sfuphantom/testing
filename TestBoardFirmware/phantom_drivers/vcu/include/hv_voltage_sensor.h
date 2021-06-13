@@ -19,6 +19,8 @@
 #include "hwConfig.h"
 #include "timer.h"
 
+//#define HV_VS_DEBUG
+
 typedef enum
 {
     HV_VS_LOWER_BOUND,    //Expected VCU output/state: 125V/Running,Tractive on
