@@ -14,6 +14,8 @@
 
 #include "common.h"
 
+#define NUM_PERIPHERALS 11
+
 typedef enum
 {
     IDLE,
@@ -43,7 +45,7 @@ typedef enum
 typedef struct
 {
   TestBoardModes_t testMode; //BMS/VCU mode
-  uint8_t peripheralStateArray[10]; //holds test to run
+  uint8_t peripheralStateArray[NUM_PERIPHERALS]; //holds test to run
 } TestBoardState_t;
 
 
