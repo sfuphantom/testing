@@ -18,8 +18,7 @@
 #include "Phantom_sci.h"
 #include "hwConfig.h"
 #include "timer.h"
-
-//#define HV_VS_DEBUG
+#include "common.h"
 
 typedef enum
 {

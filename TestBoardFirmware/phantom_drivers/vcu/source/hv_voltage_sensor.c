@@ -170,8 +170,11 @@ static void hv_vs_lower_bound()
     //should send -1644 in 2's complement form to MibSPI3
     ADC_output = (uint16)getADCdigital(125);
     spiSetup(ADC_output);
+
+    #ifdef HV_VS_DEBUG
     UARTprintf("Minimum operating battery voltage level of 168V \n\r");
     UARTtesting(ADC_output);
+    #endif
 }
 
 static void hv_vs_upper_bound(){
@@ -179,8 +182,11 @@ static void hv_vs_upper_bound(){
     //should send value of 2021 to MibSPI3
     ADC_output = (uint16_t)getADCdigital(168);
     spiSetup(ADC_output);
+
+    #ifdef HV_VS_DEBUG
     UARTprintf("Maximum operating battery voltage level of 125V \n\r");
     UARTtesting(ADC_output);
+    #endif
 }
 
 static void hv_vs_out_of_lowerBound()
@@ -189,8 +195,11 @@ static void hv_vs_out_of_lowerBound()
     //should send value of 0x0800 to MibSPI3
     ADC_output = 0x0800;
     spiSetup(ADC_output);
+
+    #ifdef HV_VS_DEBUG
     UARTprintf("out of lower bound voltage level \n\r");
     UARTtesting(ADC_output);
+    #endif
 }
 
 static void hv_vs_out_of_upperBound()
@@ -199,8 +208,11 @@ static void hv_vs_out_of_upperBound()
     //should send value of 0x07FF to MibSPI3
     ADC_output = 0x07FF;
     spiSetup(ADC_output);
+
+    #ifdef HV_VS_DEBUG
     UARTprintf("out of upper bound voltage level \n\r");
     UARTtesting(ADC_output);
+    #endif
 }
 
 static void hv_vs_at_zero()
@@ -209,8 +221,11 @@ static void hv_vs_at_zero()
     // sending ADC output voltage of 0 to MibSPI3
     ADC_output = 0x0000;
     spiSetup(ADC_output);
+
+    #ifdef HV_VS_DEBUG
     UARTprintf("0V voltage level \n\r");
     UARTtesting(ADC_output);
+    #endif
 }
 
 /* Sweep test with a timer */
