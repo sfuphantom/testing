@@ -41,7 +41,6 @@ static void initializeTimers();
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
-static bool tests_received;
 
 int main(void){
 
@@ -90,9 +89,6 @@ int main(void){
 
     //* test code *//
     setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
-
-    tests_received = false;
-
 
     while(1)
     {
