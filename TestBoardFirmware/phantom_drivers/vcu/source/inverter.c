@@ -4,10 +4,11 @@
  *  Created on: Jun 3, 2021
  *      Author: Rafael
  */
+#include "inverter.h"
 
-adc_Data_t Inverter_data;
+adcData_t Inverter_data;
 
-adc_Data_t* Inverter_data_ptr = &Inverter_data;
+adcData_t* Inverter_data_ptr = &Inverter_data;
 
 static unsigned int Inverter_signal;
 

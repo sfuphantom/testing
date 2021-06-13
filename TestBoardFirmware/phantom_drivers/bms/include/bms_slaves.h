@@ -10,10 +10,6 @@
 
 #include "stdint.h"
 #include "common.h"
-//#include "FreeRTOS.h"
-//#include "FreeRTOSConfig.h"
-//#include "os_task.h"
-//#include "os_timer.h"
 
 Result_t bms_slaves_process(uint8_t state);
 void bms_slaves_init();

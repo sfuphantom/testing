@@ -8,10 +8,6 @@
 #include "communications.h"
 #include "Phantom_sci.h"
 #include "common.h"
-//#include "FreeRTOS.h"
-//#include "FreeRTOSConfig.h"
-//#include "os_task.h"
-//#include "os_timer.h"
 
 enum
 {

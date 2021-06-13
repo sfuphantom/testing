@@ -12,7 +12,7 @@
 #include "hwConfig.h"
 #include "common.h"
 #include "Phantom_sci.h"
-//#include "adc.h" //configure in halcogen
+#include "adc.h" //configure in halcogen
 
 
 unsigned int getInverterReadings();
