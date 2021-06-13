@@ -35,6 +35,7 @@ static Result_t bms_mode_process(TestBoardState_t *stateptr);
 static void vcu_mode_process(TestBoardState_t *stateptr);
 static void setPeripheralTestCases(TestBoardState_t* stateptr, json_t* json);
 static json_t * JSONHandler(unsigned char *jsonstring);
+static void initializeVCU();
 
 //Timer functions
 static void initializeTimers();
@@ -92,10 +93,8 @@ int main(void){
 
     while(1)
     {
-        //startTimer(TEST_COMPLETE_TIMER);
         //parse JSON and set states
 
-        //determine the expected state of VCU/BMS
 
         startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
 
@@ -117,15 +116,7 @@ int main(void){
 
             case VCU_MODE:
 
-                //reset VCU state
-                gioSetBit(RESET_PORT, RESET_PIN, 1);
-
-                delayms(500);
-
-                gioSetBit(RESET_PORT, RESET_PIN, 0);
-
-                //put VCU into state running
-                gpio_process(RTD_NORMAL_PROCEDURE);
+                initializeVCU();
 
                 vcu_mode_process(&testBoardState);
 
@@ -246,6 +237,25 @@ static void vcu_mode_process(TestBoardState_t *stateptr)
     bse_process(stateptr->peripheralStateArray[BSE]);
 
     apps_process(stateptr->peripheralStateArray[APPS]);
+
+
+}
+
+static void initializeVCU(){
+
+    //reset VCU state
+    gioSetBit(RESET_PORT, RESET_PIN, 1);
+
+    delayms(500);
+
+    gioSetBit(RESET_PORT, RESET_PIN, 0);
+
+    //put VCU into state running
+    gpio_process(RTD_NORMAL_PROCEDURE);
+
+    //check VCU state
+//    if(!RUNNING)
+//        UARTprintf("Failed to initialize VCU\r\n");
 
 
 }
