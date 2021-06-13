@@ -29,6 +29,8 @@
 //Add Shutdown Tests...and other GPIOs
 #include "gpio_tests.h"
 
+uint8_t GPIO_RESULTS_LUT[] = { /* RUNNING */ 0 , /* TS_OFF */0, 0 /* !RUNNING */};
+
 
 // Static function definitions
 static void rtd_normal_procedure();
@@ -80,18 +82,16 @@ static void rtd_normal_procedure()
     gioSetBit(TSAL_PORT, TSAL_ACTIVE_PIN, 1);
 
 	//delay?
-    delayms(200);
+    delayms(500);
 
 	//send bse signal ON
     bse_process(NORMAL_BSE_ON);
 
 	//delay?
-    delayms(1000);
+    delayms(500);
 
 	//finally, send RTD signal 
     gioSetBit(READY_TO_DRIVE_PORT, READY_TO_DRIVE_PIN, 1);
-
-
 
 }
 

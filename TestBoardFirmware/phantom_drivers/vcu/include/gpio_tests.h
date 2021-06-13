@@ -27,7 +27,6 @@ enum
     RTD_INORDER, //Reverse order of RTD procedure
 };
 
-//uint8_t GPIO_RESULTS_LUT[] = { /* RUNNING */ 0 , /* TS_OFF */0, 0 /* !RUNNING */};
 
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_GPIOTESTS_H_ */
