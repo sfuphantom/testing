@@ -34,7 +34,8 @@ typedef enum Peripheral
     VCU_COMMUNICATIONS,
     BMS_SLAVES,
     THERMISTOR_EXPANSION,
-    BMS_COMMUNICATIONS
+    BMS_COMMUNICATIONS,
+    HVCT
 } Peripheral;
 
 void delayms(uint16_t ms);

@@ -160,6 +160,12 @@ void stopTimer(Peripheral peripheral_timer){
 
             break;
 
+        case HVCT:
+
+            UARTprintf("HVCT TEST FINISHED!...\r\n\n");
+
+            break;
+
 
         //add more peripherals for debugging here...
 

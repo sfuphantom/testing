@@ -21,6 +21,8 @@
 
 #include "bms_slaves.h"
 
+#include "hv_current_sensor.h"
+
 #define TIMER_PERIOD 1000
 
 static unsigned char UARTBuffer[200];
@@ -267,6 +269,15 @@ void initializeTimers(){
                 0 // ID
              );
 
+    xTimerSet(
+                "HVCT", // name
+
+                HVCT, // peripheral
+
+                hvct_timer, // callback function
+
+                0 // ID
+             );
 
 
     //add more peripheral timers here...

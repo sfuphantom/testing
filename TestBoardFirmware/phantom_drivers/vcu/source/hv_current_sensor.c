@@ -5,18 +5,20 @@
  */
 
 #include "hv_current_sensor.h"
-#include "MCP48FV_DAC_SPI.h"
+#include "apps.c"
 
 #define VOUT1 1
-#define DAC_SIZE_HVCT 0xFF
+#define DAC_SIZE_HVCT 0xFF //8 bit DAC
+#define MAX_VOUT 438 //4.375V, highest the HVCT should record -> 300A
+#define MIN_VOUT 63 //.625V, lowest the HVCT should record -> -300A
+#define OFFLINE_VOUT 0
 
-const int MAX_VOUT = 438;
-const int MIN_VOUT = 63;
+#define HVCT_SWEEP_STEP 1 //Voltage step 1 -> 0.01 volts
 
 enum operation 
 {  
-    INTERVAL_HV_CT_RANGE, //send range of voltages at .125V intervals
-    GRANULAR_HV_CT_RANGE, //send range of voltages at .001V intervals
+    NORMAL_HVCT, //sends a HVCT corrosponding to 100A
+    SWEEP_HV_CT_RANGE, //send range of voltages at .01V intervals
     OFFLINE_HV_CT, //send 0V
     PROPORTIONAL_APPS, //send voltages at .1V intervals, alongside APPS readings
     LOW_APPS, //same as proportional_apps, but apps is too low
@@ -24,80 +26,125 @@ enum operation
 };
 
 //Test function prototypes
-static void interval_hv_ct_range();
-static void granular_hv_ct_range();
+static void normal_hvct();
+static void sweep_hv_ct_range();
 static void offline_hv_ct();
 static void proportional_apps();
 static void low_apps();
 static void high_apps();
 
-//ignore this test
-//Test 1
-void interval_hv_ct_range()
+void hvct_timer(TestTimer_t test_timer, int ID);
+void send_hvct_voltage(int voltage);
+
+void hv_ct_process (uint8_t state)
 {
-    uint16_t current = 63;
-    for(int i = 0; i<30;i++)
+    switch (state)
     {
-        current += i*;
-        MCP48FV_Set_Value_Single(current, DAC_SIZE_HVCT, VOUT1, 1);
+        case NORMAL_HVCT:
+            normal_hvct();
+            break;
+        case SWEEP_HV_CT_RANGE:
+            sweep_hv_ct_range();
+            break;
+        case OFFLINE_HV_CT:
+            offline_hv_ct();
+            break;
+        case PROPORTIONAL_APPS:
+            proportional_apps();
+            break;
+        case LOW_APPS:
+            low_apps();
+            break;
+        case HIGH_APPS:
+            high_apps();
+            break;
     }
+}
+
+//Test 1
+static void normal_hvct()
+{
+    int voltage = (MAX_VOUT-MIN_VOUT)/6; //corrosponds to ~100A
+    send_hvct_voltage(voltage);
+    return;
 }
 
 //Test 2
-void granular_hv_ct_range()
+static void sweep_hv_ct_range()
 {
+    setTimerID(HVCT, 0);
+
+    startTimer(HVCT, SWEEP_TIMER, SWEEP_PERIOD);
+    return;
+
     //test goes from .63V to 4.3V
-    uint16_t current = MIN_VOUT;
-    for( ; current<MAX_VOUT; current++)
-        MCP48FV_Set_Value_Single(current, DAC_SIZE_HVCT, VOUT1, 1);
-    //for this one, make sure to make .csv files to graph the the values after, and they should be roughly proportional
-    //max uncertainty can be 4amps 
+    //test should take ~3.1 minutes, but can be done shorter if SWEEP_PERIOD is shortened or HVCT_SWEEP_STEP is increased
+    //max uncertainty in VCU reading should be 4amps
 }
 
 //Test 3
-void offline_hv_ct()
+static void offline_hv_ct()
 {
-    MCP48FV_Set_Value_Single(0, DAC_SIZE_HVCT, VOUT1, 1);
+    MCP48FV_Set_Value_Single(OFFLINE_VOUT, DAC_SIZE_HVCT, VOUT1, 1);
 }
 
 //Test 4
-void proportional_apps()
+static void proportional_apps()
 {
-    int current = MIN_VOUT;
-    int i = 0;
-    while (current<MAX_VOUT)
-    {
-        MCP48FV_Set_Value_Single(current, DAC_SIZE_HVCT, VOUT1, 1);
-        //send_apps_current(current);
-        i += 10;
-        current += i;
-    }
+    normal_apps_on();
+    //send_hvct_voltage(middle of range);
+    return;
 }
 
 //Test 5
-void low_apps()
+static void low_apps()
 {
-    int current = MIN_VOUT;
-    int i = 0;
-    while (current<MAX_VOUT)
-    {
-        MCP48FV_Set_Value_Single(current, DAC_SIZE_HVCT, VOUT1, 1);
-        //send_apps_current(current-10);
-        i += 10;
-        current += i;
-    }
+    normal_apps_on();
+    //send_hvct_voltage(middle of range*1.2);
+    return;
 }
 
 //Test 6
-void high_apps()
+static void high_apps()
 {
-    int current = MIN_VOUT;
-    int i = 0;
-    while (current<MAX_VOUT)
+    normal_apps_on();
+    //send_hvct_voltage(middle of range*0.8);
+    return;
+}
+
+//Misc functions
+void hvct_timer(TestTimer_t test_timer, int ID)
+{
+
+    switch(test_timer)
     {
-        MCP48FV_Set_Value_Single(current, DAC_SIZE_HVCT, VOUT1, 1);
-        //send_apps_current(current+10);
-        i += 10;
-        current += i;
+        case SWEEP_TIMER:
+
+        #ifdef TIMER_DEBUG
+
+        UARTprintf("HVCT sweep timer expired.\n\n\r");
+
+        #endif
+
+        int voltage = MIN_VOUT + (HVCT_SWEEP_STEP * ID);
+
+        //STOP CONDITION
+        if(voltage > MAX_VOUT)
+        {
+            stopTimer(HVCT);
+            voltage = MAX_VOUT;
+        }
+
+        MCP48FV_Set_Value_Single(voltage, DAC_SIZE_HVCT, VOUT1, 1);
+
+        //increment cycle
+        setTimerID(HVCT, ++ID);
+        return;
     }
+}
+
+void send_hvct_voltage(int voltage)
+{
+    MCP48FV_Set_Value_Single(voltage, DAC_SIZE_HVCT, VOUT1, 1);
+    return;
 }
