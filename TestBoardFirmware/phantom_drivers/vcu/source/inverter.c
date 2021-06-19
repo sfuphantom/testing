@@ -2,7 +2,7 @@
  * inverter.c
  *
  *  Created on: Jun 3, 2021
- *      Author: Rafael
+ *      Author: Rafael Guevara
  */
 #include "inverter.h"
 
@@ -23,15 +23,23 @@ static unsigned int getInverterReading(){
 }
 
 
-
+//Receives raw ADC output from VCU throttle pin
+//Returns 0-5V reading
 unsigned int getInverterSignal(){
 
     Inverter_signal = getInverterReading();
 
     //do some calculations...
 
-    return 0;
+    return Inverter_signal;
 
 }
 
+//Receives 0-5V reading
+//Returns corresponding bus voltage
+unsigned int getInverterOutput(){
+
+//    getInverterSignal();
+
+}
 

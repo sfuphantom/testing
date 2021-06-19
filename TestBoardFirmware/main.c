@@ -17,7 +17,7 @@
 #include "MCP48FV_DAC_SPI.h"
 #include "timer.h"
 #include "hv_voltage_sensor.h"
-
+#include "inverter.h"
 #include "gpio_tests.h"
 
 #include "bms_slaves.h"
@@ -36,6 +36,7 @@ static void vcu_mode_process(TestBoardState_t *stateptr);
 static void setPeripheralTestCases(TestBoardState_t* stateptr, json_t* json);
 static json_t * JSONHandler(unsigned char *jsonstring);
 static void initializeVCU();
+static void validateVCUTests();
 
 //Timer functions
 static void initializeTimers();
@@ -119,6 +120,9 @@ int main(void){
                 initializeVCU();
 
                 vcu_mode_process(&testBoardState);
+
+                validateVCUTests(&testBoardState);
+
 
                 break;
 
@@ -259,6 +263,50 @@ static void initializeVCU(){
 
 
 }
+
+static void validateVCUTests(TestBoardState_t *stateptr){
+
+    unsigned int inverter_signal = getInverterSignal();
+
+    uint8_t testcase = stateptr->peripheralStateArray[APPS];
+
+    bool test_passed = false;
+
+    //APPS
+    switch(testcase){
+
+        case NORMAL_APPS_ON:
+
+            test_passed = (inverter_signal == 0);
+
+            break;
+        case APPS_IMPLAUSIBILITY:
+            apps_implausibility();
+            break;
+        case APPS_SHORT_CIRCUIT:
+            apps_short_circuit();
+            break;
+        case APPS_OPEN_CIRCUIT:
+            apps_open_circuit();
+            break;
+        case APPS_BSE_ACTIVATED: //be wary of this test...bse cannot change the value
+            apps_bse_activated();
+            break;
+        case APPS_SWEEP:
+            apps_sweep();
+            break;
+        default:
+            normal_apps_off();
+            break;
+    }
+
+
+    //focus on non zero values for now...
+
+
+}
+
+
 
 void initializeTimers(){
 
