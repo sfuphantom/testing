@@ -13,6 +13,8 @@
 #include "het.h"
 #include "mibspi.h"
 
+#include "het.h"
+#include "gio.h"
 
 /***************  VCU PINS  *********************/
 
@@ -108,8 +110,8 @@
 #define BMS_UART                sciREG //configure in halcogen
 #define WAKEUP_PORT             gioPORTA //configure in halcogen
 #define WAKEUP_PIN              0 //configure in halcogen
-#define FAULT_PORT              gioPORTA //configure in halcogen
-#define FAULT_PIN               1 //configure in halcogen
+#define BMS_SHUTDOWN_PORT       hetPORT1 //temporary...
+#define BMS_SHUTDOWN_PIN        15
 #define DAC_SIZE_BMS            0x3FF
 
 // Debug UART
