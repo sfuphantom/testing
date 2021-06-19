@@ -29,13 +29,18 @@
 //Add Shutdown Tests...and other GPIOs
 #include "gpio_tests.h"
 
-uint8_t GPIO_RESULTS_LUT[] = { /* RUNNING */ 0 , /* TS_OFF */0, 0 /* !RUNNING */};
+uint8_t GPIO_RESULTS_LUT[] = { /* RUNNING */ 0 , /* TS_OFF */0, 0 /* !RUNNING */, /* ZERO THROTTLE */ 0};
 
 
 // Static function definitions
 static void rtd_normal_procedure();
 static void rtd_latch_test();
 static void rtd_inorder_test();
+//Shutdown
+
+static void shutdown_latch_test();
+
+
 
 void gpio_init(){
 
@@ -154,6 +159,20 @@ static void rtd_inorder_test()
 
 
 }
+
+static void shutdown_latch_test(){
+
+    gioSetBit(SHUTDOWN_CIRCUIT_PORT, IMD_FAULT_PIN, 1);
+
+    //delay?
+    delayms(500);
+
+    gioSetBit(SHUTDOWN_CIRCUIT_PORT, IMD_FAULT_PIN, 0);
+
+    apps_process(NORMAL_APPS_ON); //zero motor output
+
+}
+
 
 
 
