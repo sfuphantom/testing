@@ -29,9 +29,6 @@
 //Add Shutdown Tests...and other GPIOs
 #include "gpio_tests.h"
 
-uint8_t GPIO_RESULTS_LUT[] = { /* RUNNING */ 0 , /* TS_OFF */0, 0 /* !RUNNING */, /* ZERO THROTTLE */ 0};
-
-
 // Static function definitions
 static void rtd_normal_procedure();
 static void rtd_latch_test();
