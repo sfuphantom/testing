@@ -89,7 +89,7 @@ int main(void){
     //* test code *//
     setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
-    while(1)
+    while(true)
     {
         //parse JSON and set states
 
@@ -122,8 +122,7 @@ int main(void){
 
                 vcu_mode_process(&testBoardState);
 
-                validateVCUTests(&testBoardState);
-
+                validateThrottleControls(testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
 
                 break;
 
@@ -173,7 +172,7 @@ static json_t * JSONHandler(unsigned char *jsonstring){
 
 static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
-    /*
+
     //VCU Tests
     json_t * appsProperty = json_getProperty(json, "APPS"); 
     stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
@@ -189,7 +188,7 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
     stateptr->peripheralStateArray[LV] = 0;
 
     stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = 0;
-    */
+
 
     //BMS Tests
     json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
