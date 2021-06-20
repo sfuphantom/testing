@@ -9,6 +9,21 @@ import serial
 import time
 import json
 
+from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
+
+# Getting selected tests from MainWindow
+@Slot(list)
+def get_tests(tests: list):
+    global selectedTests
+    selectedTests = tests
+# # Uncomment the following lines to test
+#     test_print()
+
+# def test_print():
+#     print('---bms_test.py---')
+#     print(selectedTests)
+#     print('-----------------')
+# #########################################
 
 # Constants to be changed based on Launchpad Settings
 PORT = "COM3"

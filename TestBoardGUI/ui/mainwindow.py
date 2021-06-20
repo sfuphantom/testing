@@ -3,6 +3,8 @@ import os
 import json
 from datetime import date
 import pytest
+import tests.vcu_test as vcu_test
+import tests.bms_test as bms_test
 
 from PySide2.QtWidgets import (QApplication, QPushButton, QLineEdit,
                                QTabWidget, QTreeWidget, QComboBox,
@@ -15,6 +17,8 @@ from PySide2.QtGui import (QBrush, QColor)
 
 # Set-up/Connect mainwindow
 class MainWindow(QObject):
+    # Create a signal for sending selected tests to back-end
+    tests_signal = Signal(list)
 
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
@@ -123,11 +127,24 @@ class MainWindow(QObject):
         # Get selected device
         self.device = self.deviceComboBox.currentText()
 
+        # Renew signal and slot connection
+        try:
+            self.tests_signal.disconnect()
+        except RuntimeError:
+            pass
+
         # Define selected tree based on selected device
         if self.device == 'VCU':
+            # Previously selected tests
+            self.BMSTree.clearSelection()
+            # Define tree
             self.selectedTree = self.VCUTree
+            # Connect tests_signal to vcu_test for sending selected tests later
+            self.tests_signal.connect(vcu_test.get_tests)
         elif self.device == 'BMS':
+            self.VCUTree.clearSelection()
             self.selectedTree = self.BMSTree
+            self.tests_signal.connect(bms_test.get_tests)
 
         # Set tree behaviors
         self.selectedTree.setSelectionMode(QAbstractItemView.MultiSelection)
@@ -185,17 +202,15 @@ class MainWindow(QObject):
     def _parse_tests(self, item):
         test_item = dict()
         test_item['Test Name'] = item.parent().text(0)
-       # test_item['Test Case'] = item.text(0)
+        test_item['Test Case'] = item.text(0)
         test_item['Repeat'] = item.text(1)
         # Edit the following lines to match enum attributes
         test_item['enum'] = item.text(3)
-        #test_item['a'] = item.text(4)
-        #test_item['b'] = item.text(5)
         return test_item
 
     # Retrieve check-in information
     def _get_checkin_info(self):
-        self.checkin_info['device'] = self.deviceCombobox.currentText()
+        self.checkin_info['device'] = self.deviceComboBox.currentText()
         self.checkin_info['board_name'] = self.boardName.text()
         self.checkin_info['board_version'] = self.boardVersion.text()
         self.checkin_info['testID'] = self.testID.text()
@@ -225,20 +240,24 @@ class MainWindow(QObject):
         self.status.showMessage('Tests in progress...')
         # Get selected tests
         self.selectedTests = self._get_selected_tests()
-        print(self.selectedTests)
         # Disable some features while running tests
         self._switch_mode(False)
-        '''
-        Excecute run code here
+        # Send selected tests to bms_test or vcu_test
+        self.tests_signal.emit(self.selectedTests)
 
-        '''
+        # Execute run code here
+        # ##########################################
+
         # pytest.main()
-        pytest.main(["-k \"vcu" , self.selectedTests])
+        # pytest.main(["-k \"vcu" , self.selectedTests])
 
-        # Temporary assigning results to selected test cases
-        # sort results by their Test Name for heirachical structure
+        # ##########################################
+
+        # Temporary assigning selected test cases as results
+        # To be replaced with actual results from back end
+        # Sort results by their Test Name for heirachical structure
         results = sorted(self.selectedTests,key = lambda i: i['Test Name'])
-        # self.resultsWriter.writeResults(results)
+        self.resultsWriter.writeResults(results)
         # Switch to result page
         self.stackedWidget.setCurrentIndex(1)
 
@@ -302,7 +321,6 @@ class ResultsWriter(QObject):
         parents = ['']
         for item in data:
             root = item['Test Name']
-            print(parents[-1])
             # check if a top level has already been added
             if root != parents[-1]:
                 parents.pop()
@@ -313,11 +331,18 @@ class ResultsWriter(QObject):
             parent.setFlags(parent.flags() & ~Qt.ItemIsSelectable)
             self.resultsTree.expandItem(parent)
             column_0 = item['Test Case']
+
+            # Edit the following part to propoerly display status
+            # ##########################################
+
             child = QTreeWidgetItem([column_0, '',''])
             # column_2 = item['Message']
             # child = QTreeWidgetItem([column_0, '', column_2])
             parent.addChild(child)
             # self._fill_status(item['Status'], child)
+
+            # ##########################################
+            
             child.setFlags(child.flags() & ~Qt.ItemIsSelectable)
 
 

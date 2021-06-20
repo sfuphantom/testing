@@ -16,6 +16,22 @@ import copy
 import serial
 import time
 
+from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
+
+# Getting selected tests from MainWindow
+@Slot(list)
+def get_tests(tests: list):
+    global selectedTests
+    selectedTests = tests
+# # Uncomment the following lines to test
+#     test_print()
+
+# def test_print():
+#     print('---vcu_test.py---')
+#     print(selectedTests)
+#     print('-----------------')
+# #########################################
+
 # example list of what might be received from front end
 selectedTest_example = [{'Test Name': 'APPS', 'Test Case': 'Test 2: 10% Difference', 'Repeat': None, 'Test Index': None, 'Enum': 2}, {'Test Name': 'BSE', 'Test Case': 'Test 3: Open/Short Circuit', 'Repeat': None, 'Test Index': None, 'Enum': 1}]
 
@@ -59,5 +75,4 @@ def build_json():
 def test_vcu_json():
     assert build_json() == True
 
-test_vcu_json()
-
+# test_vcu_json()
