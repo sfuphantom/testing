@@ -149,7 +149,6 @@ void apps_timer(TestTimer_t test_timer, int ID){
            if(prev_voltage > APPS1_MAX){
 
 
-
                stopTimer(APPS);
 
                prev_voltage = APPS1_MAX;
@@ -161,18 +160,13 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
             break;
 
-        /*case SHORT_TIMER:
+        case SHORT_TIMER:
 
             #ifdef TIMER_DEBUG
 
             UARTprintf("Apps short timer expired\n\n\r");
 
             #endif
-
-            //stop timer here...
-
-//            prev = get_apps_voltage(readRegister(0, 0));
-
 
             prev = APPS1_MIN + ( 20 * ID);
 
@@ -188,9 +182,9 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
             setTimerID(APPS, ++ID);
 
-            break;*/
+            break;
 
-        /*case OPEN_TIMER:
+        case OPEN_TIMER:
 
             #ifdef TIMER_DEBUG
 
@@ -222,7 +216,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
             setTimerID(APPS, ++ID);
 
 
-            break;*/
+            break;
 
         /*case BSE_ACTIVATED_TIMER:
 

@@ -29,17 +29,33 @@ unsigned int getInverterSignal(){
 
     Inverter_signal = getInverterReading();
 
-    //do some calculations...
+    //TODO: do some calculations...
 
-    return Inverter_signal;
+    #ifdef VCU_DEBUG
+
+    //TODO: print Inverter reading through UART
+
+    #endif
+
+
+    return 1;
 
 }
 
 //Receives 0-5V reading
-//Returns corresponding bus voltage
+//Returns corresponding AC output
 unsigned int getInverterOutput(){
+
+
+
+    #ifdef VCU_DEBUG
+
+    //TODO: print Inverter output through UART
+
+    #endif
 
 //    getInverterSignal();
 
+    return 0;
 }
 

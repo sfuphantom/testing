@@ -12,7 +12,9 @@
 
 
 #define TIMER_DEBUG //print expirations of all active timers
-#define VALID_DEBUG //print received signals from Device Under Test; print expected and actual results
+#define BMS_DEBUG //print received signals from Device Under Test; print expected and actual results
+#define VCU_DEBUG //print received signals from Device Under Test; print expected and actual results
+
 
 //Common defines
 #define TIMER_DEBUG
