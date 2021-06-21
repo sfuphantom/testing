@@ -12,6 +12,7 @@
 
 //Common defines
 #define TIMER_DEBUG
+//#define HV_VS_DEBUG
 #define SWEEP_STEP 25
 #define SWEEP_PERIOD 500
 
@@ -26,10 +27,12 @@ typedef enum Peripheral
     //systems with timers
     APPS = 0,
     BSE,
+    GPIO,
 
     TSAL,
     IMD,
     LV,
+    HV_VS,
     VCU_COMMUNICATIONS,
     BMS_SLAVES,
     THERMISTOR_EXPANSION,
