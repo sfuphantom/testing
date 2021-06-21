@@ -7,7 +7,8 @@ import serial.tools.list_ports
 from PySide2.QtWidgets import (QApplication, QPushButton, QLineEdit,
                                QTabWidget, QTreeWidget, QComboBox,
                                QStackedWidget, QCommandLinkButton,
-                               QStatusBar, QTreeWidgetItem, QAbstractItemView)
+                               QStatusBar, QTreeWidgetItem, QAbstractItemView,
+                               QFileDialog)
 from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
 from PySide2.QtUiTools import (QUiLoader)
 from PySide2.QtGui import (QBrush, QColor)
@@ -208,7 +209,7 @@ class MainWindow(QObject):
 
     # Retrieve check-in information
     def _get_checkin_info(self):
-        self.checkin_info['device'] = self.deviceCombobox.currentText()
+        self.checkin_info['device'] = self.deviceComboBox.currentText()
         self.checkin_info['board_name'] = self.boardName.text()
         self.checkin_info['board_version'] = self.boardVersion.text()
         self.checkin_info['testID'] = self.testID.text()
@@ -237,6 +238,9 @@ class MainWindow(QObject):
         for element in comlist:
             port_num.append(element.device)
         return port_num
+
+    def open_directory(self):
+        self.dirName = QFileDialog.getExistingDirectory()
 
     # Run tests
     @Slot()
@@ -282,6 +286,7 @@ class MainWindow(QObject):
     @Slot()
     def save(self):
         self._get_checkin_info()
+        self.open_directory()
         print('save button is clicked')
 
     @Slot()
