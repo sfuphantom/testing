@@ -32,9 +32,6 @@ source venv/bin/activate
 pip install -r TestBoardGUI/requirements.txt
 ```
 
-```
-pip install pyserial
-```
 
 Steps 1) and 3) are only needed to be done once.
 
@@ -50,4 +47,17 @@ When finished, to deactivate the environment, simply run:
 ```
 deactivate
 ```
+
+### VSCode set-up for debugging (Optional)
+
+Replace "program" in launch.json with the following line.
+```
+"program": "${workspaceFolder}/TestBoardGUI/application.py",
+```
+
+To debug in virtual environment, add "python.pythonPath" to settings.json.
+```
+"python.pythonPath": "env\\Scripts\\python.exe",
+```
+
 
