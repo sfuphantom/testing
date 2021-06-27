@@ -1,0 +1,229 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+SHELL = cmd.exe
+
+# Add inputs and outputs from these tool invocations to the build variables 
+CMD_SRCS += \
+../HAL_drivers/source/sys_link.cmd 
+
+ASM_SRCS += \
+../HAL_drivers/source/dabort.asm \
+../HAL_drivers/source/sys_core.asm \
+../HAL_drivers/source/sys_intvecs.asm \
+../HAL_drivers/source/sys_mpu.asm \
+../HAL_drivers/source/sys_pmu.asm 
+
+C_SRCS += \
+../HAL_drivers/source/adc.c \
+../HAL_drivers/source/can.c \
+../HAL_drivers/source/crc.c \
+../HAL_drivers/source/dcc.c \
+../HAL_drivers/source/ecap.c \
+../HAL_drivers/source/eqep.c \
+../HAL_drivers/source/errata_SSWF021_45.c \
+../HAL_drivers/source/esm.c \
+../HAL_drivers/source/etpwm.c \
+../HAL_drivers/source/gio.c \
+../HAL_drivers/source/het.c \
+../HAL_drivers/source/i2c.c \
+../HAL_drivers/source/lin.c \
+../HAL_drivers/source/mibspi.c \
+../HAL_drivers/source/notification.c \
+../HAL_drivers/source/pinmux.c \
+../HAL_drivers/source/rti.c \
+../HAL_drivers/source/sci.c \
+../HAL_drivers/source/spi.c \
+../HAL_drivers/source/sys_dma.c \
+../HAL_drivers/source/sys_main.c \
+../HAL_drivers/source/sys_pcr.c \
+../HAL_drivers/source/sys_phantom.c \
+../HAL_drivers/source/sys_pmm.c \
+../HAL_drivers/source/sys_selftest.c \
+../HAL_drivers/source/sys_startup.c \
+../HAL_drivers/source/sys_vim.c \
+../HAL_drivers/source/system.c 
+
+C_DEPS += \
+./HAL_drivers/source/adc.d \
+./HAL_drivers/source/can.d \
+./HAL_drivers/source/crc.d \
+./HAL_drivers/source/dcc.d \
+./HAL_drivers/source/ecap.d \
+./HAL_drivers/source/eqep.d \
+./HAL_drivers/source/errata_SSWF021_45.d \
+./HAL_drivers/source/esm.d \
+./HAL_drivers/source/etpwm.d \
+./HAL_drivers/source/gio.d \
+./HAL_drivers/source/het.d \
+./HAL_drivers/source/i2c.d \
+./HAL_drivers/source/lin.d \
+./HAL_drivers/source/mibspi.d \
+./HAL_drivers/source/notification.d \
+./HAL_drivers/source/pinmux.d \
+./HAL_drivers/source/rti.d \
+./HAL_drivers/source/sci.d \
+./HAL_drivers/source/spi.d \
+./HAL_drivers/source/sys_dma.d \
+./HAL_drivers/source/sys_main.d \
+./HAL_drivers/source/sys_pcr.d \
+./HAL_drivers/source/sys_phantom.d \
+./HAL_drivers/source/sys_pmm.d \
+./HAL_drivers/source/sys_selftest.d \
+./HAL_drivers/source/sys_startup.d \
+./HAL_drivers/source/sys_vim.d \
+./HAL_drivers/source/system.d 
+
+OBJS += \
+./HAL_drivers/source/adc.obj \
+./HAL_drivers/source/can.obj \
+./HAL_drivers/source/crc.obj \
+./HAL_drivers/source/dabort.obj \
+./HAL_drivers/source/dcc.obj \
+./HAL_drivers/source/ecap.obj \
+./HAL_drivers/source/eqep.obj \
+./HAL_drivers/source/errata_SSWF021_45.obj \
+./HAL_drivers/source/esm.obj \
+./HAL_drivers/source/etpwm.obj \
+./HAL_drivers/source/gio.obj \
+./HAL_drivers/source/het.obj \
+./HAL_drivers/source/i2c.obj \
+./HAL_drivers/source/lin.obj \
+./HAL_drivers/source/mibspi.obj \
+./HAL_drivers/source/notification.obj \
+./HAL_drivers/source/pinmux.obj \
+./HAL_drivers/source/rti.obj \
+./HAL_drivers/source/sci.obj \
+./HAL_drivers/source/spi.obj \
+./HAL_drivers/source/sys_core.obj \
+./HAL_drivers/source/sys_dma.obj \
+./HAL_drivers/source/sys_intvecs.obj \
+./HAL_drivers/source/sys_main.obj \
+./HAL_drivers/source/sys_mpu.obj \
+./HAL_drivers/source/sys_pcr.obj \
+./HAL_drivers/source/sys_phantom.obj \
+./HAL_drivers/source/sys_pmm.obj \
+./HAL_drivers/source/sys_pmu.obj \
+./HAL_drivers/source/sys_selftest.obj \
+./HAL_drivers/source/sys_startup.obj \
+./HAL_drivers/source/sys_vim.obj \
+./HAL_drivers/source/system.obj 
+
+ASM_DEPS += \
+./HAL_drivers/source/dabort.d \
+./HAL_drivers/source/sys_core.d \
+./HAL_drivers/source/sys_intvecs.d \
+./HAL_drivers/source/sys_mpu.d \
+./HAL_drivers/source/sys_pmu.d 
+
+OBJS__QUOTED += \
+"HAL_drivers\source\adc.obj" \
+"HAL_drivers\source\can.obj" \
+"HAL_drivers\source\crc.obj" \
+"HAL_drivers\source\dabort.obj" \
+"HAL_drivers\source\dcc.obj" \
+"HAL_drivers\source\ecap.obj" \
+"HAL_drivers\source\eqep.obj" \
+"HAL_drivers\source\errata_SSWF021_45.obj" \
+"HAL_drivers\source\esm.obj" \
+"HAL_drivers\source\etpwm.obj" \
+"HAL_drivers\source\gio.obj" \
+"HAL_drivers\source\het.obj" \
+"HAL_drivers\source\i2c.obj" \
+"HAL_drivers\source\lin.obj" \
+"HAL_drivers\source\mibspi.obj" \
+"HAL_drivers\source\notification.obj" \
+"HAL_drivers\source\pinmux.obj" \
+"HAL_drivers\source\rti.obj" \
+"HAL_drivers\source\sci.obj" \
+"HAL_drivers\source\spi.obj" \
+"HAL_drivers\source\sys_core.obj" \
+"HAL_drivers\source\sys_dma.obj" \
+"HAL_drivers\source\sys_intvecs.obj" \
+"HAL_drivers\source\sys_main.obj" \
+"HAL_drivers\source\sys_mpu.obj" \
+"HAL_drivers\source\sys_pcr.obj" \
+"HAL_drivers\source\sys_phantom.obj" \
+"HAL_drivers\source\sys_pmm.obj" \
+"HAL_drivers\source\sys_pmu.obj" \
+"HAL_drivers\source\sys_selftest.obj" \
+"HAL_drivers\source\sys_startup.obj" \
+"HAL_drivers\source\sys_vim.obj" \
+"HAL_drivers\source\system.obj" 
+
+C_DEPS__QUOTED += \
+"HAL_drivers\source\adc.d" \
+"HAL_drivers\source\can.d" \
+"HAL_drivers\source\crc.d" \
+"HAL_drivers\source\dcc.d" \
+"HAL_drivers\source\ecap.d" \
+"HAL_drivers\source\eqep.d" \
+"HAL_drivers\source\errata_SSWF021_45.d" \
+"HAL_drivers\source\esm.d" \
+"HAL_drivers\source\etpwm.d" \
+"HAL_drivers\source\gio.d" \
+"HAL_drivers\source\het.d" \
+"HAL_drivers\source\i2c.d" \
+"HAL_drivers\source\lin.d" \
+"HAL_drivers\source\mibspi.d" \
+"HAL_drivers\source\notification.d" \
+"HAL_drivers\source\pinmux.d" \
+"HAL_drivers\source\rti.d" \
+"HAL_drivers\source\sci.d" \
+"HAL_drivers\source\spi.d" \
+"HAL_drivers\source\sys_dma.d" \
+"HAL_drivers\source\sys_main.d" \
+"HAL_drivers\source\sys_pcr.d" \
+"HAL_drivers\source\sys_phantom.d" \
+"HAL_drivers\source\sys_pmm.d" \
+"HAL_drivers\source\sys_selftest.d" \
+"HAL_drivers\source\sys_startup.d" \
+"HAL_drivers\source\sys_vim.d" \
+"HAL_drivers\source\system.d" 
+
+ASM_DEPS__QUOTED += \
+"HAL_drivers\source\dabort.d" \
+"HAL_drivers\source\sys_core.d" \
+"HAL_drivers\source\sys_intvecs.d" \
+"HAL_drivers\source\sys_mpu.d" \
+"HAL_drivers\source\sys_pmu.d" 
+
+C_SRCS__QUOTED += \
+"../HAL_drivers/source/adc.c" \
+"../HAL_drivers/source/can.c" \
+"../HAL_drivers/source/crc.c" \
+"../HAL_drivers/source/dcc.c" \
+"../HAL_drivers/source/ecap.c" \
+"../HAL_drivers/source/eqep.c" \
+"../HAL_drivers/source/errata_SSWF021_45.c" \
+"../HAL_drivers/source/esm.c" \
+"../HAL_drivers/source/etpwm.c" \
+"../HAL_drivers/source/gio.c" \
+"../HAL_drivers/source/het.c" \
+"../HAL_drivers/source/i2c.c" \
+"../HAL_drivers/source/lin.c" \
+"../HAL_drivers/source/mibspi.c" \
+"../HAL_drivers/source/notification.c" \
+"../HAL_drivers/source/pinmux.c" \
+"../HAL_drivers/source/rti.c" \
+"../HAL_drivers/source/sci.c" \
+"../HAL_drivers/source/spi.c" \
+"../HAL_drivers/source/sys_dma.c" \
+"../HAL_drivers/source/sys_main.c" \
+"../HAL_drivers/source/sys_pcr.c" \
+"../HAL_drivers/source/sys_phantom.c" \
+"../HAL_drivers/source/sys_pmm.c" \
+"../HAL_drivers/source/sys_selftest.c" \
+"../HAL_drivers/source/sys_startup.c" \
+"../HAL_drivers/source/sys_vim.c" \
+"../HAL_drivers/source/system.c" 
+
+ASM_SRCS__QUOTED += \
+"../HAL_drivers/source/dabort.asm" \
+"../HAL_drivers/source/sys_core.asm" \
+"../HAL_drivers/source/sys_intvecs.asm" \
+"../HAL_drivers/source/sys_mpu.asm" \
+"../HAL_drivers/source/sys_pmu.asm" 
+
+
