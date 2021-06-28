@@ -5,11 +5,12 @@ from datetime import date
 import pytest
 import tests.vcu_test as vcu_test
 import tests.bms_test as bms_test
+import serial.tools.list_ports
 
 from PySide2.QtWidgets import (QApplication, QPushButton, QLineEdit,
                                QTabWidget, QTreeWidget, QComboBox,
                                QStackedWidget, QCommandLinkButton,
-                               QStatusBar, QTreeWidgetItem, QAbstractItemView)
+                               QStatusBar, QTreeWidgetItem, QAbstractItemView, QFileDialog)
 from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
 from PySide2.QtUiTools import (QUiLoader)
 from PySide2.QtGui import (QBrush, QColor)
@@ -51,6 +52,16 @@ class MainWindow(QObject):
             QComboBox, 'deviceSelection')
         self.deviceComboBox.currentTextChanged.connect(
             lambda: self._device_selected(self.deviceComboBox.currentIndex()))
+        # self.deviceCombobox.currentTextChanged.connect(
+        #     lambda: self._device_selected(self.deviceCombobox.currentIndex()))
+        self.portNumComboBox = self.mainwindow.findChild(
+            QComboBox, 'portNumber')
+
+        self.portNumComboBox.setPlaceholderText('Select')
+        self.portNumComboBox.addItems(self._port_num())
+
+        self.portNumComboBox.currentTextChanged.connect( #creates a signal
+            lambda: self.get_port_num(self.portNumComboBox.currentText()))
 
         # LineEdits
         self.boardName = self.mainwindow.findChild(
@@ -103,6 +114,9 @@ class MainWindow(QObject):
 
         # Show ui when application runs
         self.mainwindow.show()
+
+    def get_port_num(self, num):
+        self.portnum = num
 
     # Load ui file
     def _load_ui(self, file):
@@ -232,6 +246,17 @@ class MainWindow(QObject):
         self.boardVersion.setEnabled(mode)
         self.teamMember.setEnabled(mode)
 
+    # Retrieve list of COM ports
+    def _port_num (self):
+        comlist = serial.tools.list_ports.comports()
+        port_num = []
+        for element in comlist:
+            port_num.append(element.device)
+        return port_num
+
+    def open_directory(self):
+        self.dirName = QFileDialog.getExistingDirectory()
+
     # Run tests
     @Slot()
     def run(self):
@@ -240,6 +265,7 @@ class MainWindow(QObject):
         self.status.showMessage('Tests in progress...')
         # Get selected tests
         self.selectedTests = self._get_selected_tests()
+        print(self.selectedTests)
         # Disable some features while running tests
         self._switch_mode(False)
         # Send selected tests to bms_test or vcu_test
@@ -283,6 +309,7 @@ class MainWindow(QObject):
     @Slot()
     def save(self):
         self._get_checkin_info()
+        self.open_directory()
         print('save button is clicked')
 
     @Slot()
@@ -321,6 +348,7 @@ class ResultsWriter(QObject):
         parents = ['']
         for item in data:
             root = item['Test Name']
+            print(parents[-1])
             # check if a top level has already been added
             if root != parents[-1]:
                 parents.pop()

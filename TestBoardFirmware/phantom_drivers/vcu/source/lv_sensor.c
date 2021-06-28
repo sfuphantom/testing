@@ -17,7 +17,6 @@
 //void lv_pow_powerdraw();
 //void lv_pow_current_short();
 //void lv_pow_current_sustained();
-
 //void hv_cs_process(uint8_t state)
 //{
 //    switch(state)
@@ -32,10 +31,8 @@
 //            lv_pow_current_sust();  break;
 //            default;    break;
 //    }
-//
 //}
 //
 //void lv_pow_std_op(){
 //    uint16_t mode;
-//
 //}

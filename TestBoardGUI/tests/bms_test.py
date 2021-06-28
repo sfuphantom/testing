@@ -27,7 +27,7 @@ def get_tests(tests: list):
 
 # Constants to be changed based on Launchpad Settings
 PORT = "COM3"
-BAUDRATE = 115200
+BAUDRATE = 9600
 TIMEOUT = 0.1
 
 #Example of Tests to be chosen by UI
@@ -38,7 +38,7 @@ normal_bms = {
     "Mode": "BMS",
 	"BMS/VCU CAN": 0,
 	"Thermistor Expansion": 0,
-	"BMS Slave Voltages & Temperatures": 0,
+	"BMS_SLAVES": 0,
 	"repeat": 1
 }
 
@@ -73,7 +73,7 @@ def send_and_receive(selectedJson, serialPort):
 def main():
     
     # Initalize Serial
-    serialPort = serial.Serial(port = PORT, baudrate = BAUDRATE, timeout = TIMEOUT)
+    serialPort = serial.Serial(port = PORT, baudrate = BAUDRATE, timeout = TIMEOUT, stopbits = serial.STOPBITS_TWO)
 
     # Prepare Test Infomation
     selectedJson = build_json()

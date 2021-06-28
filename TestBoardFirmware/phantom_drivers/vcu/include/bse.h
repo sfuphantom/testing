@@ -12,6 +12,8 @@
 
 #include "Phantom_sci.h"
 
+#include "hwConfig.h"
+#include "MCP48FV_DAC_SPI.h"
 
 #include "timer.h"
 

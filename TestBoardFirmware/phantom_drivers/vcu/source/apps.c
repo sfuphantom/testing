@@ -6,9 +6,6 @@
  */
 
 #include "apps.h"
-#include "hwConfig.h"
-#include "MCP48FV_DAC_SPI.h"
-#include "bse.h"
 
 #define APPS1_MAX 440
 #define APPS1_MIN 150
@@ -93,7 +90,7 @@ static void apps_short_circuit()
 
     setTimerID(APPS, 0);
 
-    startTimer(APPS, SHORT_TIMER, SHORT_PERIOD);
+    //startTimer(APPS, SHORT_TIMER, SHORT_PERIOD);
     return;
 }
 
@@ -103,7 +100,7 @@ static void apps_open_circuit()
 
     setTimerID(APPS, 0);
 
-    startTimer(APPS, OPEN_TIMER, OPEN_PERIOD);
+    //startTimer(APPS, OPEN_TIMER, OPEN_PERIOD);
     return;
 }
 
@@ -114,7 +111,7 @@ static void apps_bse_activated()
     // BSE activated
     bse_process(NORMAL_BSE_ON);
 
-    startTimer(APPS, BSE_ACTIVATED_TIMER, BSE_ACTIVATED_PERIOD);
+    //startTimer(APPS, BSE_ACTIVATED_TIMER, BSE_ACTIVATED_PERIOD);
     return;
 }
 
@@ -164,7 +161,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
             break;
 
-        case SHORT_TIMER:
+        /*case SHORT_TIMER:
 
             #ifdef TIMER_DEBUG
 
@@ -191,9 +188,9 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
             setTimerID(APPS, ++ID);
 
-            break;
+            break;*/
 
-        case OPEN_TIMER:
+        /*case OPEN_TIMER:
 
             #ifdef TIMER_DEBUG
 
@@ -225,9 +222,9 @@ void apps_timer(TestTimer_t test_timer, int ID){
             setTimerID(APPS, ++ID);
 
 
-            break;
+            break;*/
 
-        case BSE_ACTIVATED_TIMER:
+        /*case BSE_ACTIVATED_TIMER:
 
             //check if vcu can clear faults (MINOR)
 
@@ -280,7 +277,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
 
 
-            break;
+            break;*/
 
         default:
 

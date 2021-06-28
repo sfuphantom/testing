@@ -7,7 +7,8 @@
 #include "main.h"
 #include "Phantom_sci.h"
 #include "hwConfig.h"
-
+#include "gio.h"
+#include "het.h"
 #include "common.h"
 
 //Drivers
@@ -15,6 +16,11 @@
 #include "apps.h"
 #include "MCP48FV_DAC_SPI.h"
 #include "timer.h"
+#include "hv_voltage_sensor.h"
+
+#include "gpio_tests.h"
+
+#include "bms_slaves.h"
 
 #define TIMER_PERIOD 1000
 
@@ -35,16 +41,27 @@ static void initializeTimers();
 
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
-static bool tests_received;
 
 int main(void){
 
     //initialization
+    _enable_IRQ();
 
+
+    /* Slave Data */
+    adcSlaveDataSetup();
+
+
+    gioInit();
+    gioSetDirection(hetPORT1, 0xFFFFFFFF);
+    
     MCP48FV_Init();
 
    // sciInit();
     timerInit();
+
+    gpio_init();
+
 
     Result_t res = SUCCESS;
     //res = MCP48FV_Init(); 
@@ -55,23 +72,27 @@ int main(void){
 
     UARTprintf(" Ready to initialize GUI \n\r");
     sciReceive(PC_UART, 3, (unsigned char *)&testMode);
+    if (testMode == 'BMS'){
+        testBoardState.testMode = BMS_MODE;
+    } else {
+        testBoardState.testMode = VCU_MODE;
+    }
     UARTprintf("Mode detected: ");
     UARTSend(PC_UART, testMode);
-
-    sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer); 
+    if (testMode == "BMS"){
+        sciReceive(PC_UART, 141, (unsigned char *)&UARTBuffer); // change 100 to actual value
+    
+    } 
+    else if (testMode == "VCU") {
+        sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer);
+    } 
 
     //* test code *//
-    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer)); 
+    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
-    tests_received = false;
-
-    while(true){
-
-        tests_received = false;
-
-        //poll test cases from GUI
-//        while(!tests_received);
-
+    while(1)
+    {
+        //startTimer(TEST_COMPLETE_TIMER);
         //parse JSON and set states
 
         //determine the expected state of VCU/BMS
@@ -96,7 +117,18 @@ int main(void){
 
             case VCU_MODE:
 
+                //reset VCU state
+                gioSetBit(RESET_PORT, RESET_PIN, 1);
+
+                delayms(500);
+
+                gioSetBit(RESET_PORT, RESET_PIN, 0);
+
+                //put VCU into state running
+                gpio_process(RTD_NORMAL_PROCEDURE);
+
                 vcu_mode_process(&testBoardState);
+
                 break;
 
         }//switch case
@@ -111,6 +143,7 @@ int main(void){
         delayms(5000);
 
     }//superloop
+
 
 }//main
 
@@ -131,6 +164,7 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     return SUCCESS;
 }
 
+
 static json_t * JSONHandler(unsigned char *jsonstring){
     
     json_t const* json = json_create( jsonstring, mem, sizeof mem / sizeof *mem );
@@ -143,15 +177,13 @@ static json_t * JSONHandler(unsigned char *jsonstring){
 
 static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
-    //TestBoard Mode
-    stateptr->testMode = VCU_MODE;
-
-
     //VCU Tests
     json_t * appsProperty = json_getProperty(json, "APPS"); 
     stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
     json_t * bseProperty = json_getProperty(json, "BSE"); 
     stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
+    json_t * hv_vsProperty = json_getProperty(json, "HV_VS");
+    stateptr->peripheralStateArray[HV_VS] = (uint8_t) json_getInteger(hv_vsProperty);
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
@@ -163,11 +195,12 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
 
     //BMS Tests
-    stateptr->peripheralStateArray[BMS_SLAVES] = 0;
+    json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
+    stateptr->peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
 
-    stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
+    //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 
-    stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+    //stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
 
 }
 
@@ -237,6 +270,17 @@ void initializeTimers(){
                 apps_timer, // callback function
 
                 0 // ID
+             );
+
+    xTimerSet(
+
+                 "HV_VS", // name
+
+                 HV_VS, // peripheral
+
+                 hv_vs_timer, // callback function
+
+                 0 // ID
              );
 
 
