@@ -248,8 +248,8 @@ class MainWindow(QObject):
         # Execute run code here
         # ##########################################
 
-        # pytest.main()
-        # pytest.main(["-k \"vcu" , self.selectedTests])
+        #pytest.main()
+        pytest.main(["-k " + self.device])
 
         # ##########################################
 
