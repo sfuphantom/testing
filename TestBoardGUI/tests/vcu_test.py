@@ -53,8 +53,8 @@ normal_vcu = {
 def build_json():
     selectedJson = copy.deepcopy(normal_vcu)
     counter = 0
-    for x in selectedTest_example:
-        selectedJson.update({selectedTest_example[counter].get('Test Name'): selectedTest_example[counter].get('Enum')})
+    for x in selectedTests:
+        selectedJson.update({selectedTests[counter].get('Test Name'): selectedTests[counter].get('Enum')})
         counter += 1
         
     jsonStr = json.dumps(selectedJson, indent="\t")
