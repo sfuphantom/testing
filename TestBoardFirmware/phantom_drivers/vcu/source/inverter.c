@@ -50,7 +50,7 @@ static float getInverterSignal(){
 
     //TODO: print Inverter reading through UART
     //Printing upto 2nd decimal places of the inverter input voltage value
-    uint8 Inverter_input = Inverter_analog*100;
+    unsigned int Inverter_input = Inverter_analog*100;
     int i;
     for (i=2;i>=0;i--){
         uint8 bit =(int) (Inverter_input % 10);
