@@ -16,6 +16,8 @@
 
 
 unsigned int getInverterReadings();
+float getInverterSignal();
+unsigned int getInverterOutput();
 
 
 
