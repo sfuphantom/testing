@@ -12,6 +12,12 @@ static adcData_t* Inverter_data_ptr = &Inverter_data;
 
 static unsigned int Inverter_signal = 0;
 
+static unsigned float Inverter_analog = 0;
+
+#define ADref_HI = 5.25;
+#define ADref_LOW = 0;
+#define max_res = 1023;
+
 static unsigned int getInverterReading(){
 
     adcStartConversion(INVERTER_PORT, INVERTER_PIN);
@@ -25,12 +31,20 @@ static unsigned int getInverterReading(){
 
 //Receives raw ADC output from VCU throttle pin
 //Returns 0-5V reading
-unsigned int getInverterSignal(){
+unsigned float getInverterSignal(){
 
     Inverter_signal = getInverterReading();
 
     //TODO: do some calculations...
-
+    if (Inverter_signal >= max_res){
+        Inverter_analog = ADref_HI;
+    }
+    else if (Inverter_signal <= 0){
+        Inverter_analog = ADref_LOW;
+    }
+    else {
+        Inverter_analog = Inverter_signal/max_res*(ADref_HI-ADref_LOW)+ADref_LOW;
+    }
     #ifdef VCU_DEBUG
 
     //TODO: print Inverter reading through UART
@@ -38,7 +52,7 @@ unsigned int getInverterSignal(){
     #endif
 
 
-    return 1;
+    return Inverter_analog;
 
 }
 
