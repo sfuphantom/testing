@@ -36,10 +36,10 @@ static float getInverterSignal(){
     Inverter_signal = getInverterReading();
 
     //TODO: do some calculations...
-    if (Inverter_signal >= max_res){
+    if (Inverter_signal == max_res){
         Inverter_analog = ADref_HI;
     }
-    else if (Inverter_signal <= ADref_LOW){
+    else if (Inverter_signal == ADref_LOW){
         Inverter_analog = ADref_LOW;
     }
     else {
