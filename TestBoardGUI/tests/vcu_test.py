@@ -24,7 +24,7 @@ def get_tests(tests: list):
     global selectedTests
     selectedTests = tests
 # # Uncomment the following lines to test
-#     test_print()
+    #test_print()
 
 # def test_print():
 #     print('---vcu_test.py---')
@@ -53,7 +53,9 @@ normal_vcu = {
 def build_json():
     selectedJson = copy.deepcopy(normal_vcu)
     counter = 0
+    print()
     for x in selectedTests:
+        # print(selectedTests[counter])
         selectedJson.update({selectedTests[counter].get('Test Name'): selectedTests[counter].get('Enum')})
         counter += 1
         
@@ -61,7 +63,8 @@ def build_json():
     # print("The length of the string is: " + str(len(jsonStr)))
     # print(jsonStr)
 
-    launchpad= serial.Serial(port = 'COM8', baudrate = 9600, stopbits = serial.STOPBITS_TWO) # fix port ID
+    # add comport selection here
+    launchpad= serial.Serial(port = 'COM8', baudrate = 9600, stopbits = serial.STOPBITS_TWO) # fix port ID - use user selection instead of COM8
     launchpad.write("VCU")
     time.sleep(8)
     launchpad.write(jsonStr)

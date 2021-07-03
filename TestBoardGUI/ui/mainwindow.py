@@ -20,6 +20,7 @@ from PySide2.QtGui import (QBrush, QColor)
 class MainWindow(QObject):
     # Create a signal for sending selected tests to back-end
     tests_signal = Signal(list)
+    coms_signal = Signal(list)
 
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
