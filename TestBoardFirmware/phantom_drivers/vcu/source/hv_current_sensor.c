@@ -91,7 +91,7 @@ static void offline_hv_ct()
 //Test 4
 static void proportional_apps()
 {
-    normal_apps_on();
+    //normal_apps_on();
     //send_hvct_voltage(middle of range);
     return;
 }
@@ -99,7 +99,7 @@ static void proportional_apps()
 //Test 5
 static void low_apps()
 {
-    normal_apps_on();
+    //normal_apps_on();
     //send_hvct_voltage(middle of range*1.2);
     return;
 }
@@ -107,7 +107,7 @@ static void low_apps()
 //Test 6
 static void high_apps()
 {
-    normal_apps_on();
+    //normal_apps_on();
     //send_hvct_voltage(middle of range*0.8);
     return;
 }
