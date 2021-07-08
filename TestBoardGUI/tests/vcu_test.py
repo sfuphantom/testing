@@ -23,6 +23,13 @@ from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
 def get_tests(tests: list):
     global selectedTests
     selectedTests = tests
+
+# Getting selected COM port from MainWindow
+@Slot(str)
+def get_portnum(portnum: str):
+    global portNumber
+    portNumber = portnum
+    
 # # Uncomment the following lines to test
     #test_print()
 
@@ -63,8 +70,7 @@ def build_json():
     # print("The length of the string is: " + str(len(jsonStr)))
     # print(jsonStr)
 
-    # add comport selection here
-    launchpad= serial.Serial(port = 'COM8', baudrate = 9600, stopbits = serial.STOPBITS_TWO) # fix port ID - use user selection instead of COM8
+    launchpad= serial.Serial(port = portNumber, baudrate = 9600, stopbits = serial.STOPBITS_TWO)
     launchpad.write("VCU")
     time.sleep(8)
     launchpad.write(jsonStr)

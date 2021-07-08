@@ -16,6 +16,13 @@ from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
 def get_tests(tests: list):
     global selectedTests
     selectedTests = tests
+
+# Getting selected COM port from MainWindow
+@Slot(str)
+def get_portnum(portnum: str):
+    global portNumber
+    portNumber = portnum
+
 # # Uncomment the following lines to test
 #     test_print()
 

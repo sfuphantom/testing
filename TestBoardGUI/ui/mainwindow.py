@@ -20,7 +20,8 @@ from PySide2.QtGui import (QBrush, QColor)
 class MainWindow(QObject):
     # Create a signal for sending selected tests to back-end
     tests_signal = Signal(list)
-    coms_signal = Signal(list)
+    # Create a signal for sending selected COM port to back-end
+    coms_signal = Signal(str)
 
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
@@ -156,10 +157,13 @@ class MainWindow(QObject):
             self.selectedTree = self.VCUTree
             # Connect tests_signal to vcu_test for sending selected tests later
             self.tests_signal.connect(vcu_test.get_tests)
+            # Connect coms_signal to vcu_test for sending selected COM port
+            self.coms_signal.connect(vcu_test.get_portnum)
         elif self.device == 'BMS':
             self.VCUTree.clearSelection()
             self.selectedTree = self.BMSTree
             self.tests_signal.connect(bms_test.get_tests)
+            self.coms_signal.connect(bms_test.get_portnum)
 
         # Set tree behaviors
         self.selectedTree.setSelectionMode(QAbstractItemView.MultiSelection)
@@ -271,6 +275,8 @@ class MainWindow(QObject):
         self._switch_mode(False)
         # Send selected tests to bms_test or vcu_test
         self.tests_signal.emit(self.selectedTests)
+        # Send selected COM port to bms_test or vcu_test 
+        self.coms_signal.emit(self.portnum)
 
         # Execute run code here
         # ##########################################
