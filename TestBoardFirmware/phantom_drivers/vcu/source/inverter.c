@@ -61,6 +61,7 @@ static float getInverterSignal(){
             UARTprintf(",");
         }
         sciSend(PC_UART,1,&bit);
+        Inverter_input = Inverter_input/10;
     }
     UARTprintf("\n\r");
 
