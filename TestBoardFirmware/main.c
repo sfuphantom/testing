@@ -75,7 +75,7 @@ int main(void){
 
     initializeTimers();
 
-    
+
     UARTprintf(" Ready to initialize GUI \n\r");
     sciReceive(PC_UART, 3, (unsigned char *)&testMode);
     if (!strncmp(testMode, "BMS", 3 * sizeof(char))){
@@ -89,10 +89,10 @@ int main(void){
     //* test code *//
     setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
+
     while(true)
     {
         //parse JSON and set states
-
 
         startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
 

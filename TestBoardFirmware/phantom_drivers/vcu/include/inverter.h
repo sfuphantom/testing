@@ -17,12 +17,6 @@
 
 unsigned int getInverterReadings();
 float getInverterSignal();
-unsigned int getInverterOutput();
-
-
-
-
-
 
 
 #endif /* PHANTOM_DRIVERS_VCU_INCLUDE_INVERTER_H_ */

@@ -10,8 +10,8 @@ static adcData_t Inverter_data;
 
 static adcData_t* Inverter_data_ptr = &Inverter_data;
 
-static unsigned int Inverter_signal = 0;
-static float Inverter_analog = 0;
+static float Inverter_signal;
+static float Inverter_analog;
 
 #define ADref_HI 5.25
 #define ADref_LOW 0
@@ -31,37 +31,35 @@ static unsigned int getInverterReading(){
 
 //Receives raw ADC output from VCU throttle pin
 //Returns 0-5V reading
-static float getInverterSignal(){
+float getInverterSignal(){
 
     Inverter_signal = getInverterReading();
-
-    //TODO: do some calculations...
-    if (Inverter_signal == max_res){
-        Inverter_analog = ADref_HI;
-    }
-    else if (Inverter_signal == ADref_LOW){
-        Inverter_analog = ADref_LOW;
-    }
-    else {
-        Inverter_analog = Inverter_signal/max_res*(ADref_HI-ADref_LOW)+ADref_LOW;
-    }
+    Inverter_analog = Inverter_signal/max_res*(ADref_HI-ADref_LOW)+ADref_LOW;
 
     #ifdef VCU_DEBUG
 
     //TODO: print Inverter reading through UART
     //Printing upto 2nd decimal places of the inverter input voltage value
-    unsigned int Inverter_input = Inverter_analog*100;
-    int i;
+    UARTprintf("Throttle Input Voltage Value: \n\r");
+    unsigned int Inverter_input = (int) (Inverter_analog);
+    int i,j;
     for (i=2;i>=0;i--){
         uint8 bit =(int) (Inverter_input % 10);
-        if (bit == 0){
-            UARTprintf("0");
+        for (j=3;j>=0;j--){
+            uint8 t=(int) ((bit >> j) & 1);
+            if (t == 0){
+                UARTprintf("0");
+            }
+            sciSend(PC_UART,1,&t);
         }
-        if (i==0){
-            UARTprintf(",");
+        if(i==2){
+            UARTprintf(".");
+            Inverter_input = (int) (Inverter_analog*10);
         }
-        sciSend(PC_UART,1,&bit);
-        Inverter_input = Inverter_input/10;
+        if(i==1){
+            UARTprintf(" ");
+            Inverter_input = (int) (Inverter_analog*100);
+        }
     }
     UARTprintf("\n\r");
 
@@ -70,21 +68,3 @@ static float getInverterSignal(){
     return Inverter_analog;
 
 }
-
-//Receives 0-5V reading
-//Returns corresponding AC output
-unsigned int getInverterOutput(){
-
-
-
-    #ifdef VCU_DEBUG
-
-    //TODO: print Inverter output through UART
-
-    #endif
-
-//    getInverterSignal();
-
-    return 0;
-}
-
