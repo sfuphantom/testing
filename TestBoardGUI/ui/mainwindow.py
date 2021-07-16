@@ -19,9 +19,9 @@ from PySide2.QtGui import (QBrush, QColor)
 # Set-up/Connect mainwindow
 class MainWindow(QObject):
     # Create a signal for sending selected tests to back-end
-    tests_signal = Signal(list)
+    # tests_signal = Signal(list)
     # Create a signal for sending selected COM port to back-end
-    coms_signal = Signal(str)
+    # coms_signal = Signal(str)
 
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
@@ -144,10 +144,10 @@ class MainWindow(QObject):
         self.device = self.deviceComboBox.currentText()
 
         # Renew signal and slot connection
-        try:
-            self.tests_signal.disconnect()
-        except RuntimeError:
-            pass
+        # try:
+        #     # self.tests_signal.disconnect()
+        # except RuntimeError:
+        #     pass
 
         # Define selected tree based on selected device
         if self.device == 'VCU':
@@ -156,14 +156,14 @@ class MainWindow(QObject):
             # Define tree
             self.selectedTree = self.VCUTree
             # Connect tests_signal to vcu_test for sending selected tests later
-            self.tests_signal.connect(vcu_test.get_tests)
+            # self.tests_signal.connect(vcu_test.get_tests)
             # Connect coms_signal to vcu_test for sending selected COM port
-            self.coms_signal.connect(vcu_test.get_portnum)
+            # self.coms_signal.connect(vcu_test.get_portnum)
         elif self.device == 'BMS':
             self.VCUTree.clearSelection()
             self.selectedTree = self.BMSTree
-            self.tests_signal.connect(bms_test.get_tests)
-            self.coms_signal.connect(bms_test.get_portnum)
+            # self.tests_signal.connect(bms_test.get_tests)
+            # self.coms_signal.connect(bms_test.get_portnum)
 
         # Set tree behaviors
         self.selectedTree.setSelectionMode(QAbstractItemView.MultiSelection)
@@ -262,6 +262,13 @@ class MainWindow(QObject):
     def open_directory(self):
         self.dirName = QFileDialog.getExistingDirectory()
 
+    def get_results(self, info: list):
+        if self.device == 'VCU':
+            result = vcu_test.build_json(info)
+        elif self.device == 'BMS':
+            result = bms_test.main(info)
+        return result
+
     # Run tests
     @Slot()
     def run(self):
@@ -274,21 +281,23 @@ class MainWindow(QObject):
         # Disable some features while running tests
         self._switch_mode(False)
         # Send selected tests to bms_test or vcu_test
-        self.tests_signal.emit(self.selectedTests)
+        # self.tests_signal.emit(self.selectedTests)
         # Send selected COM port to bms_test or vcu_test 
-        self.coms_signal.emit(self.portnum)
+        # self.coms_signal.emit(self.portnum)
+        results = self.get_results([self.selectedTests, self.portnum])
 
         # Execute run code here
         # ##########################################
 
         #pytest.main()
-        pytest.main(["-k " + self.device])
+        # pytest.main(["-k " + self.device])
 
         # ##########################################
 
         # Temporary assigning selected test cases as results
         # To be replaced with actual results from back end
         # Sort results by their Test Name for heirachical structure
+        # WIP*
         results = sorted(self.selectedTests,key = lambda i: i['Test Name'])
         self.resultsWriter.writeResults(results)
         # Switch to result page

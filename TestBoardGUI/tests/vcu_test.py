@@ -18,26 +18,6 @@ import time
 
 from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
 
-# Getting selected tests from MainWindow
-@Slot(list)
-def get_tests(tests: list):
-    global selectedTests
-    selectedTests = tests
-
-# Getting selected COM port from MainWindow
-@Slot(str)
-def get_portnum(portnum: str):
-    global portNumber
-    portNumber = portnum
-    
-# # Uncomment the following lines to test
-    #test_print()
-
-# def test_print():
-#     print('---vcu_test.py---')
-#     print(selectedTests)
-#     print('-----------------')
-# #########################################
 
 # example list of what might be received from front end
 selectedTest_example = [{'Test Name': 'APPS', 'Test Case': 'Test 2: 10% Difference', 'Repeat': None, 'Test Index': None, 'Enum': 2}, {'Test Name': 'BSE', 'Test Case': 'Test 3: Open/Short Circuit', 'Repeat': None, 'Test Index': None, 'Enum': 1}]
@@ -57,7 +37,12 @@ normal_vcu = {
 
 }
 
-def build_json():
+# @Slot(list)
+def build_json(info):
+
+    selectedTests = info[0]
+    portNumber = info[1]
+
     selectedJson = copy.deepcopy(normal_vcu)
     counter = 0
     print()
@@ -71,7 +56,7 @@ def build_json():
     # print(jsonStr)
 
     launchpad= serial.Serial(port = portNumber, baudrate = 9600, stopbits = serial.STOPBITS_TWO)
-    launchpad.write("VCU")
+    launchpad.write(bytes("VCU", encoding='utf8'))
     time.sleep(8)
     launchpad.write(jsonStr)
     launchpad.read() # this will read 1 byte. To read multiple, use read_until()
