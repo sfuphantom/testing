@@ -90,7 +90,7 @@ static void apps_short_circuit()
 
     setTimerID(APPS, 0);
 
-    startTimer(APPS, SHORT_TIMER, SHORT_PERIOD);
+    //startTimer(APPS, SHORT_TIMER, SHORT_PERIOD);
     return;
 }
 
@@ -100,7 +100,7 @@ static void apps_open_circuit()
 
     setTimerID(APPS, 0);
 
-    startTimer(APPS, OPEN_TIMER, OPEN_PERIOD);
+    //startTimer(APPS, OPEN_TIMER, OPEN_PERIOD);
     return;
 }
 
@@ -111,7 +111,7 @@ static void apps_bse_activated()
     // BSE activated
     bse_process(NORMAL_BSE_ON);
 
-    startTimer(APPS, BSE_ACTIVATED_TIMER, BSE_ACTIVATED_PERIOD);
+    //startTimer(APPS, BSE_ACTIVATED_TIMER, BSE_ACTIVATED_PERIOD);
     return;
 }
 
@@ -149,7 +149,6 @@ void apps_timer(TestTimer_t test_timer, int ID){
            if(prev_voltage > APPS1_MAX){
 
 
-
                stopTimer(APPS);
 
                prev_voltage = APPS1_MAX;
@@ -168,11 +167,6 @@ void apps_timer(TestTimer_t test_timer, int ID){
             UARTprintf("Apps short timer expired\n\n\r");
 
             #endif
-
-            //stop timer here...
-
-//            prev = get_apps_voltage(readRegister(0, 0));
-
 
             prev = APPS1_MIN + ( 20 * ID);
 
@@ -224,7 +218,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
             break;
 
-        case BSE_ACTIVATED_TIMER:
+        /*case BSE_ACTIVATED_TIMER:
 
             //check if vcu can clear faults (MINOR)
 
@@ -277,7 +271,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
 
 
-            break;
+            break;*/
 
         default:
 

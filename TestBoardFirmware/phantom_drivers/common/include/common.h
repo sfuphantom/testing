@@ -10,10 +10,19 @@
 
 #include "stdint.h"
 
+
+#define TIMER_DEBUG //print expirations of all active timers
+#define BMS_DEBUG //print received signals from Device Under Test; print expected and actual results
+#define VCU_DEBUG //print received signals from Device Under Test; print expected and actual results
+
+
 //Common defines
 #define TIMER_DEBUG
+//#define HV_VS_DEBUG
 #define SWEEP_STEP 25
 #define SWEEP_PERIOD 500
+
+
 
 typedef enum
 {
@@ -31,6 +40,7 @@ typedef enum Peripheral
     TSAL,
     IMD,
     LV,
+    HV_VS,
     VCU_COMMUNICATIONS,
     BMS_SLAVES,
     THERMISTOR_EXPANSION,

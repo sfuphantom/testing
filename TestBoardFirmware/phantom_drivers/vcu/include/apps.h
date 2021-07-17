@@ -28,7 +28,7 @@ void apps_timer(TestTimer_t, int);
 
 enum
 {
-    NORMAL_APPS_ON,
+    NORMAL_APPS_ON = 0,
     NORMAL_APPS_OFF,
     APPS_IMPLAUSIBILITY,
     APPS_SHORT_CIRCUIT,

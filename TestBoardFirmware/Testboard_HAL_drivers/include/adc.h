@@ -56,7 +56,7 @@ extern "C" {
 #endif
 
 /* USER CODE BEGIN (0) */
-///* USER CODE END */
+/* USER CODE END */
 
 /* ADC General Definitions */
 
@@ -190,7 +190,7 @@ enum adc2HwTriggerSource
 };
 
 /* USER CODE BEGIN (1) */
-///* USER CODE END */
+/* USER CODE END */
 
 /** @struct adcData
 *   @brief ADC Conversion data structure
@@ -208,7 +208,7 @@ typedef struct adcData
 
 
 /* USER CODE BEGIN (2) */
-///* USER CODE END */
+/* USER CODE END */
 
 typedef struct adc_config_reg
 {           
@@ -229,6 +229,29 @@ typedef struct adc_config_reg
     uint32 CONFIG_PARCR;
 }adc_config_reg_t;
 
+#define ADC1_OPMODECR_CONFIGVALUE		0x81140001U
+#define ADC1_CLOCKCR_CONFIGVALUE		(7U)
+
+#define ADC1_G0MODECR_CONFIGVALUE		((uint32)ADC_12_BIT | (uint32)0x00000000U | (uint32)0x00000000U)
+#define ADC1_G1MODECR_CONFIGVALUE		((uint32)ADC_12_BIT | (uint32)0x00000000U | (uint32)0x00000000U | (uint32)0x00000000U)
+#define ADC1_G2MODECR_CONFIGVALUE		((uint32)ADC_12_BIT | (uint32)0x00000000U | (uint32)0x00000000U | (uint32)0x00000000U)
+
+#define ADC1_G0SRC_CONFIGVALUE 			((uint32)0x00000000U | (uint32)ADC1_EVENT)
+#define ADC1_G1SRC_CONFIGVALUE 			((uint32)0x00000000U | (uint32)ADC1_EVENT)
+#define ADC1_G2SRC_CONFIGVALUE 			((uint32)0x00000000U | (uint32)ADC1_EVENT)
+
+#define ADC1_BNDCR_CONFIGVALUE			((uint32)((uint32)8U << 16U)|(8U + 8U))
+#define ADC1_BNDEND_CONFIGVALUE			(2U)
+
+#define ADC1_G0SAMP_CONFIGVALUE			(1U)
+#define ADC1_G1SAMP_CONFIGVALUE			(1U)
+#define ADC1_G2SAMP_CONFIGVALUE			(1U)
+
+#define ADC1_G0SAMPDISEN_CONFIGVALUE	((uint32)((uint32)0U << 8U) | 0x00000000U)
+#define ADC1_G1SAMPDISEN_CONFIGVALUE	((uint32)((uint32)0U << 8U) | 0x00000000U)
+#define ADC1_G2SAMPDISEN_CONFIGVALUE	((uint32)((uint32)0U << 8U) | 0x00000000U)
+
+#define ADC1_PARCR_CONFIGVALUE			(0x00000005U)
 
 
 /** 
@@ -261,6 +284,8 @@ uint32 adcMidPointCalibration(adcBASE_t *adc);
 void adcSetEVTPin(adcBASE_t *adc, uint32 value);
 uint32 adcGetEVTPin(adcBASE_t *adc);
 
+void adc1GetConfigValue(adc_config_reg_t *config_reg, config_value_type_t type);
+void adc2GetConfigValue(adc_config_reg_t *config_reg, config_value_type_t type);
 
 /** @fn void adcNotification(adcBASE_t *adc, uint32 group)
 *   @brief Group notification
@@ -277,7 +302,7 @@ uint32 adcGetEVTPin(adcBASE_t *adc);
 void adcNotification(adcBASE_t *adc, uint32 group);
 
 /* USER CODE BEGIN (3) */
-///* USER CODE END */
+/* USER CODE END */
 
 /**@}*/
 #ifdef __cplusplus

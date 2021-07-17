@@ -33,17 +33,11 @@
 #define VOLT_MIN  76 // 0.7608 * 100
 #define VOLT_MAX  100 // 0.9985 * 100
 
-enum
-{
-    NORMAL_BMS_OPERATION,
-    OVER_VOLTAGE_FAULT,
-    UNDER_VOLTAGE_FAULT,
-    OVER_TEMPERATURE_FAULT,
-    UNDER_TEMPERATURE_FAULT,
-    WEIRD_SENSOR_READINGS_VOLTAGE,
-    WEIRD_SENSOR_READINGS_TEMPERATURE,
-    COMMUNICATION_LOSS,
-};
+// CHANGE THIS VALUE TO
+#define VOLT_TEST 0 //102 = 84.5
+
+//const uint8_t[] BMS_FAULT_LUT = {   }
+
 
 typedef struct {
     float bmsSlaveVoltage;
@@ -61,8 +55,8 @@ static void over_voltage_test();
 static void under_voltage_test();
 static void over_temperature_test();
 static void under_temperature_test();
-static void weird_sensor_readings_voltage_test();
-static void weird_sensor_readings_temperature_test();
+//static void weird_sensor_readings_voltage_test();
+//static void weird_sensor_readings_temperature_test();
 static void communication_loss_test();
 static void temperature_mux(uint8_t pinSelect);
 
@@ -135,7 +129,7 @@ static void normal_bms_operation(){
     // set_bms_voltage and temp at normal levels
     UARTprintf("Normal BMS Operation\n\r");
 
-    MCP48FV_Set_Value_Single(TEMP_HIGH_VOLT, DAC_SIZE_BMS, 0, 2);
+    MCP48FV_Set_Value_Single(VOLT_TEST, DAC_SIZE_BMS, 0, 2);
 
     uint8_t pinSelect = 0;
     //setting temp on each of the 16 pins
@@ -244,5 +238,5 @@ static void temperature_mux(uint8_t pinSelect){
         gioSetBit(THERMISTOR_MUX_HET_PORT, THERMISTOR_MUX_PIN_3, 0);
     }
 
-    return 0;
+    return;
  }

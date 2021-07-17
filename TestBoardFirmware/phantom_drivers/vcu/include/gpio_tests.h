@@ -14,6 +14,7 @@
 #include "timer.h"
 #include "common.h"
 #include "bse.h"
+#include "apps.h"
 
 
 void gpio_init();
@@ -25,9 +26,9 @@ enum
     RTD_NORMAL_PROCEDURE = 0, //Get VCU to state RUNNING
     RTD_LATCH,  //Simulate RTD procedure -> turn off RTD
     RTD_INORDER, //Reverse order of RTD procedure
+    SHUTDOWN_LATCH //Apply fault then lift it
 };
 
-//uint8_t GPIO_RESULTS_LUT[] = { /* RUNNING */ 0 , /* TS_OFF */0, 0 /* !RUNNING */};
 
 
 #endif /* PHANTOM_DRIVERS_INCLUDE_GPIOTESTS_H_ */

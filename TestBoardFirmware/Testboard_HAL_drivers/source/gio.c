@@ -133,8 +133,8 @@ void gioInit(void)
                    | (uint32)((uint32)0U << 7U); /* Bit 7 */
 
     /** - Port B direction */
-    gioPORTB->DIR  = (uint32)((uint32)1U << 0U)  /* Bit 0 */
-                   | (uint32)((uint32)1U << 1U)  /* Bit 1 */
+    gioPORTB->DIR  = (uint32)((uint32)0U << 0U)  /* Bit 0 */
+                   | (uint32)((uint32)0U << 1U)  /* Bit 1 */
                    | (uint32)((uint32)0U << 2U)  /* Bit 2 */
                    | (uint32)((uint32)0U << 3U)  /* Bit 3 */
                    | (uint32)((uint32)0U << 4U)  /* Bit 4 */

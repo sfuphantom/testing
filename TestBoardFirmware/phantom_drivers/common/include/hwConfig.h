@@ -13,6 +13,8 @@
 #include "het.h"
 #include "mibspi.h"
 
+#include "het.h"
+#include "gio.h"
 
 /***************  VCU PINS  *********************/
 
@@ -50,7 +52,7 @@
 ///*********   HV CURRENT APPS/BSE   ****************/
 #define DAC_SPI_PORT          mibspiREG1 // APPS1/2, BSE, HVCURRENT //configure in halcogen
 #define INVERTER_PORT         adcREG1
-#define INVERTER_PIN          adcGROUP1 //configure in halcogen (input/output? on pin 15)
+#define INVERTER_PIN          adcGROUP1 //configure in halcogen (input on pin 15)
 
 /***************  IMD  *********************/
 #define IMD_PORT              hetRAM1   //configure in halcogen
@@ -108,8 +110,8 @@
 #define BMS_UART                sciREG //configure in halcogen
 #define WAKEUP_PORT             gioPORTA //configure in halcogen
 #define WAKEUP_PIN              0 //configure in halcogen
-#define FAULT_PORT              gioPORTA //configure in halcogen
-#define FAULT_PIN               1 //configure in halcogen
+#define BMS_SHUTDOWN_PORT       hetPORT1 //temporary...
+#define BMS_SHUTDOWN_PIN        15
 #define DAC_SIZE_BMS            0x3FF
 
 // Debug UART

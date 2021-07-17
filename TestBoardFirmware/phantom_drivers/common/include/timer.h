@@ -20,7 +20,9 @@
 #include "common.h"
 #include "Phantom_sci.h"
 
+
 #define NUM_TIMERS 10 //each system gets one timer if needed. reduce number of timers later...
+
 
 /* Variables */
 
@@ -30,6 +32,11 @@ typedef enum{
     SWEEP_TIMER = 0, //general vcu timer
 
     //apps timers
+    APPS_SHORT_TIMER,
+    APPS_OPEN_TIMER,
+    APPS_BSE_ACTIVATED_TIMER,
+    APPS_SWEEP_TIMER,
+
     SHORT_TIMER,
     OPEN_TIMER,
     BSE_ACTIVATED_TIMER,

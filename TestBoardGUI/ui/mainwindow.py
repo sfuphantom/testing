@@ -2,12 +2,13 @@ import sys
 import os
 import json
 from datetime import date
-import pytest
+import serial.tools.list_ports
 
 from PySide2.QtWidgets import (QApplication, QPushButton, QLineEdit,
                                QTabWidget, QTreeWidget, QComboBox,
                                QStackedWidget, QCommandLinkButton,
-                               QStatusBar, QTreeWidgetItem, QAbstractItemView)
+                               QStatusBar, QTreeWidgetItem, QAbstractItemView,
+                               QFileDialog)
 from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
 from PySide2.QtUiTools import (QUiLoader)
 from PySide2.QtGui import (QBrush, QColor)
@@ -45,6 +46,16 @@ class MainWindow(QObject):
         # ComboBox
         self.deviceComboBox = self.mainwindow.findChild(
             QComboBox, 'deviceSelection')
+        # self.deviceCombobox.currentTextChanged.connect(
+        #     lambda: self._device_selected(self.deviceCombobox.currentIndex()))
+        self.portNumComboBox = self.mainwindow.findChild(
+            QComboBox, 'portNumber')
+
+        self.portNumComboBox.setPlaceholderText('Select')
+        self.portNumComboBox.addItems(self._port_num())
+
+        self.portNumComboBox.currentTextChanged.connect( #creates a signal
+            lambda: self.get_port_num(self.portNumComboBox.currentText()))
         self.deviceComboBox.currentTextChanged.connect(
             lambda: self._device_selected(self.deviceComboBox.currentIndex()))
 
@@ -99,6 +110,9 @@ class MainWindow(QObject):
 
         # Show ui when application runs
         self.mainwindow.show()
+
+    def get_port_num(self, num):
+            self.portnum = num
 
     # Load ui file
     def _load_ui(self, file):
@@ -195,7 +209,7 @@ class MainWindow(QObject):
 
     # Retrieve check-in information
     def _get_checkin_info(self):
-        self.checkin_info['device'] = self.deviceCombobox.currentText()
+        self.checkin_info['device'] = self.deviceComboBox.currentText()
         self.checkin_info['board_name'] = self.boardName.text()
         self.checkin_info['board_version'] = self.boardVersion.text()
         self.checkin_info['testID'] = self.testID.text()
@@ -217,6 +231,17 @@ class MainWindow(QObject):
         self.boardVersion.setEnabled(mode)
         self.teamMember.setEnabled(mode)
 
+    # Retrieve list of COM ports
+    def _port_num (self):
+        comlist = serial.tools.list_ports.comports()
+        port_num = []
+        for element in comlist:
+            port_num.append(element.device)
+        return port_num
+
+    def open_directory(self):
+        self.dirName = QFileDialog.getExistingDirectory()
+
     # Run tests
     @Slot()
     def run(self):
@@ -232,7 +257,6 @@ class MainWindow(QObject):
         Excecute run code here
 
         '''
-
         # Temporary assigning results to selected test cases
         # sort results by their Test Name for heirachical structure
         results = sorted(self.selectedTests,key = lambda i: i['Test Name'])
@@ -262,6 +286,7 @@ class MainWindow(QObject):
     @Slot()
     def save(self):
         self._get_checkin_info()
+        self.open_directory()
         print('save button is clicked')
 
     @Slot()
