@@ -9,11 +9,10 @@
 #include "hwConfig.h"
 #include "i2c.h"
 #include "sys_common.h"
+#include <iostream>
 
 //configure in halcogen
-#define LV_MONITOR_I2C_PORT   i2cREG1 
-#define LVP_SDA //pin59
-#define LVP_SCL //pin 58
+#define LV_MONITOR_I2C_PORT
 
 //Register
 //#define LV_configuration_register 0x00
@@ -149,59 +148,178 @@ int main()
 
 
 
+int main() {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-static int getVoltage(double battery_voltage)
+//decimal to binary
+void dec2bin(double c)
 {
-   int output_voltage;
-    output_voltage = (battery_voltage+0.25); // battery_voltage is operating voltage (around 13.2v)
-    return output_voltage;
+   int i = 0;
+   for(i = 31; i >= 0; i--){
+     if((c & (1 << i)) != 0){
+       printf("1");
+     }else{
+       printf("0");
+     } 
+   }
 }
 
-static int getCurrent(double current)
- {
-     int output_current;
-    output_current = ((5120*0.25)/2048);
-    return output_current;
- }
+
+//voltage calculation and decimal --> binary
+double getVoltage(double battery_voltage)
+{
+   double output_voltage;
+    getVoltage = (battery_voltage+0.25); // battery_voltage is operating voltage (around 13.2v)
+    output_voltage = dec2bin(getVoltage)
+
+}
+
+//current calculation and decimal --> binary
+double getCurrent = ((5120*0.25)/2048);
+output_current = dec2bin(getCurrent);
 
 
 
 
+
+/*
+//i2c functions
+void i2cInit (void) //Initializes the i2c Driver.
+void i2cSetOwnAdd (i2cBASE_t *i2c, uint32 oadd) //Set I2C Own Address.
+void i2cSetSlaveAdd (i2cBASE_t *i2c, uint32 sadd) //Set Port Direction.
+void i2cSetBaudrate (i2cBASE_t *i2c, uint32 baud) //Change baudrate at runtime.
+uint32 i2cIsTxReady (i2cBASE_t *i2c) //Check if Tx buffer empty.
+void i2cSendByte (i2cBASE_t *i2c, uint8 byte) //Send Byte.
+void i2cSend (i2cBASE_t *i2c, uint32 length, uint8 *data) //Send Data.
+uint32 i2cIsRxReady (i2cBASE_t *i2c) //Check if Rx buffer full.
+uint32 i2cIsStopDetected (i2cBASE_t *i2c) //Check if Stop Condition Detected.
+void i2cClearSCD (i2cBASE_t *i2c) //Clears the Stop condition detect flags.
+uint32 i2cRxError (i2cBASE_t *i2c) //Return Rx Error flags.
+uint8 i2cReceiveByte (i2cBASE_t *i2c) //Receive Byte.
+void i2cReceive (i2cBASE_t *i2c, uint32 length, uint8 *data) //Receive Data.
+void i2cEnableNotification (i2cBASE_t *i2c, uint32 flags) //Enable interrupts.
+void i2cDisableNotification (i2cBASE_t *i2c, uint32 flags) //Disable interrupts.
+void i2cSetStart (i2cBASE_t *i2c) //Set i2c start condition.
+void i2cSetStop (i2cBASE_t *i2c) //Set i2c stop condition.
+void i2cSetCount (i2cBASE_t *i2c, uint32 cnt) //Set i2c data count.
+void i2cEnableLoopback (i2cBASE_t *i2c) //Enable Loopback mode for self test.
+void i2cDisableLoopback (i2cBASE_t *i2c) //Enable Loopback mode for self test.
+void i2cSetMode (i2cBASE_t *i2c, uint32 mode) //Sets Master or Slave mode.
+void i2cGetConfigValue (i2c_config_reg_t *config_reg, config_value_type_t type) //Get the initial or current values of the I2C configuration registers.
+void i2cSetDirection (i2cBASE_t *i2c, uint32 dir) //Sets I2C as transmitter or receiver.
+bool i2cIsMasterReady (i2cBASE_t *i2c) //Indicates whether MST bit is set or cleared to indicate that stop condition was generated. This API should be called after Master Tx or Rx to check if the transaction is complete.
+bool i2cIsBusBusy (i2cBASE_t *i2c) //Returns the state of the bus busy flag. True if it is set and false otherwise.
+void i2cNotification (i2cBASE_t *i2c, uint32 flags) //Interrupt callback.
+*/
+
+/*
+//example
+i2cSetMode(i2cREG1, I2C_MASTER);
+
+    /* Set direction to receiver 
+    i2cSetDirection(i2cREG1, I2C_TRANSMITTER);
+
+    i2cSetStart(i2cREG1); //start bit
+
+    i2cSetSlaveAdd(i2cREG1, 0b1001000); //address of temp sensor
+    while(i2cIsTxReady(i2cREG1)){}; //wait until flag is clear
+    i2cSendByte(i2cREG1, 0b00000000); //register to read from 
+
+    i2cSetStart(i2cREG1); 
+    i2cSendByte(i2cREG1, 0b10010001); //read from sensor
+
+    i2cSetDirection(i2cREG1, I2C_RECEIVER);
+    while(i2cIsRxReady(i2cREG1)){};
+    data = i2cReceiveByte(i2cREG1); //read data
+
+    i2cSetStop(i2cREG1); //stop bit
+
+*/
 
 
 
 void lv_pow_std_op() {
-    ​//send 13.2v to power
-     voltage_output = (uint16)getVoltage(13.2);
-     // "Normal operation of low voltage system of 12V.\n\r"
-     // (lv_output);   //??​
+    double v=13.2; //send 13.2v to power
+    double output_voltage;
+    output_voltage = getVoltage(v);
+
+    i2cInit(); //initializes i2c driver
+    i2cSetMode(i2cREG1, I2C_MASTER); //variables?
+    i2cSetSlaveAdd(i2cREG1, 0b1001000); //address of voltage bus
+    i2cSetBaudrate(LV_MONITOR_I2C_PORT, 100); // change baudrate at runtime
+    i2cSetDirection(i2cREG1, I2C_TRANSMITTER);
+    i2cSetStart(LV_MONITOR_I2C_PORT); // initializes transmission 
+     
+     while(i2cIsTxReady(i2cREG1)){}; //Check if Tx buffer empty.
+    i2cSendByte(i2cREG1, output_voltage); //send bytes
+
+     i2cSetDirection(i2cREG1, I2C_RECEIVER);
+    while(i2cIsRxReady(i2cREG1)){};
+    data = i2cReceiveByte(i2cREG1); //read data
+
+    i2cSetStop(LV_MONITOR_I2C_PORT);
+    printf("NORMAL_OPERATION");
+    return;
 }
+
 
 void v_pow_uv() {
-    ​//send 9v to power
-     voltage_output = (uint16)getVoltage(9);
-     // "Low voltage system under voltage.\n\r"
-     // (lv_output);   //??​​
+    double ​v=9; //send 9v to power
+    double output_voltage;
+    output_voltage = getVoltage(v);
+
+    i2cInit(); //initializes i2c driver
+    i2cSetMode(i2cREG1, I2C_MASTER); //variables?
+    i2cSetSlaveAdd(i2cREG1, 0b1001000); //address of voltage bus
+    i2cSetBaudrate(LV_MONITOR_I2C_PORT, 100); // change baudrate at runtime
+    i2cSetDirection(i2cREG1, I2C_TRANSMITTER);
+    i2cSetStart(LV_MONITOR_I2C_PORT); // initializes transmission 
+     
+     while(i2cIsTxReady(i2cREG1)){}; //Check if Tx buffer empty.
+    i2cSendByte(i2cREG1, output_voltage); //send bytes
+
+     i2cSetDirection(i2cREG1, I2C_RECEIVER);
+    while(i2cIsRxReady(i2cREG1)){};
+    data = i2cReceiveByte(i2cREG1); //read data
+
+    i2cSetStop(LV_MONITOR_I2C_PORT);
+    printf("LV_VOLTAGE_OUT_OF_RANGE");
+    return;
+
+ /*   i2cInit(); //initializes i2c driver
+    i2cSetBaudrate(LV_MONITOR_I2C_PORT, 100); // change baudrate at runtime
+    i2cIsTxReady(LV_MONITOR_I2C_PORT); // Check if Tx buffer empty.
+    i2cSetStart(LV_MONITOR_I2C_PORT); // initializes transmission 
+    i2cSendByte(LV_MONITOR_I2C_PORT,output_voltage); //send byte
+    i2cSetStop(LV_MONITOR_I2C_PORT);
+    printf("LV_VOLTAGE_OUT_OF_RANGE");
+    
+    return;
+    */
+
 }
 
-void lv_pow_ov() {
-    ​//send 15v to power
-     voltage_output = (uint16)getVoltage(15);
-     // "Low voltage system over voltage.\n\r"
-     // (lv_output);   //??​
+void lv_pow_ov() {​
+    double ​v=15; //send 15v to power
+    double output_voltage;
+    output_voltage = getVoltage(v);
+
+     i2cInit(); //initializes i2c driver
+    i2cSetMode(i2cREG1, I2C_MASTER); //variables?
+    i2cSetSlaveAdd(i2cREG1, 0b1001000); //address of voltage bus
+    i2cSetBaudrate(LV_MONITOR_I2C_PORT, 100); // change baudrate at runtime
+    i2cSetDirection(i2cREG1, I2C_TRANSMITTER);
+    i2cSetStart(LV_MONITOR_I2C_PORT); // initializes transmission 
+     
+     while(i2cIsTxReady(i2cREG1)){}; //Check if Tx buffer empty.
+    i2cSendByte(i2cREG1, output_voltage); //send bytes
+
+     i2cSetDirection(i2cREG1, I2C_RECEIVER);
+    while(i2cIsRxReady(i2cREG1)){};
+    data = i2cReceiveByte(i2cREG1); //read data
+
+    i2cSetStop(LV_MONITOR_I2C_PORT);
+    printf("LV_VOLTAGE_OUT_OF_RANGE");
+    return;
 }
 
 void lv_pow_powerdraw() {
@@ -211,5 +329,25 @@ void lv_pow_powerdraw() {
 
 void lv_pow_overcurrent() {
     // overcurrent protection, short a sustained signal to shunt
-     current_output = (uint16)getCurrent(13.2);​
+    double getCurrent = ((5120*0.25)/2048);
+    output_current = dec2bin(getCurrent);
+    
+    i2cInit(); //initializes i2c driver
+    i2cSetMode(i2cREG1, I2C_MASTER); //variables?
+    i2cSetSlaveAdd(i2cREG1, 0x04); //address of voltage bus
+    i2cSetBaudrate(LV_MONITOR_I2C_PORT, 100); // change baudrate at runtime
+    i2cSetDirection(i2cREG1, I2C_TRANSMITTER);
+    i2cSetStart(LV_MONITOR_I2C_PORT); // initializes transmission 
+     
+     while(i2cIsTxReady(i2cREG1)){}; //Check if Tx buffer empty.
+    i2cSendByte(i2cREG1, output_current); //send bytes
+
+     i2cSetDirection(i2cREG1, I2C_RECEIVER);
+    while(i2cIsRxReady(i2cREG1)){};
+    data = i2cReceiveByte(i2cREG1); //read data
+
+    i2cSetStop(LV_MONITOR_I2C_PORT);
+    printf("LV_CURRENT_OUT_OF_RANGE");
+    return;​
+}
 }

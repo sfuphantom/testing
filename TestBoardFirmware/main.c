@@ -10,6 +10,7 @@
 #include "gio.h"
 #include "het.h"
 #include "common.h"
+#include "i2c.h"
 
 //Drivers
 #include "bse.h"
@@ -51,7 +52,7 @@ int main(void){
     /* Slave Data */
     adcSlaveDataSetup();
 
-
+    i2cInit();
     gioInit();
     gioSetDirection(hetPORT1, 0xFFFFFFFF);
     

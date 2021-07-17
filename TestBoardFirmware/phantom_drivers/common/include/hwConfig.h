@@ -60,7 +60,7 @@
 
 
 ///*********   LV MONITOR   ****************/
-//#define LV_MONITOR_I2C_PORT   i2cREG1 //configure in halcogen
+#define LV_MONITOR_I2C_PORT   i2cREG1 //configure in halcogen
 
 
 
