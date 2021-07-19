@@ -128,6 +128,10 @@ int main(void){
 
         }//switch case
 
+//        UARTprintf("{ 1, 1 }") send results to GUI
+
+
+
         while(!timers_complete()); //wait for tests to finish
 
         stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
