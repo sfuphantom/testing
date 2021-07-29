@@ -48,11 +48,11 @@ def build_json(info):
     print()
     for x in selectedTests:
         # print(selectedTests[counter])
-        selectedJson.update({selectedTests[counter].get('Test Name'): selectedTests[counter].get('Enum')})
+        selectedJson.update({selectedTests[counter].get('Test Name'): int(selectedTests[counter].get('enum'))})
         counter += 1
         
     jsonStr = json.dumps(selectedJson, indent="\t")
-    # print("The length of the string is: " + str(len(jsonStr)))
+    length = len(jsonStr)
     # print(jsonStr)
 
     launchpad= serial.Serial(port = portNumber, baudrate = 9600, stopbits = serial.STOPBITS_TWO)
