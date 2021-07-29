@@ -1,252 +1,252 @@
 
 
-/**
- * main.c
- */
-#include "tiny-json.h"
-#include "main.h"
-#include "Phantom_sci.h"
-#include "hwConfig.h"
-#include "gio.h"
-#include "het.h"
-#include "common.h"
-#include "i2c.h"
 
-//Drivers
-#include "bse.h"
-#include "apps.h"
-#include "MCP48FV_DAC_SPI.h"
-#include "timer.h"
-#include "hv_voltage_sensor.h"
+  main.c
 
-#include "gpio_tests.h"
+#include tiny-json.h
+#include main.h
+#include Phantom_sci.h
+#include hwConfig.h
+#include gio.h
+#include het.h
+#include common.h
+#include i2c.h
 
-#include "bms_slaves.h"
+Drivers
+#include bse.h
+#include apps.h
+#include MCP48FV_DAC_SPI.h
+#include timer.h
+#include hv_voltage_sensor.h
+
+#include gpio_tests.h
+
+#include bms_slaves.h
 
 #define TIMER_PERIOD 1000
 
 static unsigned char UARTBuffer[200];
 static unsigned char testMode[3];
 static json_t mem[100];
-//static bool initGUI = false;
+static bool initGUI = false;
 
-// Static Function Declaration
-static Result_t initUARTandModeHandler(TestBoardState_t *stateptr);
-static Result_t bms_mode_process(TestBoardState_t *stateptr);
-static void vcu_mode_process(TestBoardState_t *stateptr);
-static void setPeripheralTestCases(TestBoardState_t* stateptr, json_t* json);
-static json_t * JSONHandler(unsigned char *jsonstring);
+ Static Function Declaration
+static Result_t initUARTandModeHandler(TestBoardState_t stateptr);
+static Result_t bms_mode_process(TestBoardState_t stateptr);
+static void vcu_mode_process(TestBoardState_t stateptr);
+static void setPeripheralTestCases(TestBoardState_t stateptr, json_t json);
+static json_t  JSONHandler(unsigned char jsonstring);
 
-//Timer functions
+Timer functions
 static void initializeTimers();
 
-// Static global variables
+ Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 
 int main(void){
 
-    //initialization
+    initialization
     _enable_IRQ();
 
 
-    /* Slave Data */
+     Slave Data
     adcSlaveDataSetup();
 
     i2cInit();
     gioInit();
     gioSetDirection(hetPORT1, 0xFFFFFFFF);
-    
+
     MCP48FV_Init();
 
-   // sciInit();
+    sciInit();
     timerInit();
 
     gpio_init();
 
 
     Result_t res = SUCCESS;
-    //res = MCP48FV_Init(); 
+    res = MCP48FV_Init();
 
     res = initUARTandModeHandler(&testBoardState);
 
     initializeTimers();
 
-    UARTprintf(" Ready to initialize GUI \n\r");
-    sciReceive(PC_UART, 3, (unsigned char *)&testMode);
+    UARTprintf( Ready to initialize GUI nr);
+    sciReceive(PC_UART, 3, (unsigned char )&testMode);
     if (testMode == 'BMS'){
         testBoardState.testMode = BMS_MODE;
     } else {
         testBoardState.testMode = VCU_MODE;
     }
-    UARTprintf("Mode detected: ");
+    UARTprintf(Mode detected );
     UARTSend(PC_UART, testMode);
-    if (testMode == "BMS"){
-        sciReceive(PC_UART, 141, (unsigned char *)&UARTBuffer); // change 100 to actual value
-    
-    } 
-    else if (testMode == "VCU") {
-        sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer);
-    } 
+    if (testMode == BMS){
+        sciReceive(PC_UART, 141, (unsigned char )&UARTBuffer);  change 100 to actual value
 
-    //* test code *//
+    }
+    else if (testMode == VCU) {
+        sciReceive(PC_UART, 173, (unsigned char )&UARTBuffer);
+    }
+
+     test code
     setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
     while(1)
     {
-        //startTimer(TEST_COMPLETE_TIMER);
-        //parse JSON and set states
+        startTimer(TEST_COMPLETE_TIMER);
+        parse JSON and set states
 
-        //determine the expected state of VCU/BMS
+        determine the expected state of VCUBMS
 
-        startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
+        startGlobalTimer(); potentially needs to be ON for CAN communications...expects message every 50 ms
 
         switch(testBoardState.testMode){
 
-            case IDLE:
+            case IDLE
 
                 continue;
 
-            case BMS_MODE:
+            case BMS_MODE
 
                 res = bms_mode_process(&testBoardState);
 
                 if(res != SUCCESS)
-                    UARTprintf("Failed to Initialize BMS Test board\n\r");
+                    UARTprintf(Failed to Initialize BMS Test boardnr);
 
                 testBoardState.testMode = IDLE;
                 break;
 
-            case VCU_MODE:
+            case VCU_MODE
 
-                //reset VCU state
+                reset VCU state
                 gioSetBit(RESET_PORT, RESET_PIN, 1);
 
                 delayms(500);
 
                 gioSetBit(RESET_PORT, RESET_PIN, 0);
 
-                //put VCU into state running
+                put VCU into state running
                 gpio_process(RTD_NORMAL_PROCEDURE);
 
                 vcu_mode_process(&testBoardState);
 
                 break;
 
-        }//switch case
+        }switch case
 
-        while(!timers_complete()); //wait for tests to finish
+        while(!timers_complete()); wait for tests to finish
 
-        stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
+        stopGlobalTimer(); potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms
 
-        //validate test cases (through timer and send to PC)
-        //send a single pass/result to PC
+        validate test cases (through timer and send to PC)
+        send a single passresult to PC
 
         delayms(5000);
 
-    }//superloop
+    }superloop
 
 
-}//main
+}main
 
-static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
+static Result_t initUARTandModeHandler(TestBoardState_t stateptr)
 {
-    sciInit(); // replace with UARTInit() to set baudrate
+    sciInit();  replace with UARTInit() to set baudrate
     sciSetBaudrate(PC_UART, 9600);
-   // sciEnableNotification(PC_UART, SCI_RX_INT);
+    sciEnableNotification(PC_UART, SCI_RX_INT);
 
-    UARTprintf("hello world\n\r");
+    UARTprintf(hello worldnr);
 
-    stateptr->peripheralStateArray[BMS_SLAVES] = 0;
-    stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
-    stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+    stateptr-peripheralStateArray[BMS_SLAVES] = 0;
+    stateptr-peripheralStateArray[THERMISTOR_EXPANSION] = 0;
+    stateptr-peripheralStateArray[BMS_COMMUNICATIONS] = 0;
 
-    stateptr->testMode = VCU_MODE;
+    stateptr-testMode = VCU_MODE;
 
     return SUCCESS;
 }
 
 
-static json_t * JSONHandler(unsigned char *jsonstring){
-    
-    json_t const* json = json_create( jsonstring, mem, sizeof mem / sizeof *mem );
-    // error checking the JSON
+static json_t  JSONHandler(unsigned char jsonstring){
+
+    json_t const json = json_create( jsonstring, mem, sizeof mem  sizeof mem );
+     error checking the JSON
     if(!json){
-        UARTprintf("Error creating JSON\n\r");
+        UARTprintf(Error creating JSONnr);
     }
     return json;
 }
 
-static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
+static void setPeripheralTestCases(TestBoardState_t stateptr, json_t json){
 
-    //VCU Tests
-    json_t * appsProperty = json_getProperty(json, "APPS"); 
-    stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
-    json_t * bseProperty = json_getProperty(json, "BSE"); 
-    stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
-    json_t * hv_vsProperty = json_getProperty(json, "HV_VS");
-    stateptr->peripheralStateArray[HV_VS] = (uint8_t) json_getInteger(hv_vsProperty);
+    VCU Tests
+    json_t  appsProperty = json_getProperty(json, APPS);
+    stateptr-peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
+    json_t  bseProperty = json_getProperty(json, BSE);
+    stateptr-peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
+    json_t  hv_vsProperty = json_getProperty(json, HV_VS);
+    stateptr-peripheralStateArray[HV_VS] = (uint8_t) json_getInteger(hv_vsProperty);
 
-    stateptr->peripheralStateArray[TSAL] = 0;
+    stateptr-peripheralStateArray[TSAL] = 0;
 
-    stateptr->peripheralStateArray[IMD] = 0;
+    stateptr-peripheralStateArray[IMD] = 0;
 
-    stateptr->peripheralStateArray[LV] = 0;
+    stateptr-peripheralStateArray[LV] = 0;
 
-    stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = 0;
+    stateptr-peripheralStateArray[VCU_COMMUNICATIONS] = 0;
 
 
-    //BMS Tests
-    json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
-    stateptr->peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
+    BMS Tests
+    json_t  bmsProperty = json_getProperty(json, BMS_SLAVES);
+    stateptr-peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
 
-    //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
+    stateptr-peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 
-    //stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+    stateptr-peripheralStateArray[BMS_COMMUNICATIONS] = 0;
 
 }
 
 
-//pass timer ptr to each pointer peripheral. timer to periodically call test function you want
-//inner state machines for each BMS peripheral and three outer state machines -Meeting with Amneet
-static Result_t bms_mode_process(TestBoardState_t *stateptr)
+pass timer ptr to each pointer peripheral. timer to periodically call test function you want
+inner state machines for each BMS peripheral and three outer state machines -Meeting with Amneet
+static Result_t bms_mode_process(TestBoardState_t stateptr)
 {
     Result_t ret = FAIL;
 
-    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
+    ret = bms_slaves_process(stateptr-peripheralStateArray[BMS_SLAVES]);
 
     if(ret != SUCCESS)
     {
-        UARTprintf("BMS SLAVE FAIL %d\n\r", ret);
+        UARTprintf(BMS SLAVE FAIL %dnr, ret);
         return FAIL;
     }
 
-    ret = thermistor_process(stateptr->peripheralStateArray[THERMISTOR_EXPANSION]);
+    ret = thermistor_process(stateptr-peripheralStateArray[THERMISTOR_EXPANSION]);
 
     if(ret != SUCCESS)
     {
-        UARTprintf("THERMISTOR FAIL %d\n\r", ret);
+        UARTprintf(THERMISTOR FAIL %dnr, ret);
         return FAIL;
     }
 
-    ret = communications_process(stateptr->peripheralStateArray[BMS_COMMUNICATIONS]);
+    ret = communications_process(stateptr-peripheralStateArray[BMS_COMMUNICATIONS]);
 
     if(ret == FAIL)
     {
-        UARTprintf("CAN COMMUNICATIONS FAIL %d\n\r", ret);
+        UARTprintf(CAN COMMUNICATIONS FAIL %dnr, ret);
         return FAIL;
     }
 
     return SUCCESS;
 }
 
-static void vcu_mode_process(TestBoardState_t *stateptr)
+static void vcu_mode_process(TestBoardState_t stateptr)
 {
 
-    //eg Constant outputs don't need periodic timers should
+    eg Constant outputs don't need periodic timers should
 
-    bse_process(stateptr->peripheralStateArray[BSE]);
+    bse_process(stateptr-peripheralStateArray[BSE]);
 
-    apps_process(stateptr->peripheralStateArray[APPS]);
+    apps_process(stateptr-peripheralStateArray[APPS]);
 
 
 }
@@ -254,38 +254,38 @@ static void vcu_mode_process(TestBoardState_t *stateptr)
 void initializeTimers(){
 
     xTimerSet(
-                "BSE", // name
+                BSE,  name
 
-                BSE, // peripheral
+                BSE,  peripheral
 
-                bse_timer, // callback function
+                bse_timer,  callback function
 
-                0 // ID
+                0  ID
              );
 
     xTimerSet(
-                "APPS", // name
+                APPS,  name
 
-                APPS, // peripheral
+                APPS,  peripheral
 
-                apps_timer, // callback function
+                apps_timer,  callback function
 
-                0 // ID
+                0  ID
              );
 
     xTimerSet(
 
-                 "HV_VS", // name
+                 HV_VS,  name
 
-                 HV_VS, // peripheral
+                 HV_VS,  peripheral
 
-                 hv_vs_timer, // callback function
+                 hv_vs_timer,  callback function
 
-                 0 // ID
+                 0  ID
              );
 
 
-    //add more peripheral timers here...
+    add more peripheral timers here...
 
 
 }

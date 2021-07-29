@@ -3,4 +3,5 @@
         "__locale": "c",
         "xutility": "c"
     }
+    "python.pythonPath": "env\\Scripts\\python.exe"
 }
