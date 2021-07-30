@@ -85,7 +85,7 @@
                     "enum": "8"
                 },
                 {
-                    "Case": "Test 7: Integration Test",
+                    "Case": "Test 8: Integration Test",
                     "Repeat": "",
                     "Description": "If APPS signal aligns with VCU reading", 
                     "enum": "0"
@@ -131,7 +131,7 @@
                     "enum": "5"
                 },
                 {
-                    "Case": "Test 5: Integration Test",
+                    "Case": "Test 7: Integration Test",
                     "Repeat": "",
                     "Description": "Check if BSE signal measured by VCU matches",
                     "enum": "0"
