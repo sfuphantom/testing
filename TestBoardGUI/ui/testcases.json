@@ -75,7 +75,7 @@
                 {
                     "Case": "Test 6: 25% Pedal Travel + Brakes",
                     "Repeat": "",
-                    "Description": "If breaks activated & APPS shows more than 25% travel, must shut down ***must be demonstrated when motor controller is under load***",
+                    "Description": "If brakes activated & APPS shows more than 25% travel, must shut down ***must be demonstrated when motor controller is under load***",
                     "enum": "5"
                 },
                 {
@@ -121,7 +121,7 @@
                 {
                     "Case": "Test 5: 25% Pedal Travel + Brakes",
                     "Repeat": "",
-                    "Description": "If breaks activated & APPS shows more than 25% travel, must shut down ***must be demonstrated when motor controller is under load***",
+                    "Description": "If brakes activated & APPS shows more than 25% travel, must shut down ***must be demonstrated when motor controller is under load***",
                     "enum": "4"
                 },
                 {
@@ -171,9 +171,9 @@
                     "enum": "0"
                 },
                 {
-                    "Case": "Test 6: No TSAL, No Breaks",
+                    "Case": "Test 6: No TSAL, No Brakes",
                     "Repeat": "",
-                    "Description": "See if the VCU ever tells the breaks to go off while the TSAL is inactive (EV.8.2.9)",
+                    "Description": "See if the VCU ever tells the brakes to go off while the TSAL is inactive (EV.8.2.9)",
                     "enum": "0"
                 }
             ]
