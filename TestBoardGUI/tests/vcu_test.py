@@ -53,14 +53,15 @@ def build_json(info):
         
     jsonStr = json.dumps(selectedJson, indent="\t")
     length = len(jsonStr)
+    bytelength = len(bytes(jsonStr, encoding = 'utf8'))
     # print(jsonStr)
 
-    launchpad= serial.Serial(port = portNumber, baudrate = 9600, stopbits = serial.STOPBITS_TWO)
+    launchpad= serial.Serial(port = portNumber, baudrate = 9600, bytesize = serial.EIGHTBITS, stopbits = serial.STOPBITS_TWO, timeout = 10)
     launchpad.write(bytes("VCU", encoding='utf8'))
-    time.sleep(8)
+    time.sleep(2)
     launchpad.write(bytes(jsonStr, encoding='utf8'))
-    launchpad.read() # this will read 1 byte. To read multiple, use read_until()
-    result = launchpad.read()
+    #launchpad.read() # this will read 1 byte. To read multiple, use read_until()
+    result = launchpad.read_until(200)
     launchpad.close()
 
     return result
