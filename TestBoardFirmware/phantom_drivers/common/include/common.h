@@ -10,9 +10,14 @@
 
 #include "stdint.h"
 
+#define BSE_TEST
+
+//#define APPS_TEST
+
+
 
 #define TIMER_DEBUG //print expirations of all active timers
-#define BMS_DEBUG //print received signals from Device Under Test; print expected and actual results
+//#define BMS_DEBUG //print received signals from Device Under Test; print expected and actual results
 #define VCU_DEBUG //print received signals from Device Under Test; print expected and actual results
 
 
@@ -45,6 +50,7 @@ typedef enum Peripheral
     BMS_SLAVES,
     THERMISTOR_EXPANSION,
     BMS_COMMUNICATIONS
+
 } Peripheral;
 
 void delayms(uint16_t ms);
