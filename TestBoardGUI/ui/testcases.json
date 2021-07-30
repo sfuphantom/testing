@@ -43,40 +43,46 @@
         {
             "APPS": [
                 {
-                    "Case": "Test 1: Normal Acceleration",
+                    "Case": "Test 1: Normal Acceleration - On",
                     "Repeat": "",
                     "Description": "Ensure normal operation handled correctly", 
                     "enum": "0"
                 },
                 {
-                    "Case": "Test 2: 10% Difference",
+                    "Case": "Test 2: Normal Acceleration - Off",
+                    "Repeat": "",
+                    "Description": "Ensure normal operation handled correctly", 
+                    "enum": "1"
+                },
+                {
+                    "Case": "Test 3: 10% Difference",
                     "Repeat": "",
                     "Description": "Implausibility condition", 
-                    "enum": "0"
+                    "enum": "2"
                 },
                 {
-                    "Case": "Test 3: Open/Short Circuit",
+                    "Case": "Test 4: Short Circuit",
                     "Repeat": "",
                     "Description": "Check for condition of no response/sensors unplugged", 
-                    "enum": "0"
+                    "enum": "3"
                 },
                 {
-                    "Case": "Test 4: 25% Pedal Travel + Brakes",
+                    "Case": "Test 5: Open Circuit",
+                    "Repeat": "",
+                    "Description": "Check for condition of no response/sensors unplugged", 
+                    "enum": "4"
+                },
+                {
+                    "Case": "Test 6: 25% Pedal Travel + Brakes",
                     "Repeat": "",
                     "Description": "If breaks activated & APPS shows more than 25% travel, must shut down ***must be demonstrated when motor controller is under load***",
-                    "enum": "0"
+                    "enum": "5"
                 },
                 {
-                    "Case": "Test 5: Pedal & Breaks, Post Shutdown",
-                    "Repeat": "",
-                    "Description": "After test 4, must remain off until APPS signals less than 5% travel", 
-                    "enum": "0"
-                },
-                {
-                    "Case": "Test 6: Sweep Test",
+                    "Case": "Test 7: Sweep Test",
                     "Repeat": "",
                     "Description": "Check signals throughout range", 
-                    "enum": "0"
+                    "enum": "8"
                 },
                 {
                     "Case": "Test 7: Integration Test",
