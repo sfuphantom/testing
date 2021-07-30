@@ -1,5 +1,3 @@
-
-
 /**
  * main.c
  */
@@ -76,23 +74,14 @@ int main(void){
     initializeTimers();
 
 
-    UARTprintf(" Ready to initialize GUI \n\r");
-    sciReceive(PC_UART, 3, (unsigned char *)&testMode);
-    if (!strncmp(testMode, "BMS", 3 * sizeof(char))){
-        //UARTprintf("we have a mode");
-        testBoardState.testMode = BMS_MODE;
-    } else {
-        testBoardState.testMode = VCU_MODE;
-    }
-    UARTprintf("Mode detected: ");
-
-    //* test code *//
-    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
     bool test_passed = false;
 
+    int test_num = 0;
+
     while(true)
     {
+
         //parse JSON and set states
 
         startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
@@ -119,17 +108,24 @@ int main(void){
 
             case VCU_MODE:
 
+                #ifdef APPS_TEST
+                testBoardState.peripheralStateArray[APPS] = test_num;
+                #endif
+
+                #ifdef BSE_TEST
+                testBoardState.peripheralStateArray[BSE] = test_num;
+                #endif
+
                 initializeVCU();
 
                 vcu_mode_process(&testBoardState);
 
-                test_passed = validateThrottleControls(testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
+
+                test_num++;
 
                 break;
 
         }//switch case
-
-//        UARTprintf("{ 1, 1 }") send results to GUI
 
 
 
@@ -137,13 +133,13 @@ int main(void){
 
         stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
 
-        //send a single pass/result to PC (for CLI, uncomment VALID_DEBUG in common.h to display results)
+//        test_passed = validateThrottleControls(testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
 
-        UARTprintf(test_passed ? "{ 1 }" : "{ 0 }"); // send results to GUI
+        delayms(3000);
 
 
-
-        delayms(5000);
+        //stop tests
+        if(test_num > APPS_SWEEP) testBoardState.testMode = IDLE;
 
     }//superloop
 
@@ -182,12 +178,7 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
 
     //VCU Tests
-    json_t * appsProperty = json_getProperty(json, "APPS"); 
-    stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
-    json_t * bseProperty = json_getProperty(json, "BSE"); 
-    stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
-    json_t * hv_vsProperty = json_getProperty(json, "HV_VS");
-    stateptr->peripheralStateArray[HV_VS] = (uint8_t) json_getInteger(hv_vsProperty);
+    stateptr->peripheralStateArray[HV_VS] = 0;
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
