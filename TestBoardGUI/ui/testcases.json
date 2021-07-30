@@ -95,28 +95,40 @@
         {
             "BSE": [
                 {
-                    "Case": "Test 1: Normal Breaking",
+                    "Case": "Test 1: Normal Braking - Off",
                     "Repeat": "",
                     "Description": "Ensure normal operation handled correctly",
                     "enum": "0"
                 },
                 {
-                    "Case": "Test 2: Implausibility for more than 100ms",
+                    "Case": "Test 2: Normal Braking - On",
                     "Repeat": "",
-                    "Description": "Check for values outside of normal range for 100ms",
-                    "enum": "0"
+                    "Description": "Ensure normal operation handled correctly",
+                    "enum": "1"
                 },
                 {
-                    "Case": "Test 3: Open/Short Circuit",
+                    "Case": "Test 3: Open Circuit",
                     "Repeat": "",
                     "Description": "Check for condition of no response, sensor unplugged, etc.",
-                    "enum": "0"
+                    "enum": "2"
                 },
                 {
-                    "Case": "Test 4: Sweep Test",
+                    "Case": "Test 4: Short Circuit",
+                    "Repeat": "",
+                    "Description": "Check for condition of no response, sensor unplugged, etc.",
+                    "enum": "3"
+                },
+                {
+                    "Case": "Test 5: 25% Pedal Travel + Brakes",
+                    "Repeat": "",
+                    "Description": "If breaks activated & APPS shows more than 25% travel, must shut down ***must be demonstrated when motor controller is under load***",
+                    "enum": "4"
+                },
+                {
+                    "Case": "Test 6: Sweep Test",
                     "Repeat": "",
                     "Description": "Check signals throughout normal range",
-                    "enum": "0"
+                    "enum": "5"
                 },
                 {
                     "Case": "Test 5: Integration Test",
