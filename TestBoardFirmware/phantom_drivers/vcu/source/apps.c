@@ -34,24 +34,50 @@ void apps_process(uint8_t state)
     switch(state)
     {
         case NORMAL_APPS_ON:
+
+            #ifdef APPS_TEST
+            UARTprintf("Running NORMAL_APPS_ON test...\r\n");
+            #endif
+
             normal_apps_on();
             break;
         case APPS_IMPLAUSIBILITY:
+
+
+            UARTprintf("Running APPS_IMPLAUSIBILITY test...\r\n");
+
             apps_implausibility();
+
             break;
+
         case APPS_SHORT_CIRCUIT:
+
+            UARTprintf("Running APPS_SHORT_CIRCUIT test...\r\n");
+
             apps_short_circuit();
             break;
         case APPS_OPEN_CIRCUIT:
+
+            UARTprintf("Running APPS_OPEN_CIRCUIT test...\r\n");
+
             apps_open_circuit();
             break;
         case APPS_BSE_ACTIVATED: //be wary of this test...bse cannot change the value
+
+            UARTprintf("Running APPS_BSE_ACTIVATED test...\r\n");
+
             apps_bse_activated();
             break;
         case APPS_SWEEP:
+
+            UARTprintf("Running APPS_SWEEP test...\r\n");
+
             apps_sweep();
             break;
         default: 
+
+            UARTprintf("Running NORMAL_APPS_OFF test...\r\n");
+
             normal_apps_off();
             break;
     }
@@ -90,7 +116,7 @@ static void apps_short_circuit()
 
     setTimerID(APPS, 0);
 
-    //startTimer(APPS, SHORT_TIMER, SHORT_PERIOD);
+    startTimer(APPS, SHORT_TIMER, SHORT_PERIOD);
     return;
 }
 
@@ -100,7 +126,7 @@ static void apps_open_circuit()
 
     setTimerID(APPS, 0);
 
-    //startTimer(APPS, OPEN_TIMER, OPEN_PERIOD);
+    startTimer(APPS, OPEN_TIMER, OPEN_PERIOD);
     return;
 }
 
@@ -111,7 +137,7 @@ static void apps_bse_activated()
     // BSE activated
     bse_process(NORMAL_BSE_ON);
 
-    //startTimer(APPS, BSE_ACTIVATED_TIMER, BSE_ACTIVATED_PERIOD);
+    startTimer(APPS, BSE_ACTIVATED_TIMER, BSE_ACTIVATED_PERIOD);
     return;
 }
 
@@ -277,6 +303,8 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
 
             UARTprintf("ERROR. APPS Timer not found\r\n");
+
+            stopTimer(APPS);
 
 
             break;

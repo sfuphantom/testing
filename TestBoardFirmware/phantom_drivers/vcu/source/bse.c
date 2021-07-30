@@ -28,21 +28,35 @@ void bse_process(uint8_t state){
     switch(state)
     {
         case NORMAL_BSE_ON:
+
+            #ifdef BSE_TEST
+            UARTprintf("Running NORMAL_BSE_ON test...\r\n");
+            #endif
+
             normal_bse_on();
             break;
         case BSE_OPEN_CIRCUIT:
+
+            UARTprintf("Running BSE_OPEN_CIRCUIT test...\r\n");
             bse_open_circuit();
             break;
         case BSE_SHORT_CIRCUIT:
+            UARTprintf("Running BSE_SHORT_CIRCUIT test...\r\n");
             bse_short_circuit();
             break;
         case BSE_SWEEP:
+
+            UARTprintf("Running BSE_SWEEP test...\r\n");
             bse_sweep();
             break;
         case BSE_APPS_ACTIVATED:
+
+            UARTprintf("Running BSE_APPS_ACTIVATED test...\r\n");
             apps_bse_activated();
             break;
         default:
+
+            UARTprintf("Running NORMAL_BSE_OFF test...\r\n");
             normal_bse_off();
             break;
     }
