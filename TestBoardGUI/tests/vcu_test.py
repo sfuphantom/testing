@@ -52,6 +52,7 @@ def build_json(info):
         counter += 1
         
     jsonStr = json.dumps(selectedJson, indent="\t")
+    # used for debugging purposes
     length = len(jsonStr)
     bytelength = len(bytes(jsonStr, encoding = 'utf8'))
     # print(jsonStr)
@@ -60,8 +61,7 @@ def build_json(info):
     launchpad.write(bytes("VCU", encoding='utf8'))
     time.sleep(2)
     launchpad.write(bytes(jsonStr, encoding='utf8'))
-    #launchpad.read() # this will read 1 byte. To read multiple, use read_until()
-    result = launchpad.read_until(200)
+    result = launchpad.read(size=50)
     launchpad.close()
 
     return result
