@@ -10,7 +10,7 @@
 # or can use sys.path to import
 # implement tests as an integration test or test fully encompassing all vcu states to create a json?
 
-import pytest
+#import pytest
 import json
 import copy
 import serial

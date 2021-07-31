@@ -29,11 +29,15 @@
 //Add Shutdown Tests...and other GPIOs
 #include "gpio_tests.h"
 
-
 // Static function definitions
 static void rtd_normal_procedure();
 static void rtd_latch_test();
 static void rtd_inorder_test();
+//Shutdown
+
+static void shutdown_latch_test();
+
+
 
 void gpio_init(){
 
@@ -80,18 +84,16 @@ static void rtd_normal_procedure()
     gioSetBit(TSAL_PORT, TSAL_ACTIVE_PIN, 1);
 
 	//delay?
-    delayms(200);
+    delayms(500);
 
 	//send bse signal ON
     bse_process(NORMAL_BSE_ON);
 
 	//delay?
-    delayms(1000);
+    delayms(500);
 
 	//finally, send RTD signal 
     gioSetBit(READY_TO_DRIVE_PORT, READY_TO_DRIVE_PIN, 1);
-
-
 
 }
 
@@ -154,6 +156,20 @@ static void rtd_inorder_test()
 
 
 }
+
+static void shutdown_latch_test(){
+
+    gioSetBit(SHUTDOWN_CIRCUIT_PORT, IMD_FAULT_PIN, 1);
+
+    //delay?
+    delayms(500);
+
+    gioSetBit(SHUTDOWN_CIRCUIT_PORT, IMD_FAULT_PIN, 0);
+
+    apps_process(NORMAL_APPS_ON); //zero motor output
+
+}
+
 
 
 
