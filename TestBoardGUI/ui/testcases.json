@@ -225,8 +225,43 @@
             ]
         },
         {
-            "HV Voltage Sensor": [
-
+            "HV Voltage Voltage Sensor": [
+                {
+                    "Case": "Test 1: Normal Operation - Lower Bound",
+                    "Repeat": "",
+                    "Description": "Expected HV reading at lower end of expected range", 
+                    "enum": "0"
+                },
+                {
+                    "Case": "Test 2: Normal Operation - Upper Bound",
+                    "Repeat": "",
+                    "Description": "Expected HV reading at upper end of expected range", 
+                    "enum": "1"
+                },
+                {
+                    "Case": "Test 3: Out of Range - Below Lower Threshold",
+                    "Repeat": "",
+                    "Description": "HV reading below normal range", 
+                    "enum": "2"
+                },
+                {
+                    "Case": "Test 4: Out of Range - Above Upper Threshold",
+                    "Repeat": "",
+                    "Description": "HV reading above normal range", 
+                    "enum": "3"
+                },
+                {
+                    "Case": "Test 5: Zero Reading",
+                    "Repeat": "",
+                    "Description": "HV reading at 0V", 
+                    "enum": "4"
+                },
+                {
+                    "Case": "Test 6: Sweep Test",
+                    "Repeat": "",
+                    "Description": "Sweep through normal range of values", 
+                    "enum": "5"
+                }
             ]
         },
         {
