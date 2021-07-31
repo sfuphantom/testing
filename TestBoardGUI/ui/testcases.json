@@ -1,7 +1,7 @@
 {
     "VCU": [
         {
-            "LV Power Sensor": [
+            "LV_POWER_SENSOR": [
                 {
                     "Case": "Test 1: Standard Operation (12V)",
                     "Repeat": "",
@@ -179,7 +179,7 @@
             ]
         },
         {
-            "IMD Signal": [
+            "IMD": [
                 {
                     "Case": "Test 1: Generate Various Frequency Outputs",
                     "Repeat": "",
@@ -225,7 +225,7 @@
             ]
         },
         {
-            "HV Voltage Voltage Sensor": [
+            "HV_VOLTAGE_SENSOR": [
                 {
                     "Case": "Test 1: Normal Operation - Lower Bound",
                     "Repeat": "",
@@ -265,7 +265,7 @@
             ]
         },
         {
-            "HV Current Sensor": [
+            "HV_CURRENT_SENSOR": [
                 {
                     "Case": "Test 1: CT Signal at 0A (2.5V)",
                     "Repeat": "",
