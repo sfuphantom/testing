@@ -87,13 +87,16 @@ int main(void){
     UARTprintf("Mode detected: ");
 
     //* test code *//
-    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
+//    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
     bool test_passed = false;
 
     while(true)
     {
         //parse JSON and set states
+        //* test code *//
+        setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
+
 
         startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
 
@@ -112,9 +115,6 @@ int main(void){
 
                 testBoardState.testMode = IDLE;
 
-                //read bms shutdown pin; display results
-                test_passed = is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
-
                 break;
 
             case VCU_MODE:
@@ -122,8 +122,6 @@ int main(void){
                 initializeVCU();
 
                 vcu_mode_process(&testBoardState);
-
-                test_passed = validateThrottleControls(testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
 
                 break;
 
@@ -138,6 +136,12 @@ int main(void){
         stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
 
         //send a single pass/result to PC (for CLI, uncomment VALID_DEBUG in common.h to display results)
+
+        test_passed = validateThrottleControls(testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
+
+        //read bms shutdown pin; display results
+
+//        test_passed = is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
 
         UARTprintf(test_passed ? "{ 1 }" : "{ 0 }"); // send results to GUI
 
