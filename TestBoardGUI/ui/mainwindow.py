@@ -6,7 +6,7 @@ import tests.vcu_test as vcu_test
 import tests.bms_test as bms_test
 import serial.tools.list_ports
 
-from PySide2.QtWidgets import (QApplication, QHeaderView, QPushButton, QLineEdit,
+from PySide2.QtWidgets import (QMessageBox, QApplication, QHeaderView, QPushButton, QLineEdit,
                                QTabWidget, QTreeWidget, QComboBox,
                                QStackedWidget, QCommandLinkButton,
                                QStatusBar, QTreeWidgetItem, QAbstractItemView, QFileDialog)
@@ -228,6 +228,7 @@ class MainWindow(QObject):
         self.testID.setEnabled(mode)
         self.boardVersion.setEnabled(mode)
         self.teamMember.setEnabled(mode)
+        self.selectedTree.setEnabled(mode)
 
     # Retrieve list of COM ports
     def _port_num (self):
@@ -268,7 +269,11 @@ class MainWindow(QObject):
         self.selectedTests = self._get_selected_tests()
         # Disable some features while running tests
         self._switch_mode(False)
-
+        popup = QMessageBox()
+        popup.setIcon(QMessageBox.Warning)
+        popup.setWindowTitle("Test Board GUI")
+        popup.setText('Test in progress. Please wait.')
+        popup.exec_()
         # Get results from back-end
         self.testResults = self.get_results([self.selectedTests, self.portnum])
 
@@ -329,11 +334,11 @@ class ResultsWriter(QObject):
         self.resultsTree = tree
 
     def _status_colour(self, stat: str):
-        if stat.lower() == "pass":
+        if "pass" in stat.lower():
             return "#196F3D"
-        elif stat.lower() == "fail":
+        elif "fail" in stat.lower():
             return "#FF0000"
-
+            
     def writeResults(self, data: list):
         # This list keeps track of the parents to avoid
         # having multiple parents with the same name
@@ -351,7 +356,7 @@ class ResultsWriter(QObject):
             self.resultsTree.expandItem(parent)
 
             column_0 = item['Test Case']
-            column_1 = item['Status']
+            column_1 = item['Status'].decode("utf-8")
             column_2 = item['Message']
 
             child = QTreeWidgetItem([column_0, column_1, column_2])            
