@@ -15,9 +15,15 @@
 
 //TODO: Fill out ranges for expected results ie { MIN, MAX } -> { 10, 20 } =  10 <= expected result <= 20
 
-static const unsigned int APPS_RESULTS_LUT[][2] = { { 0, 20}, //NORMAL_APPS_ON expected result (replace values...)
+//reference equation from throttle task 390 * apps_percent_avg + 60
+//#define APPS1_MAX 440
+//#define APPS1_MIN 150
+//#define APPS2_MAX 150
+//#define APPS2_MIN 50
 
-                                                   { LOW_BOUND, UP_BOUND }, //NORMAL_APPS_OFF...
+static const unsigned int APPS_RESULTS_LUT[][2] = { { 250, 260 }, //NORMAL_APPS_ON expected result (apps_percent = 0.5) +/- 5
+
+                                                   { 0, 0 }, //NORMAL_APPS_OFF...(apps_percent = 0)
 
                                                    { LOW_BOUND, UP_BOUND }, //APPS_IMPLAUSIBILITY...
 
