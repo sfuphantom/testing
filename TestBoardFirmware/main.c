@@ -40,6 +40,7 @@ static void vcu_mode_process(TestBoardState_t *stateptr);
 static void setPeripheralTestCases(TestBoardState_t* stateptr, json_t* json);
 static json_t * JSONHandler(unsigned char *jsonstring);
 static void initializeVCU();
+static void initializeTestBoard();
 
 //Timer functions
 static void initializeTimers();
@@ -47,35 +48,12 @@ static void initializeTimers();
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 
+static Result_t res;
+
 int main(void){
 
-    //initialization
-    _enable_IRQ();
-
-
-    /* Slave Data */
-    adcSlaveDataSetup();
-
-
-    gioInit();
-    gioSetDirection(hetPORT1, 0xFFFFFFFF);
     
-    MCP48FV_Init();
-
-   // sciInit();
-    timerInit();
-
-    gpio_init();
-
-    adcInit();
-
-    Result_t res = SUCCESS;
-    //res = MCP48FV_Init(); 
-
-    res = initUARTandModeHandler(&testBoardState);
-
-    initializeTimers();
-
+    initializeTestBoard();
 
     #ifdef GUI_MODE
 
@@ -350,5 +328,39 @@ void initializeTimers(){
 
 
 }
+
+void initializeTestBoard(){
+
+    //initialization
+        _enable_IRQ();
+
+
+        /* Slave Data */
+        adcSlaveDataSetup();
+
+
+        gioInit();
+        gioSetDirection(hetPORT1, 0xFFFFFFFF);
+
+        MCP48FV_Init();
+
+       // sciInit();
+        timerInit();
+
+        gpio_init();
+
+
+        adcInit();
+
+
+        res = SUCCESS;
+        //res = MCP48FV_Init();
+
+        res = initUARTandModeHandler(&testBoardState);
+
+        initializeTimers();
+
+}
+
 
 
