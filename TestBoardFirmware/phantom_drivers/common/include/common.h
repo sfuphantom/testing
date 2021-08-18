@@ -14,6 +14,7 @@
 #define TIMER_DEBUG //print expirations of all active timers
 #define BMS_DEBUG //print received signals from Device Under Test; print expected and actual results
 #define VCU_DEBUG //print received signals from Device Under Test; print expected and actual results
+//#define GUI_MODE //runs firmware with GUI. if not defined, firmware can run w/o the GUI
 
 
 //Common defines

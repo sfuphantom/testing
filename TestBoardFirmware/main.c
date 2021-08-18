@@ -67,6 +67,7 @@ int main(void){
 
     gpio_init();
 
+    adcInit();
 
     Result_t res = SUCCESS;
     //res = MCP48FV_Init(); 
@@ -75,6 +76,8 @@ int main(void){
 
     initializeTimers();
 
+
+    #ifdef GUI_MODE
 
     UARTprintf(" Ready to initialize GUI \n\r");
     sciReceive(PC_UART, 3, (unsigned char *)&testMode);
@@ -89,14 +92,21 @@ int main(void){
     //* test code *//
 //    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
+    #endif
+
     bool test_passed = false;
 
     while(true)
     {
         //parse JSON and set states
         //* test code *//
+        #ifdef GUI_MODE
         setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
+        #endif
 
+        #ifndef GUI_MODE
+        setPeripheralTestCases(&testBoardState, NULL);
+        #endif
 
         startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
 
@@ -184,6 +194,7 @@ static json_t * JSONHandler(unsigned char *jsonstring){
 
 static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
+    #ifdef GUI_MODE
 
     //VCU Tests
     json_t * appsProperty = json_getProperty(json, "APPS"); 
@@ -209,6 +220,29 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
     //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 
     //stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+
+    #endif
+
+    #ifndef GUI_MODE
+
+    stateptr->peripheralStateArray[APPS]  = 0;
+    stateptr->peripheralStateArray[BSE]   = 0;
+    stateptr->peripheralStateArray[HV_VS] = 0;
+    stateptr->peripheralStateArray[TSAL]  = 0;
+    stateptr->peripheralStateArray[IMD]   = 0;
+    stateptr->peripheralStateArray[LV]    = 0;
+
+    stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = 0;
+
+    //BMS Tests
+    stateptr->peripheralStateArray[BMS_SLAVES] = 0;
+
+    //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
+
+    //stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+
+    #endif
+
 
 }
 
