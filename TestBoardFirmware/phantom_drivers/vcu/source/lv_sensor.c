@@ -20,6 +20,9 @@
 //#define LV_power_register 0x03
 
 
+//constants
+#define ShuntVoltage 0.25
+#define CalibrationRegister 5120
 
 // static function definitions
 static void lv_pow_std_op();
@@ -75,7 +78,7 @@ double getVoltage(battery_voltage)
 {
    double output_voltage;
    double tempvoltage;
-    tempvoltage = (battery_voltage+0.25); // battery_voltage is operating voltage (around 13.2v)
+    tempvoltage = (battery_voltage+ShuntVoltage); // battery_voltage is operating voltage (around 13.2v)
     output_voltage = dec2bin(tempvoltage);
 return output_voltage;
 }
@@ -238,7 +241,7 @@ void lv_pow_powerdraw() {
 
 void lv_pow_overcurrent() {
     // overcurrent protection, short a sustained signal to shunt
-    double getCurrent = ((5120*0.25)/2048);
+    double getCurrent = ((CalibrationRegister*ShuntVoltage)/2048); //2048 from current calculation in datasheet for sensor
     double output_current;
     output_current = dec2bin(getCurrent);
     i2cInit(); //initializes i2c driver
