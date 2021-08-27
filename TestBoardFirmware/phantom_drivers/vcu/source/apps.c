@@ -127,11 +127,11 @@ static void apps_sweep()
 
 void apps_timer(TestTimer_t test_timer, int ID){
 
-    uint16_t apps1_volt, apps2_volt; //bse_activated_timer
+//    uint16_t apps1_volt, apps2_volt; //bse_activated_timer
 
-    uint16_t prev; //short_timer, open_timer
+//    uint16_t prev; //short_timer, open_timer
 
-    int prev_voltage; //sweep_timer
+    int voltage; //sweep_timer
 
     switch(test_timer){
 
@@ -141,80 +141,42 @@ void apps_timer(TestTimer_t test_timer, int ID){
             UARTprintf("Apps sweep timer expired.\n\n\r");
             #endif
 
-            // make sure it doesnt go over voltage - stop it somehow
-//            prev_voltage = get_apps_voltage(readRegister(0, 0));
-           prev_voltage = APPS1_MIN + ( 50 * ID);
+            voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 50, ID, true);
 
-            //STOP CONDITION
-           if(prev_voltage > APPS1_MAX){
-
-
-               stopTimer(APPS);
-
-               prev_voltage = APPS1_MAX;
-           }
-
-            MCP48FV_Set_Value_Double(prev_voltage, create_apps2_volt(prev_voltage, 1.00), DAC_SIZE_APPS, 0);
-
-            setTimerID(APPS, ++ID);
+            MCP48FV_Set_Value_Double(voltage, create_apps2_volt(voltage, 1.00), DAC_SIZE_APPS, 0);
 
             break;
 
         case SHORT_TIMER:
 
             #ifdef TIMER_DEBUG
-
             UARTprintf("Apps short timer expired\n\n\r");
-
             #endif
 
-            prev = APPS1_MIN + ( 20 * ID);
+            voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 20, ID, true);
 
-            if (prev >= APPS1_MIN) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0); //short APPS1
+            if (voltage >= APPS1_MIN)    MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0); //short APPS1
 
-            if (prev >= APPS1_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX, APPS2_MAX+20, DAC_SIZE_APPS, 0); //APPS1 shorted to APPS1 normal, APPS2 shorted
+            if (voltage >= APPS1_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX, APPS2_MAX+20, DAC_SIZE_APPS, 0); //APPS1 shorted to APPS1 normal, APPS2 shorted
 
-            if (prev >= APPS2_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX+20, DAC_SIZE_APPS, 0); //APPS2 shorted to both shorted
-
-            ///STOP CONDITION
-            if(prev > APPS1_MAX)
-                stopTimer(APPS);
-
-            setTimerID(APPS, ++ID);
+            if (voltage >= APPS2_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX+20, DAC_SIZE_APPS, 0); //APPS2 shorted to both shorted
 
             break;
 
         case OPEN_TIMER:
 
             #ifdef TIMER_DEBUG
-
             UARTprintf("Apps open timer expired\n\n\r");
-
             #endif
 
-//            prev = get_apps_voltage(readRegister(0, 0));
-
-            prev = APPS1_MIN - ( 20 * ID);
+            voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, -20, ID, false);
 
 
-            if (prev < APPS1_MIN){
-                MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0); //open APPS1
-            }
+            if (voltage < APPS1_MIN)     MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0); //open APPS1
 
-            if (prev <= APPS1_MIN-20) {
-                MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open APPS2
-            }
+            if (voltage <= APPS1_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open APPS2
 
-            if (prev <= APPS2_MIN-20) {
-                MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open both
-            }
-
-            ///STOP CONDITION
-            if(prev < APPS2_MIN)
-                stopTimer(APPS);
-
-            setTimerID(APPS, ++ID);
-
+            if (voltage <= APPS2_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open both
 
             break;
 
