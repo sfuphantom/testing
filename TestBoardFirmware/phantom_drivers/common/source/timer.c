@@ -186,3 +186,28 @@ void setTimerPeriod(Peripheral peripheral_timer,int period){
     xTimers[peripheral_timer].period = period;
 }
 
+unsigned int update_value(Peripheral peripheral, int MIN, int MAX, int STEP, int ID, bool is_ceil){
+
+    unsigned int ret = MIN + ( STEP * ID ) ;
+
+    //check ceiling and floor respectively
+    if(ret > MAX && is_ceil){
+
+        stopTimer(peripheral);
+
+        ret = MAX;
+
+    }else if(ret < MIN && !is_ceil){
+
+        stopTimer(peripheral);
+
+        ret = MIN;
+
+    }
+
+    setTimerID(peripheral, ++ID);
+
+    return ret;
+
+}
+
