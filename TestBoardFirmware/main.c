@@ -56,15 +56,15 @@ int main(void){
 
     initializeTimers();
 
-    UARTprintf(" Ready to initialize GUI \n\r");
-    sciReceive(PC_UART, 3, (unsigned char *)&testMode);
-    UARTprintf("Mode detected: ");
-    UARTSend(PC_UART, testMode);
+//    UARTprintf(" Ready to initialize GUI \n\r");
+//    sciReceive(PC_UART, 3, (unsigned char *)&testMode);
+//    UARTprintf("Mode detected: ");
+//    UARTSend(PC_UART, testMode);
 
-    sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer); 
+//    sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer);
 
     //* test code *//
-    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer)); 
+    setPeripheralTestCases(&testBoardState, NULL);
 
     tests_received = false;
 
@@ -151,10 +151,15 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
 
     //VCU Tests
-    json_t * appsProperty = json_getProperty(json, "APPS"); 
-    stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
-    json_t * bseProperty = json_getProperty(json, "BSE"); 
-    stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
+//    json_t * appsProperty = json_getProperty(json, "APPS");
+//    stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
+//    json_t * bseProperty = json_getProperty(json, "BSE");
+//    stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
+
+    stateptr->peripheralStateArray[APPS] = NORMAL_APPS_ON;
+    //    json_t * bseProperty = json_getProperty(json, "BSE");
+    stateptr->peripheralStateArray[BSE] = NORMAL_BSE_OFF;
+
 
     stateptr->peripheralStateArray[TSAL] = 0;
 
@@ -181,7 +186,7 @@ static Result_t bms_mode_process(TestBoardState_t *stateptr)
 {
     Result_t ret = FAIL;
 
-    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
+//    ret = bms_slaves_process(stateptr->peripheralStateArray[BMS_SLAVES]);
 
     if(ret != SUCCESS)
     {
