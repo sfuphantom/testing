@@ -145,7 +145,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
             MCP48FV_Set_Value_Double(voltage, create_apps2_volt(voltage, 1.00), DAC_SIZE_APPS, 0);
 
-            break;
+             break;
 
         case SHORT_TIMER:
 
@@ -169,7 +169,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
             UARTprintf("Apps open timer expired\n\n\r");
             #endif
 
-            voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, -20, ID, false);
+            voltage = update_value(APPS, APPS2_MIN, APPS1_MIN, -20, ID, false);
 
 
             if (voltage < APPS1_MIN)     MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0); //open APPS1
@@ -179,61 +179,6 @@ void apps_timer(TestTimer_t test_timer, int ID){
             if (voltage <= APPS2_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open both
 
             break;
-
-        /*case BSE_ACTIVATED_TIMER:
-
-            //check if vcu can clear faults (MINOR)
-
-            #ifdef TIMER_DEBUG
-
-            UARTprintf("Apps bse activated timer expired\n\n\r");
-
-            #endif
-
-            // sets APPS values at midpoint of valid APPS range
-
-            prev = APPS1_MIN + ( 20 * ID);
-
-            if (prev == APPS1_MIN){ //FAULT
-
-                apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN; //finding the median
-
-                apps2_volt = create_apps2_volt(apps1_volt, 1.0); //create apps2 counterpart voltage
-
-                MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
-
-
-                delayms(250);
-
-                //apps1 should be median voltage, apps2 should be equivalent to apps1 percentage wise...
-
-                //evaluate VCU state (CAN driver(MINOR)/check throttle pin should be 0V/minimum) configure DAC pin
-
-                //if(testfailed) stopTimer(APPS)
-
-
-            } else{ //NORMAL OPERATION
-                // to be executed after apps_bse_activated()
-                // APPS sensors indicate <5% activation, regardless if BSE is still activated
-                MCP48FV_Set_Value_Double(APPS1_MIN+10, create_apps2_volt(APPS1_MIN+10, 1.00), DAC_SIZE_APPS, 0); //less than 5% apps range
-
-                delayms(250);
-
-                //apps1 should be 1.6V, apps2 should be 0.5 to 0.6V
-
-                //evaluate VCU state (CAN driver (RUNNING) /check throttle pin should be non-zero voltage)
-
-            }
-
-            setTimerID(APPS, ++ID); //TODO: double check later...
-
-            //STOP CONDITION
-            if(ID >= 2)
-                stopTimer(APPS);
-
-
-
-            break;*/
 
         default:
 
@@ -261,3 +206,61 @@ uint16_t create_apps2_volt(uint16_t apps1_volt, float difference){
 uint16_t get_apps_voltage(uint16_t dac_val){
     return ((dac_val*500000)/(0xFF*1000));
 }
+
+
+//ARCHIVE
+
+/*case BSE_ACTIVATED_TIMER:
+
+           //check if vcu can clear faults (MINOR)
+
+           #ifdef TIMER_DEBUG
+
+           UARTprintf("Apps bse activated timer expired\n\n\r");
+
+           #endif
+
+           // sets APPS values at midpoint of valid APPS range
+
+           prev = APPS1_MIN + ( 20 * ID);
+
+           if (prev == APPS1_MIN){ //FAULT
+
+               apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN; //finding the median
+
+               apps2_volt = create_apps2_volt(apps1_volt, 1.0); //create apps2 counterpart voltage
+
+               MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
+
+
+               delayms(250);
+
+               //apps1 should be median voltage, apps2 should be equivalent to apps1 percentage wise...
+
+               //evaluate VCU state (CAN driver(MINOR)/check throttle pin should be 0V/minimum) configure DAC pin
+
+               //if(testfailed) stopTimer(APPS)
+
+
+           } else{ //NORMAL OPERATION
+               // to be executed after apps_bse_activated()
+               // APPS sensors indicate <5% activation, regardless if BSE is still activated
+               MCP48FV_Set_Value_Double(APPS1_MIN+10, create_apps2_volt(APPS1_MIN+10, 1.00), DAC_SIZE_APPS, 0); //less than 5% apps range
+
+               delayms(250);
+
+               //apps1 should be 1.6V, apps2 should be 0.5 to 0.6V
+
+               //evaluate VCU state (CAN driver (RUNNING) /check throttle pin should be non-zero voltage)
+
+           }
+
+           setTimerID(APPS, ++ID); //TODO: double check later...
+
+           //STOP CONDITION
+           if(ID >= 2)
+               stopTimer(APPS);
+
+
+
+           break;*/

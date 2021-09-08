@@ -50,7 +50,7 @@ static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 
 static Result_t res;
 
-int main(void){
+ int main(void){
 
     
     initializeTestBoard();
