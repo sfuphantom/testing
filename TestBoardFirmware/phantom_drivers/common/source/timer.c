@@ -188,7 +188,9 @@ void setTimerPeriod(Peripheral peripheral_timer,int period){
 
 unsigned int update_value(Peripheral peripheral, int MIN, int MAX, int STEP, int ID, bool is_ceil){
 
-    unsigned int ret = MIN + ( STEP * ID ) ;
+    bool is_neg = (STEP < 0);
+
+    unsigned int ret = ( (MAX * is_neg) + (MIN * !is_neg) ) + ( STEP * ID ) ;
 
     //check ceiling and floor respectively
     if(ret > MAX && is_ceil){
