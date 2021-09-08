@@ -153,7 +153,10 @@ void apps_timer(TestTimer_t test_timer, int ID){
             UARTprintf("Apps short timer expired\n\n\r");
             #endif
 
-            voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 20, ID, true);
+//            ID++
+
+//            if
+//            voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 20, ID, true);
 
             if (voltage >= APPS1_MIN)    MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0); //short APPS1
 
