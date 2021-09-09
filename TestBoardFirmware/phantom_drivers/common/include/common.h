@@ -20,7 +20,7 @@
 //Common defines
 #define TIMER_DEBUG
 //#define HV_VS_DEBUG
-#define SWEEP_STEP 25
+#define SWEEP_STEP 250
 #define SWEEP_PERIOD 500
 
 
