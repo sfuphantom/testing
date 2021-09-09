@@ -7,10 +7,10 @@
 
 #include "bse.h"
 
-#define BSE_MAX 430
-#define BSE_MIN 150
+#define BSE_MAX 4300
+#define BSE_MIN 1500
 #define BSE_OPEN 0
-#define BSE_SHORT 500
+#define BSE_SHORT 5000
 #define VOUT1 1
 #define DAC_SIZE_BSE 0xFF
 
