@@ -202,7 +202,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
 // difference is the ratio difference between APPS values, 1 meaning 0% difference
 uint16_t create_apps2_volt(uint16_t apps1_volt, float difference){
-    uint16_t apps2_volt = (difference*((apps1_volt-APPS1_MIN)/(APPS1_MAX-APPS1_MIN))*(APPS2_MAX-APPS2_MIN))+APPS2_MIN;
+    uint16_t apps2_volt = (difference*( (double)(apps1_volt-APPS1_MIN)/(APPS1_MAX-APPS1_MIN))*(APPS2_MAX-APPS2_MIN))+APPS2_MIN;
     return apps2_volt;
 }
 

@@ -22,7 +22,8 @@
 //Choose test cases to run, independent of the GUI
 #ifndef GUI_MODE
 
-    #define APPS_TEST      NORMAL_APPS_ON
+    #define APPS_TEST      APPS_IMPLAUSIBILITY
+
     #define BSE_TEST       BSE_OPEN_CIRCUIT
 
     #define HV_VS_TEST     0
