@@ -7,10 +7,10 @@
 
 #include "apps.h"
 
-#define APPS1_MAX 440
-#define APPS1_MIN 150
-#define APPS2_MAX 150
-#define APPS2_MIN 50
+#define APPS1_MAX 4400
+#define APPS1_MIN 1500
+#define APPS2_MAX 1500
+#define APPS2_MIN 500
 #define DAC_SIZE_APPS 0xFF
 
 // Static function prototypes
@@ -143,7 +143,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
             // make sure it doesnt go over voltage - stop it somehow
 //            prev_voltage = get_apps_voltage(readRegister(0, 0));
-           prev_voltage = APPS1_MIN + ( 50 * ID);
+           prev_voltage = APPS1_MIN + ( 500 * ID);
 
             //STOP CONDITION
            if(prev_voltage > APPS1_MAX){
@@ -168,7 +168,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
             #endif
 
-            prev = APPS1_MIN + ( 20 * ID);
+            prev = APPS1_MIN + ( 200 * ID);
 
             if (prev >= APPS1_MIN) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0); //short APPS1
 
@@ -194,19 +194,19 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
 //            prev = get_apps_voltage(readRegister(0, 0));
 
-            prev = APPS1_MIN - ( 20 * ID);
+            prev = APPS1_MIN - ( 200 * ID);
 
 
             if (prev < APPS1_MIN){
-                MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0); //open APPS1
+                MCP48FV_Set_Value_Double(APPS1_MIN-200, APPS2_MIN, DAC_SIZE_APPS, 0); //open APPS1
             }
 
-            if (prev <= APPS1_MIN-20) {
-                MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open APPS2
+            if (prev <= APPS1_MIN-200) {
+                MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-200, DAC_SIZE_APPS, 0); //open APPS2
             }
 
-            if (prev <= APPS2_MIN-20) {
-                MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open both
+            if (prev <= APPS2_MIN-200) {
+                MCP48FV_Set_Value_Double(APPS1_MIN-200, APPS2_MIN-200, DAC_SIZE_APPS, 0); //open both
             }
 
             ///STOP CONDITION
