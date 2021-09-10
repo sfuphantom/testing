@@ -127,10 +127,6 @@ static void apps_sweep()
 
 void apps_timer(TestTimer_t test_timer, int ID){
 
-//    uint16_t apps1_volt, apps2_volt; //bse_activated_timer
-
-//    uint16_t prev; //short_timer, open_timer
-
     int voltage; //sweep_timer
 
     switch(test_timer){
@@ -156,7 +152,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
 //            ID++
 
 //            if
-//            voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 20, ID, true);
+            voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 20, ID, true);
 
             if (voltage >= APPS1_MIN)    MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0); //short APPS1
 
@@ -174,7 +170,6 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
             voltage = update_value(APPS, APPS2_MIN, APPS1_MIN, -20, ID, false);
 
-
             if (voltage < APPS1_MIN)     MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0); //open APPS1
 
             if (voltage <= APPS1_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open APPS2
@@ -185,9 +180,7 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
         default:
 
-
             UARTprintf("ERROR. APPS Timer not found\r\n");
-
 
             break;
 
