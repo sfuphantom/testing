@@ -50,7 +50,7 @@ static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 
 static Result_t res;
 
-int main(void){
+ int main(void){
 
     
     initializeTestBoard();
@@ -203,17 +203,17 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
     #ifndef GUI_MODE
 
-    stateptr->peripheralStateArray[APPS]  = 0;
-    stateptr->peripheralStateArray[BSE]   = 0;
-    stateptr->peripheralStateArray[HV_VS] = 0;
-    stateptr->peripheralStateArray[TSAL]  = 0;
-    stateptr->peripheralStateArray[IMD]   = 0;
-    stateptr->peripheralStateArray[LV]    = 0;
+    stateptr->peripheralStateArray[APPS]  = APPS_TEST;
+    stateptr->peripheralStateArray[BSE]   = BSE_TEST;
+    stateptr->peripheralStateArray[HV_VS] = HV_VS_TEST;
+    stateptr->peripheralStateArray[TSAL]  = TSAL_TEST;
+    stateptr->peripheralStateArray[IMD]   = IMD_TEST;
+    stateptr->peripheralStateArray[LV]    = LV_TEST;
 
-    stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = 0;
+    stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = VCU_COMMS_TEST;
 
     //BMS Tests
-    stateptr->peripheralStateArray[BMS_SLAVES] = 0;
+    stateptr->peripheralStateArray[BMS_SLAVES] = SLAVES_TEST;
 
     //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 

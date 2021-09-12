@@ -101,4 +101,6 @@ void setTimerID(Peripheral, int);
 
 void setTimerPeriod(Peripheral, int);
 
+unsigned int update_value(Peripheral, int, int, int, int, bool);
+
 #endif /* TIMERS_TIMERS_H_ */

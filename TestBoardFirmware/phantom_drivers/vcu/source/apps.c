@@ -127,11 +127,7 @@ static void apps_sweep()
 
 void apps_timer(TestTimer_t test_timer, int ID){
 
-    uint16_t apps1_volt, apps2_volt; //bse_activated_timer
-
-    uint16_t prev; //short_timer, open_timer
-
-    int prev_voltage; //sweep_timer
+    int voltage; //sweep_timer
 
     switch(test_timer){
 
@@ -141,143 +137,50 @@ void apps_timer(TestTimer_t test_timer, int ID){
             UARTprintf("Apps sweep timer expired.\n\n\r");
             #endif
 
-            // make sure it doesnt go over voltage - stop it somehow
-//            prev_voltage = get_apps_voltage(readRegister(0, 0));
-           prev_voltage = APPS1_MIN + ( 50 * ID);
+            voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 50, ID, true);
 
-            //STOP CONDITION
-           if(prev_voltage > APPS1_MAX){
+            MCP48FV_Set_Value_Double(voltage, create_apps2_volt(voltage, 1.00), DAC_SIZE_APPS, 0);
 
-
-               stopTimer(APPS);
-
-               prev_voltage = APPS1_MAX;
-           }
-
-            MCP48FV_Set_Value_Double(prev_voltage, create_apps2_volt(prev_voltage, 1.00), DAC_SIZE_APPS, 0);
-
-            setTimerID(APPS, ++ID);
-
-            break;
+             break;
 
         case SHORT_TIMER:
 
             #ifdef TIMER_DEBUG
-
             UARTprintf("Apps short timer expired\n\n\r");
-
             #endif
 
-            prev = APPS1_MIN + ( 20 * ID);
+//            ID++
 
-            if (prev >= APPS1_MIN) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0); //short APPS1
+//            if
+            voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 20, ID, true);
 
-            if (prev >= APPS1_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX, APPS2_MAX+20, DAC_SIZE_APPS, 0); //APPS1 shorted to APPS1 normal, APPS2 shorted
+            if (voltage >= APPS1_MIN)    MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0); //short APPS1
 
-            if (prev >= APPS2_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX+20, DAC_SIZE_APPS, 0); //APPS2 shorted to both shorted
+            if (voltage >= APPS1_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX, APPS2_MAX+20, DAC_SIZE_APPS, 0); //APPS1 shorted to APPS1 normal, APPS2 shorted
 
-            ///STOP CONDITION
-            if(prev > APPS1_MAX)
-                stopTimer(APPS);
-
-            setTimerID(APPS, ++ID);
+            if (voltage >= APPS2_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX+20, DAC_SIZE_APPS, 0); //APPS2 shorted to both shorted
 
             break;
 
         case OPEN_TIMER:
 
             #ifdef TIMER_DEBUG
-
             UARTprintf("Apps open timer expired\n\n\r");
-
             #endif
 
-//            prev = get_apps_voltage(readRegister(0, 0));
+            voltage = update_value(APPS, APPS2_MIN, APPS1_MIN, -20, ID, false);
 
-            prev = APPS1_MIN - ( 20 * ID);
+            if (voltage < APPS1_MIN)     MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0); //open APPS1
 
+            if (voltage <= APPS1_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open APPS2
 
-            if (prev < APPS1_MIN){
-                MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0); //open APPS1
-            }
-
-            if (prev <= APPS1_MIN-20) {
-                MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open APPS2
-            }
-
-            if (prev <= APPS2_MIN-20) {
-                MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open both
-            }
-
-            ///STOP CONDITION
-            if(prev < APPS2_MIN)
-                stopTimer(APPS);
-
-            setTimerID(APPS, ++ID);
-
+            if (voltage <= APPS2_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open both
 
             break;
 
-        /*case BSE_ACTIVATED_TIMER:
-
-            //check if vcu can clear faults (MINOR)
-
-            #ifdef TIMER_DEBUG
-
-            UARTprintf("Apps bse activated timer expired\n\n\r");
-
-            #endif
-
-            // sets APPS values at midpoint of valid APPS range
-
-            prev = APPS1_MIN + ( 20 * ID);
-
-            if (prev == APPS1_MIN){ //FAULT
-
-                apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN; //finding the median
-
-                apps2_volt = create_apps2_volt(apps1_volt, 1.0); //create apps2 counterpart voltage
-
-                MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
-
-
-                delayms(250);
-
-                //apps1 should be median voltage, apps2 should be equivalent to apps1 percentage wise...
-
-                //evaluate VCU state (CAN driver(MINOR)/check throttle pin should be 0V/minimum) configure DAC pin
-
-                //if(testfailed) stopTimer(APPS)
-
-
-            } else{ //NORMAL OPERATION
-                // to be executed after apps_bse_activated()
-                // APPS sensors indicate <5% activation, regardless if BSE is still activated
-                MCP48FV_Set_Value_Double(APPS1_MIN+10, create_apps2_volt(APPS1_MIN+10, 1.00), DAC_SIZE_APPS, 0); //less than 5% apps range
-
-                delayms(250);
-
-                //apps1 should be 1.6V, apps2 should be 0.5 to 0.6V
-
-                //evaluate VCU state (CAN driver (RUNNING) /check throttle pin should be non-zero voltage)
-
-            }
-
-            setTimerID(APPS, ++ID); //TODO: double check later...
-
-            //STOP CONDITION
-            if(ID >= 2)
-                stopTimer(APPS);
-
-
-
-            break;*/
-
         default:
 
-
             UARTprintf("ERROR. APPS Timer not found\r\n");
-
 
             break;
 
@@ -292,10 +195,68 @@ void apps_timer(TestTimer_t test_timer, int ID){
 
 // difference is the ratio difference between APPS values, 1 meaning 0% difference
 uint16_t create_apps2_volt(uint16_t apps1_volt, float difference){
-    uint16_t apps2_volt = (difference*((apps1_volt-APPS1_MIN)/(APPS1_MAX-APPS1_MIN))*(APPS2_MAX-APPS2_MIN))+APPS2_MIN;
+    uint16_t apps2_volt = (difference*( (double)(apps1_volt-APPS1_MIN)/(APPS1_MAX-APPS1_MIN))*(APPS2_MAX-APPS2_MIN))+APPS2_MIN;
     return apps2_volt;
 }
 
 uint16_t get_apps_voltage(uint16_t dac_val){
     return ((dac_val*500000)/(0xFF*1000));
 }
+
+
+//ARCHIVE
+
+/*case BSE_ACTIVATED_TIMER:
+
+           //check if vcu can clear faults (MINOR)
+
+           #ifdef TIMER_DEBUG
+
+           UARTprintf("Apps bse activated timer expired\n\n\r");
+
+           #endif
+
+           // sets APPS values at midpoint of valid APPS range
+
+           prev = APPS1_MIN + ( 20 * ID);
+
+           if (prev == APPS1_MIN){ //FAULT
+
+               apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN; //finding the median
+
+               apps2_volt = create_apps2_volt(apps1_volt, 1.0); //create apps2 counterpart voltage
+
+               MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
+
+
+               delayms(250);
+
+               //apps1 should be median voltage, apps2 should be equivalent to apps1 percentage wise...
+
+               //evaluate VCU state (CAN driver(MINOR)/check throttle pin should be 0V/minimum) configure DAC pin
+
+               //if(testfailed) stopTimer(APPS)
+
+
+           } else{ //NORMAL OPERATION
+               // to be executed after apps_bse_activated()
+               // APPS sensors indicate <5% activation, regardless if BSE is still activated
+               MCP48FV_Set_Value_Double(APPS1_MIN+10, create_apps2_volt(APPS1_MIN+10, 1.00), DAC_SIZE_APPS, 0); //less than 5% apps range
+
+               delayms(250);
+
+               //apps1 should be 1.6V, apps2 should be 0.5 to 0.6V
+
+               //evaluate VCU state (CAN driver (RUNNING) /check throttle pin should be non-zero voltage)
+
+           }
+
+           setTimerID(APPS, ++ID); //TODO: double check later...
+
+           //STOP CONDITION
+           if(ID >= 2)
+               stopTimer(APPS);
+
+
+
+           break;*/

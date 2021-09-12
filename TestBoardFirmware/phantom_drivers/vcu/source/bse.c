@@ -87,25 +87,13 @@ static void bse_sweep(){
 void bse_timer(TestTimer_t test_timer, int ID){
 
     #ifdef TIMER_DEBUG
-
     UARTprintf("Bse sweep timer expired.\n\n\r");
-
     #endif
 
-    int voltage = BSE_MIN + ( SWEEP_STEP * ID);
-
-    //STOP CONDITION
-    if(voltage > BSE_MAX){
-
-        stopTimer(BSE);
-
-        voltage = BSE_MAX;
-    }
+    int voltage = update_value(BSE, BSE_MIN, BSE_MAX, SWEEP_STEP, ID, true);
 
     MCP48FV_Set_Value_Single(voltage, DAC_SIZE_BSE, VOUT1, 1);
 
-    //increment cycle
-    setTimerID( BSE, ++ID );
 }
 
 /* End of Timer-Related Functions */

@@ -15,7 +15,7 @@
 
 #include "inverter.h"
 
-#include "apps.h""
+#include "apps.h"
 
 
 uint8_t is_bms_slave_test_passed(uint8_t test_case);
