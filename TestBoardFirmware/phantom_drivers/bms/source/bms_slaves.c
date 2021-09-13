@@ -18,25 +18,24 @@
 // #include "os_timer.h"
 
 // BMS Slave specific definitions, not accessed outside bms_slaves.c
-#define VOLTAGE_STEP  0.04
-#define DEFAULT_VOLTAGE 84
-#define DEFAULT_TEMPERATURE 25
+#define VOLTAGE_STEP  0.04 //not used
+#define DEFAULT_VOLTAGE 840
+#define DEFAULT_TEMPERATURE 250 //not used
 #define NUMBER_OF_TEMPERATURE_READINGS 16
 
 #define TRANSFER_GROUP 2
 
-// THESE VALUES NEED TO BE CHECKED - all must be an INT
-#define TEMP_MAX_VOLT  113 // 1.131 == 55 degrees
-#define TEMP_MIN_VOLT  268 // 2.682 = 0 degrees
-#define TEMP_HIGH_VOLT  67 //66.83 // 0.6683 = 76 degrees
-#define TEMP_LOW_VOLT 270 // 2.70 = 0 degrees
-#define VOLT_MIN  76 // 0.7608 * 100
-#define VOLT_MAX  100 // 0.9985 * 100
+#define TEMP_MAX_VOLT  1131 // 1.131 == 55 degrees
+#define TEMP_MIN_VOLT  2682 // 2.682 = 0 degrees
+#define TEMP_HIGH_VOLT  668 //66.83 // 0.6683 = 76 degrees // not used
+#define TEMP_LOW_VOLT 2700 // 2.70 = 0 degrees // not used
+#define VOLT_MIN  761 // 0.7608 * 100
+#define VOLT_MAX  999 // 0.9985 * 100
 
 // CHANGE THIS VALUE TO
-#define VOLT_TEST 0 //102 = 84.5
+#define VOLT_TEST 0 //102 = 84.5 // wtf is this
 
-//const uint8_t[] BMS_FAULT_LUT = {   }
+//const uint8_t[] BMS_FAULT_LUT = {   } //wtf is this
 
 
 typedef struct {
