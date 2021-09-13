@@ -17,18 +17,17 @@
 
 #define VOLTAGE_STEP  0.04 //not used
 #define DEFAULT_VOLTAGE 840
-#define DEFAULT_TEMPERATURE 250 //not used
-#define NUMBER_OF_TEMPERATURE_READINGS 16 //enough for 2 slaves
+#define NUMBER_OF_TEMPERATURE_READINGS 16 // represents 2 slaves
 
 #define TRANSFER_GROUP 2
 
-#define TEMP_MAX_VOLT  1131 // 1.131 == 55 degrees
-#define TEMP_MIN_VOLT  2682 // 2.682 = 0 degrees
-#define TEMP_HIGH_VOLT  668 //66.83 // 0.6683 = 76 degrees // not used
-#define TEMP_LOW_VOLT 2700 // 2.70 = 0 degrees // not used
-#define VOLT_MIN  761 // 0.7608 * 100
-#define VOLT_MAX  999 // 0.9985 * 100
-#define VOLT_TEST 0 //102 = 84.5 // wtf is this
+#define TEMP_MAX_VOLT  1131 // 55 degrees
+#define TEMP_MIN_VOLT  2682 // 0 degrees
+#define TEMP_HIGH_VOLT  668 // 76 degrees // not used
+#define TEMP_LOW_VOLT 2700 // 0 degrees // not used
+#define VOLT_MIN  761 
+#define VOLT_MAX  999 
+#define VOLT_TEST 0 // 84.5 - wtf is this
 
 typedef struct {
     float bmsSlaveVoltage;
@@ -96,23 +95,10 @@ void bms_slaves_init(){
     for(i = 0; i < NUMBER_OF_TEMPERATURE_READINGS; i++) {
         bmsStruct->bmsSlaveTemperatures[i] = (TEMP_MAX_VOLT + TEMP_MIN_VOLT)*0.5;
     }
-
-    bmsTempHigh->bmsSlaveVoltage = DEFAULT_VOLTAGE;
-    uint8_t j;
-    for(j=0; j < NUMBER_OF_TEMPERATURE_READINGS; j++) {
-        bmsTempHigh->bmsSlaveTemperatures[j] = (TEMP_MAX_VOLT + TEMP_MIN_VOLT)*0.5;
-    }
-    bmsTempHigh->bmsSlaveTemperatures[0] = TEMP_MAX_VOLT*1.5;
-    
-    bmsTempLow->bmsSlaveVoltage = DEFAULT_VOLTAGE;
-    uint8_t k;
-    for(k = 0; j < NUMBER_OF_TEMPERATURE_READINGS; j++) {
-        bmsTempLow->bmsSlaveTemperatures[j] =(TEMP_MAX_VOLT + TEMP_MIN_VOLT)*0.5;
-    }
-    bmsTempLow->bmsSlaveTemperatures[0] = 0;
     UARTprintf("BMS Initialization Complete");
-
 }
+
+
 
 // Send a constant 3.8V
 static void normal_bms_operation(){
