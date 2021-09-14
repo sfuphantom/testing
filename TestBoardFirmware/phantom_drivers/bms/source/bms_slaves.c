@@ -15,19 +15,17 @@
 #include "gio.h"
 #include "het.h"
 
-#define VOLTAGE_STEP  0.04 //not used
-#define DEFAULT_VOLTAGE 840
+#define VOLTAGE_STEP  0.04 
+#define DEFAULT_VOLTAGE 840 //this should probably be the max? probably 72V
+#define DEFAULT_TEMP 2064 // 23 degrees
 #define NUMBER_OF_TEMPERATURE_READINGS 16 // represents 2 slaves
 
 #define TRANSFER_GROUP 2
 
-#define TEMP_MAX_VOLT  1131 // 55 degrees
-#define TEMP_MIN_VOLT  2682 // 0 degrees
-#define TEMP_HIGH_VOLT  668 // 76 degrees // not used
-#define TEMP_LOW_VOLT 2700 // 0 degrees // not used
-#define VOLT_MIN  761 
-#define VOLT_MAX  999 
-#define VOLT_TEST 0 // 84.5 - wtf is this
+#define TEMP_MAX_VOLT  1106 // 55 degrees 
+#define TEMP_MIN_VOLT  2705 // 0 degrees
+#define VOLT_MIN  761 // this should probably be 48V
+#define VOLT_MAX  999 // probably 84V
 
 typedef struct {
     float bmsSlaveVoltage;
@@ -35,9 +33,9 @@ typedef struct {
 } BMSSlave_t;
 
 // Static Global Variables
-static BMSSlave_t *bmsStruct;
-static BMSSlave_t *bmsTempHigh;
-static BMSSlave_t *bmsTempLow;
+static BMSSlave_t *bmsSlaveData;
+static BMSSlave_t *bmsSlaveData_HIGH;
+static BMSSlave_t *bmsSlaveData_LOW;
 
 // Static function definitions
 static void normal_bms_operation();
@@ -86,83 +84,84 @@ Result_t bms_slaves_process(uint8_t state)
     return SUCCESS;
 }
 
-void bms_slaves_init(){
+void bms_slaves_init(){ 
 
     gioSetBit(HV_ACTIVE_PORT, HV_ACTIVE_PIN, 1);
 
-    bmsStruct->bmsSlaveVoltage =  DEFAULT_VOLTAGE;
+    bmsSlaveData->bmsSlaveVoltage =  DEFAULT_VOLTAGE;
     uint8_t i;
     for(i = 0; i < NUMBER_OF_TEMPERATURE_READINGS; i++) {
-        bmsStruct->bmsSlaveTemperatures[i] = (TEMP_MAX_VOLT + TEMP_MIN_VOLT)*0.5;
+        bmsSlaveData->bmsSlaveTemperatures[i] = DEFAULT_TEMP; 
     }
+
+    bmsSlaveData_HIGH->bmsSlaveVoltage =  VOLT_MAX; 
+    for(i = 0; i < NUMBER_OF_TEMPERATURE_READINGS; i++) {
+        bmsSlaveData_HIGH->bmsSlaveTemperatures[i] = TEMP_MAX_VOLT; 
+    }
+
+    bmsSlaveData_LOW->bmsSlaveVoltage =  VOLT_MIN; 
+    for(i = 0; i < NUMBER_OF_TEMPERATURE_READINGS; i++) {
+        bmsSlaveData_LOW->bmsSlaveTemperatures[i] = TEMP_MIN_VOLT;
+    }
+
+    //make these a normal bms values?
+    set_voltage(0);
+    set_temperature(0);
+
     UARTprintf("BMS Initialization Complete");
 }
 
-
-
 // Send a constant 3.8V
 static void normal_bms_operation(){
-    MCP48FV_Set_Value_Single(VOLT_TEST, DAC_SIZE_BMS, 0, 2);
+    set_voltage(bmsSlaveData->bmsSlaveVoltage);
+    set_temperature(bmsSlaveData->bmsSlaveTemperatures);
 
-    uint8_t pinSelect = 0;
-    for( ; pinSelect <= 00001111; pinSelect++){
-        temperature_mux(pinSelect); 
-        MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE_BMS, 1, TRANSFER_GROUP);
-    }
 }
 
 static void under_voltage_test() {
-    MCP48FV_Set_Value_Single(VOLT_MIN, DAC_SIZE_BMS, 0, TRANSFER_GROUP);
+    set_voltage(bmsSlaveData_LOW->bmsSlaveVoltage);
+    set_temperature(bmsSlaveData->bmsSlaveTemperatures);
 
-    uint8_t pinSelect = 0;
-    for( ; pinSelect <= 00001111; pinSelect++){
-        temperature_mux(pinSelect);
-        MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE_BMS, 1, TRANSFER_GROUP);
-    }
 }
 
 static void over_voltage_test(){
-    MCP48FV_Set_Value_Single(VOLT_MAX, DAC_SIZE_BMS, 0, TRANSFER_GROUP);
+    set_voltage(bmsSlaveData_HIGH->bmsSlaveVoltage);
+    set_temperature(bmsSlaveData->bmsSlaveTemperatures);
 
-    uint8_t pinSelect = 0;
-    for( ; pinSelect <= 00001111; pinSelect++){
-        temperature_mux(pinSelect);
-        MCP48FV_Set_Value_Single(bmsStruct->bmsSlaveTemperatures[pinSelect], DAC_SIZE_BMS, 1, TRANSFER_GROUP);
-    } 
 }
 
 static void under_temperature_test(){ 
-    MCP48FV_Set_Value_Single((VOLT_MAX + VOLT_MIN)*0.5, DAC_SIZE_BMS, 0, TRANSFER_GROUP);
+    set_voltage(bmsSlaveData->bmsSlaveVoltage);
+    set_temperature(bmsSlaveData_LOW->bmsSlaveTemperatures);
 
-    uint8_t pinSelect = 0;
-    for( ; pinSelect <= 0b00001111; pinSelect++){
-        temperature_mux(pinSelect); 
-        MCP48FV_Set_Value_Single(bmsTempLow->bmsSlaveTemperatures[pinSelect], DAC_SIZE_BMS, 1, TRANSFER_GROUP); 
-    }
 }
 
 static void over_temperature_test(){
-    MCP48FV_Set_Value_Single((VOLT_MAX + VOLT_MIN)*0.5, DAC_SIZE_BMS, 0, TRANSFER_GROUP);
+    set_voltage(bmsSlaveData->bmsSlaveVoltage);
+    set_temperature(bmsSlaveData_HIGH->bmsSlaveTemperatures);
 
-    uint8_t pinSelect = 0;
-    for( ; pinSelect <= 0b00001111; pinSelect++){
-        temperature_mux(pinSelect); 
-        MCP48FV_Set_Value_Single(bmsTempHigh->bmsSlaveTemperatures[pinSelect], DAC_SIZE_BMS, 1, TRANSFER_GROUP); 
-    }
 }
 
 static void communication_loss_test(){
-    MCP48FV_Set_Value_Single(0, DAC_SIZE_BMS, 0, TRANSFER_GROUP);
+    set_voltage(0);
+    set_temperature(0);
 
-    uint8_t pinSelect = 0;
-    for( ; pinSelect <= 00001111; pinSelect++){
-        temperature_mux(pinSelect);
-        MCP48FV_Set_Value_Single(0, DAC_SIZE_BMS, 1, TRANSFER_GROUP);
-    }
     return;
 }
 
-// *****temperature mux function (loop)*****
+// internal BMS Slave functions
+static void set_temperature(float temparray[]){ 
+    uint8_t pinSelect = 0;
+    for( ; pinSelect <= 00001111; pinSelect++){
+        temperature_mux(pinSelect);
+        MCP48FV_Set_Value_Single(temparray[pinSelect], DAC_SIZE_BMS, 1, TRANSFER_GROUP);
+    }
+}
+
+static void set_voltage(float voltage){ 
+    MCP48FV_Set_Value_Single(voltage, DAC_SIZE_BMS, 0, TRANSFER_GROUP);
+}
+
 static void temperature_mux(uint8_t pinSelect){
     if (0b00000001 & pinSelect){ 
         gioSetBit(THERMISTOR_MUX_HET_PORT, THERMISTOR_MUX_PIN_0, 1);
