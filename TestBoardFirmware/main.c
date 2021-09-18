@@ -290,45 +290,6 @@ static void initializeVCU(){
 }
 
 
-void initializeTimers(){
-
-    xTimerSet(
-                "BSE", // name
-
-                BSE, // peripheral
-
-                bse_timer, // callback function
-
-                0 // ID
-             );
-
-    xTimerSet(
-                "APPS", // name
-
-                APPS, // peripheral
-
-                apps_timer, // callback function
-
-                0 // ID
-             );
-
-    xTimerSet(
-
-                 "HV_VS", // name
-
-                 HV_VS, // peripheral
-
-                 hv_vs_timer, // callback function
-
-                 0 // ID
-             );
-
-
-    //add more peripheral timers here...
-
-
-}
-
 void initializeTestBoard(){
 
     //initialization
