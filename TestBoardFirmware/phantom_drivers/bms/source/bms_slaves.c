@@ -16,7 +16,7 @@
 #include "het.h"
 
 #define VOLTAGE_STEP  0.04 
-#define DEFAULT_VOLTAGE 840 //this should probably be the max? probably 72V
+#define DEFAULT_VOLTAGE 840
 #define DEFAULT_TEMP 2064 // 23 degrees
 #define NUMBER_OF_TEMPERATURE_READINGS 16 // represents 2 slaves
 
@@ -24,8 +24,8 @@
 
 #define TEMP_MAX_VOLT  1106 // 55 degrees 
 #define TEMP_MIN_VOLT  2705 // 0 degrees
-#define VOLT_MIN  761 // this should probably be 48V
-#define VOLT_MAX  999 // probably 84V
+#define VOLT_MIN  761
+#define VOLT_MAX  999
 
 typedef struct {
     float bmsSlaveVoltage;
@@ -43,10 +43,10 @@ static void over_voltage_test();
 static void under_voltage_test();
 static void over_temperature_test();
 static void under_temperature_test();
-//static void weird_sensor_readings_voltage_test();
-//static void weird_sensor_readings_temperature_test();
 static void communication_loss_test();
 static void temperature_mux(uint8_t pinSelect);
+static void set_temperature(float temparray[]);
+static void set_voltage(float voltage);
 
 Result_t bms_slaves_process(uint8_t state)
 {
@@ -69,12 +69,6 @@ Result_t bms_slaves_process(uint8_t state)
             break;
         case UNDER_TEMPERATURE_FAULT:
             under_temperature_test();
-            break;
-        case WEIRD_SENSOR_READINGS_VOLTAGE:
-            //weird_sensor_readings_voltage_test();
-            break;
-        case WEIRD_SENSOR_READINGS_TEMPERATURE:
-            //weird_sensor_readings_temperature_test();
             break;
         case COMMUNICATION_LOSS:
             communication_loss_test();
@@ -104,14 +98,12 @@ void bms_slaves_init(){
         bmsSlaveData_LOW->bmsSlaveTemperatures[i] = TEMP_MIN_VOLT;
     }
 
-    //make these a normal bms values?
-    set_voltage(0);
-    set_temperature(0);
+    set_voltage(bmsSlaveData->bmsSlaveVoltage);
+    set_temperature(bmsSlaveData->bmsSlaveTemperatures);
 
     UARTprintf("BMS Initialization Complete");
 }
 
-// Send a constant 3.8V
 static void normal_bms_operation(){
     set_voltage(bmsSlaveData->bmsSlaveVoltage);
     set_temperature(bmsSlaveData->bmsSlaveTemperatures);
@@ -133,20 +125,16 @@ static void over_voltage_test(){
 static void under_temperature_test(){ 
     set_voltage(bmsSlaveData->bmsSlaveVoltage);
     set_temperature(bmsSlaveData_LOW->bmsSlaveTemperatures);
-
 }
 
 static void over_temperature_test(){
     set_voltage(bmsSlaveData->bmsSlaveVoltage);
     set_temperature(bmsSlaveData_HIGH->bmsSlaveTemperatures);
-
 }
 
 static void communication_loss_test(){
     set_voltage(0);
     set_temperature(0);
-
-    return;
 }
 
 // internal BMS Slave functions
