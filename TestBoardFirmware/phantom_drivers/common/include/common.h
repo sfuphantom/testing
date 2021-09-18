@@ -47,12 +47,17 @@ typedef enum
   FAIL
 } Result_t;
 
+#define NUM_PERIPHERALS 12
+
 typedef enum Peripheral
 {
     //systems with timers
     APPS = 0,
     BSE,
     GPIO,
+
+    VALIDATION,
+
 
     TSAL,
     IMD,
