@@ -61,7 +61,7 @@ float getInverterSignal(){
             Inverter_input = (int) (Inverter_analog*100);
         }
     }
-    UARTprintf("\n\r");
+    UARTprintf("\n\n\r");
 
     #endif
 
