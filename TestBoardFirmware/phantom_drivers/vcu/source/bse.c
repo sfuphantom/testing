@@ -75,16 +75,7 @@ static void bse_short_circuit(){
 
 /* Timer-Related Functions */
 
-static void bse_sweep(){
-
-    //reset timer ID ( counts # of cycles)
-    setTimerID(BSE, 0);
-
-    //start timer
-    startTimer(BSE, SWEEP_TIMER, SWEEP_PERIOD);
-}
-
-void bse_timer(TestTimer_t test_timer, int ID){
+void bse_sweep_timer(int ID){
 
     #ifdef TIMER_DEBUG
     UARTprintf("Bse sweep timer expired.\n\n\r");
@@ -94,6 +85,17 @@ void bse_timer(TestTimer_t test_timer, int ID){
 
     MCP48FV_Set_Value_Single(voltage, DAC_SIZE_BSE, VOUT1, 1);
 
+}
+
+static void bse_sweep(){
+
+    //reset timer ID ( counts # of cycles)
+    setTimerID(BSE, 0);
+
+    setTimerCallback(BSE, bse_sweep_timer);
+
+    //start timer
+    startTimer(BSE, SWEEP_PERIOD);
 }
 
 /* End of Timer-Related Functions */
