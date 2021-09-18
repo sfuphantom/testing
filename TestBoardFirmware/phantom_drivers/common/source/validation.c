@@ -11,6 +11,8 @@
 #define LOW_BOUND 0
 #define UP_BOUND 1
 
+#define SHUTDOWN_TIMEOUT_PERIOD 5000
+
 //Lookup tables for expected results from the VCU
 
 //TODO: Fill out ranges for expected results ie { MIN, MAX } -> { 10, 20 } =  10 <= expected result <= 20
@@ -176,9 +178,12 @@ uint8_t getShutdownSignal(){
 
 void setShutdownOccurence(bool expected_result){
 
-    set
+    setTimerID(VALIDATION, 0)
 
 
+    setTimerCallback(VALIDATION, shutdown_timeout_callback);
+
+    startTimer(VALIDATION, SHUTDOWN_TIMEOUT_PERIOD);
 
     shutdown_expected = expected_result;
 }

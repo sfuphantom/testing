@@ -256,6 +256,16 @@ void initializeTimers(){
                  0 // ID
              );
 
+    xTimerSet(
+                 "VALIDATION", // name
+
+                 VALIDATION, // peripheral
+
+                 defaultCallback, // callback function
+
+                 0 // ID
+             );
+
 
 
     //add more peripheral timers here...
