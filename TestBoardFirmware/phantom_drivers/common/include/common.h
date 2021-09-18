@@ -23,7 +23,6 @@
 #ifndef GUI_MODE
 
     #define APPS_TEST      NORMAL_APPS_OFF
-
     #define BSE_TEST       BSE_OPEN_CIRCUIT
 
     #define HV_VS_TEST     0

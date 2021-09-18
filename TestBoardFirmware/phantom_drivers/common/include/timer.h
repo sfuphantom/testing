@@ -26,26 +26,7 @@
 
 /* Variables */
 
-// Test timer List Enum
-typedef enum{
-
-    SWEEP_TIMER = 0, //general vcu timer
-
-    //apps timers
-    APPS_SHORT_TIMER,
-    APPS_OPEN_TIMER,
-    APPS_BSE_ACTIVATED_TIMER,
-    APPS_SWEEP_TIMER,
-
-    SHORT_TIMER,
-    OPEN_TIMER,
-    BSE_ACTIVATED_TIMER,
-
-    //more timers here...
-
-} TestTimer_t;
-
-typedef void (*Callbackfunc)(TestTimer_t, int); //callback function signature; MUST return void and take Timer and int as parameters
+typedef void (*Callbackfunc)(int); //callback function signature; MUST return void and take Timer and int as parameters
 
 // TimerHandle_t Struct
 typedef struct{
@@ -59,8 +40,6 @@ typedef struct{
     int period; //peripheral timer period in ms
 
     bool stop; //boolean to start/stop peripheral timer
-
-    TestTimer_t timer; //variable holding test timer to run
 
 } TimerHandle_t;
 
@@ -93,7 +72,7 @@ void stopGlobalTimer();
 
 void stopAllTimers();
 
-void startTimer(Peripheral, TestTimer_t, int);
+void startTimer(Peripheral, int);
 
 void stopTimer(Peripheral);
 
@@ -102,5 +81,7 @@ void setTimerID(Peripheral, int);
 void setTimerPeriod(Peripheral, int);
 
 unsigned int update_value(Peripheral, int, int, int, int, bool);
+
+void setTimerCallback(Peripheral, Callbackfunc);
 
 #endif /* TIMERS_TIMERS_H_ */
