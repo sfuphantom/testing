@@ -24,7 +24,13 @@ uint8_t is_bms_slave_test_passed(uint8_t test_case);
 
 bool validateThrottleControls(uint8_t, uint8_t);
 
+uint8_t getShutdownSignal(); // getter for shutdown signal
 
+void setShutdownOccurence(bool); // tells the validation module the type of shutdown signal to expect
+
+bool getShutdownResult() // getter for shutdown_fail
+
+void shutdown_timeout_callback(int);
 
 
 

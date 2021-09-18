@@ -53,6 +53,15 @@ static const unsigned int BSE_RESULTS_LUT[][2]  = {  { 0, 20 }, //NORMAL_BSE_OFF
 
 //static const uint8_t[] GPIO_RESULTS_LUT = { /* RUNNING */ 0 , /* TS_OFF */0, 0 /* !RUNNING */, /* ZERO THROTTLE */ 0}; //wait for CAN driver...
 
+
+/* Shutdown Variables */
+
+static shutdown_fail;
+
+static shutdown_signal;
+
+static shutdown_expected;
+
 static bool validateAPPS(uint8_t, unsigned int);
 
 static bool validateBSE(uint8_t testcase, unsigned int);
@@ -75,11 +84,9 @@ uint8_t is_bms_slave_test_passed(uint8_t test_case){
     return ( (test_case != NORMAL_BMS_OPERATION) ==  gioGetBit( BMS_SHUTDOWN_PORT, BMS_SHUTDOWN_PIN ) ); /* read shutdown pin */     //expected state
 }
 
-
 bool validateThrottleControls(uint8_t apps_test, uint8_t bse_test){
 
     //grab inverter signal and apps/bse test cases
-
     unsigned int inverter_sig = getInverterSignal();
 
     return ( validateAPPS(apps_test, inverter_sig) && validateBSE(bse_test, inverter_sig) );
@@ -87,33 +94,115 @@ bool validateThrottleControls(uint8_t apps_test, uint8_t bse_test){
 
 static bool validateAPPS(uint8_t testcase, unsigned int inverter_sig){
 
-
     #ifdef VCU_DEBUG
-
     UARTprintf( (APPS_RESULTS_LUT[testcase][LOW_BOUND] <= inverter_sig) && (inverter_sig <= APPS_RESULTS_LUT[testcase][UP_BOUND]) ? "APPS Result: TEST PASSED\r\n" : "APPS Result: TEST FAILED\r\n" );
-
     #endif
 
     //check if received value is within range of result
-
     return ( (APPS_RESULTS_LUT[testcase][LOW_BOUND] <= inverter_sig) && (inverter_sig <= APPS_RESULTS_LUT[testcase][UP_BOUND]) );
-
 }
 
 static bool validateBSE(uint8_t testcase, unsigned int inverter_sig){
 
-
     #ifdef VCU_DEBUG
-
     UARTprintf( (BSE_RESULTS_LUT[testcase][LOW_BOUND] <= inverter_sig) && (inverter_sig <= BSE_RESULTS_LUT[testcase][UP_BOUND]) ? "BSE Result: TEST PASSED\r\n" : "BSE Result: TEST FAILED\r\n" );
-
     #endif
 
     //check if received value is within range of result
-
     return ( (BSE_RESULTS_LUT[testcase][LOW_BOUND] <= inverter_sig) && (inverter_sig <= BSE_RESULTS_LUT[testcase][UP_BOUND]) );
+}
+
+
+/* Shutdown Interrupts */
+
+//Halcogen Setup
+//1.Enable HET1 Driver
+//2.Choose Edge Interrupt to enable and output on specific pin
+//3.Select VIM Channel for either Low/High Priority (same priority as edge interrupt)
+//4.Initialize VIM,GIO, and enableIRQ in the code
+//HET1 interrupt set at both edges; set to high priority
+
+void initializeShutdownInterrupt(){
+
+    hetInit();
+
+    vimInit();
+
+    //Enable Interrupts
+    edgeEnableNotification(VCU_FLT_REG, VCU_FLT_EDGE);
+
+    _enable_IRQ();
 
 }
 
+static void readShutdownSignal(){
+
+    shutdown_signal = gioGetBit( VCU_FLT_PORT, VCU_FLT_PIN );
+}
+
+
+void shutdown_timeout_callback(int ID){
+
+    shutdown_fail = true;
+
+    UARTprintf("SHUTDOWN SIGNAL HAS TIMED OUT\r\n");
+
+    stopAllTimers();
+
+}
+
+void shutdown_callback(){
+
+    if( shutdown_expected == getShutdownSignal() ){
+
+        initializeVCU();
+
+
+    }else{
+
+        stopAllTimers();
+
+        shutdown_fail = true;
+
+    }
+
+}
+
+
+uint8_t getShutdownSignal(){
+
+    return shutdown_signal;
+}
+
+void setShutdownOccurence(bool expected_result){
+
+    set
+
+
+
+    shutdown_expected = expected_result;
+}
+
+bool getShutdownResult(){
+
+    return shutdown_fail;
+}
+
+void edgeNotification(hetBASE_t * hetREG,uint32 edge)
+{
+/*  enter user code between the USER CODE BEGIN and USER CODE END. */
+/* USER CODE BEGIN (37) */
+
+    if(hetREG == VCU_FLT_REG && edge == VCU_FLT_EDGE){
+
+        readShutdownSignal();
+
+        shutdown_callback();
+    }
+
+
+
+/* USER CODE END */
+}
 
 

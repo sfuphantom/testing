@@ -21,7 +21,7 @@
 #include "Phantom_sci.h"
 
 
-#define NUM_TIMERS 10 //each system gets one timer if needed. reduce number of timers later...
+#define NUM_TIMERS NUM_PERIPHERALS //each system gets one timer if needed. reduce number of timers later...
 
 
 /* Variables */
