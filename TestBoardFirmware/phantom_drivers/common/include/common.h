@@ -22,7 +22,7 @@
 //Choose test cases to run, independent of the GUI
 #ifndef GUI_MODE
 
-    #define APPS_TEST      APPS_SWEEP
+    #define APPS_TEST      APPS_SHORT_CIRCUIT
 
     #define BSE_TEST       BSE_OPEN_CIRCUIT
 
