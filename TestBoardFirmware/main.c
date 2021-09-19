@@ -67,9 +67,14 @@ static Result_t res;
     }
     UARTprintf("Mode detected: ");
 
-    //++ Added by jay pacamarra for debugging :)
-    sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer);
-    //++ Added by jay pacamarra for debugging :)
+    if(testBoardState.testMode == VCU_MODE){
+        //++ Added by jay pacamarra for debugging :)
+        sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer); 
+        //++ Added by jay pacamarra for debugging :)
+    }
+    else if (testBoardState.testMode == BMS_MODE){
+        sciReceive(PC_UART, 102, (unsigned char *)&UARTBuffer);
+    }
 
     //* test code *//
 //    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
