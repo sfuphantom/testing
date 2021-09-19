@@ -185,32 +185,32 @@ static json_t * JSONHandler(unsigned char *jsonstring){
 static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
     #ifdef GUI_MODE
-
+    if (testBoardState.testMode == VCU_MODE){
     //VCU Tests
-    json_t * appsProperty = json_getProperty(json, "APPS"); 
-    stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
-    json_t * bseProperty = json_getProperty(json, "BSE"); 
-    stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
-    json_t * hv_vsProperty = json_getProperty(json, "HV_VOLTAGE_SENSOR");
-    stateptr->peripheralStateArray[HV_VS] = (uint8_t) json_getInteger(hv_vsProperty);
+        json_t * appsProperty = json_getProperty(json, "APPS"); 
+        stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
+        json_t * bseProperty = json_getProperty(json, "BSE"); 
+        stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
+        json_t * hv_vsProperty = json_getProperty(json, "HV_VOLTAGE_SENSOR");
+        stateptr->peripheralStateArray[HV_VS] = (uint8_t) json_getInteger(hv_vsProperty);
 
-    stateptr->peripheralStateArray[TSAL] = 0;
+        stateptr->peripheralStateArray[TSAL] = 0;
 
-    stateptr->peripheralStateArray[IMD] = 0;
+        stateptr->peripheralStateArray[IMD] = 0;
 
-    stateptr->peripheralStateArray[LV] = 0;
+        stateptr->peripheralStateArray[LV] = 0;
 
-    stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = 0;
+        stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = 0;
+    } else if (testBoardState.testMode == BMS_MODE){
+        // BMS Tests
+        // Check mode of testboard before setting test cases - Jay Pacamarra >:(
+        json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
+        stateptr->peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
 
+        stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 
-    //BMS Tests
-    //Check mode of testboard before setting test cases - Jay Pacamarra >:(
-//    json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
-//    stateptr->peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
-
-    //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
-
-    //stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+        stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+    }
 
     #endif
 
