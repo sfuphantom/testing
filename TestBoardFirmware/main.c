@@ -40,6 +40,7 @@ static void vcu_mode_process(TestBoardState_t *stateptr);
 static void setPeripheralTestCases(TestBoardState_t* stateptr, json_t* json);
 static json_t * JSONHandler(unsigned char *jsonstring);
 static void initializeVCU();
+static void initializeTestBoard();
 
 //Timer functions
 static void initializeTimers();
@@ -47,34 +48,14 @@ static void initializeTimers();
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 
-int main(void){
+static Result_t res;
 
-    //initialization
-    _enable_IRQ();
+ int main(void){
 
-
-    /* Slave Data */
-    adcSlaveDataSetup();
-
-
-    gioInit();
-    gioSetDirection(hetPORT1, 0xFFFFFFFF);
     
-    MCP48FV_Init();
+    initializeTestBoard();
 
-   // sciInit();
-    timerInit();
-
-    gpio_init();
-
-
-    Result_t res = SUCCESS;
-    //res = MCP48FV_Init(); 
-
-    res = initUARTandModeHandler(&testBoardState);
-
-    initializeTimers();
-
+    #ifdef GUI_MODE
 
     UARTprintf(" Ready to initialize GUI \n\r");
     sciReceive(PC_UART, 3, (unsigned char *)&testMode);
@@ -93,14 +74,21 @@ int main(void){
     //* test code *//
 //    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
+    #endif
+
     bool test_passed = false;
 
     while(true)
     {
         //parse JSON and set states
         //* test code *//
+        #ifdef GUI_MODE
         setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
+        #endif
 
+        #ifndef GUI_MODE
+        setPeripheralTestCases(&testBoardState, NULL);
+        #endif
 
         startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
 
@@ -191,6 +179,7 @@ static json_t * JSONHandler(unsigned char *jsonstring){
 
 static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
+    #ifdef GUI_MODE
 
     //VCU Tests
     json_t * appsProperty = json_getProperty(json, "APPS"); 
@@ -217,6 +206,29 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
     //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 
     //stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+
+    #endif
+
+    #ifndef GUI_MODE
+
+    stateptr->peripheralStateArray[APPS]  = APPS_TEST;
+    stateptr->peripheralStateArray[BSE]   = BSE_TEST;
+    stateptr->peripheralStateArray[HV_VS] = HV_VS_TEST;
+    stateptr->peripheralStateArray[TSAL]  = TSAL_TEST;
+    stateptr->peripheralStateArray[IMD]   = IMD_TEST;
+    stateptr->peripheralStateArray[LV]    = LV_TEST;
+
+    stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = VCU_COMMS_TEST;
+
+    //BMS Tests
+    stateptr->peripheralStateArray[BMS_SLAVES] = SLAVES_TEST;
+
+    //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
+
+    //stateptr->peripheralStateArray[BMS_COMMUNICATIONS] = 0;
+
+    #endif
+
 
 }
 
@@ -286,43 +298,38 @@ static void initializeVCU(){
 }
 
 
-void initializeTimers(){
+void initializeTestBoard(){
 
-    xTimerSet(
-                "BSE", // name
-
-                BSE, // peripheral
-
-                bse_timer, // callback function
-
-                0 // ID
-             );
-
-    xTimerSet(
-                "APPS", // name
-
-                APPS, // peripheral
-
-                apps_timer, // callback function
-
-                0 // ID
-             );
-
-    xTimerSet(
-
-                 "HV_VS", // name
-
-                 HV_VS, // peripheral
-
-                 hv_vs_timer, // callback function
-
-                 0 // ID
-             );
+    //initialization
+        _enable_IRQ();
 
 
-    //add more peripheral timers here...
+        /* Slave Data */
+        adcSlaveDataSetup();
 
+
+        gioInit();
+        gioSetDirection(hetPORT1, 0xFFFFFFFF);
+
+        MCP48FV_Init();
+
+       // sciInit();
+        timerInit();
+
+        gpio_init();
+
+
+        adcInit();
+
+
+        res = SUCCESS;
+        //res = MCP48FV_Init();
+
+        res = initUARTandModeHandler(&testBoardState);
+
+        initializeTimers();
 
 }
+
 
 
