@@ -50,7 +50,7 @@ static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 
 static Result_t res;
 
-int main(void){
+ int main(void){
 
     
     initializeTestBoard();
@@ -66,6 +66,10 @@ int main(void){
         testBoardState.testMode = VCU_MODE;
     }
     UARTprintf("Mode detected: ");
+
+    //++ Added by jay pacamarra for debugging :)
+    sciReceive(PC_UART, 173, (unsigned char *)&UARTBuffer);
+    //++ Added by jay pacamarra for debugging :)
 
     //* test code *//
 //    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
@@ -125,14 +129,17 @@ int main(void){
 
         //send a single pass/result to PC (for CLI, uncomment VALID_DEBUG in common.h to display results)
 
-        test_passed = validateThrottleControls(testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
+//        test_passed = validateThrottleControls(testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
 
         //read bms shutdown pin; display results
 
 //        test_passed = is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
 
-        UARTprintf(test_passed ? "{ 1 }" : "{ 0 }"); // send results to GUI
+        test_passed = true;
 
+        UARTprintf(test_passed ? "{ Pass }" : "{ Fail }"); // send results to GUI
+
+        while(true);
 
 
         delayms(5000);
@@ -179,7 +186,7 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
     stateptr->peripheralStateArray[APPS] = (uint8_t) json_getInteger(appsProperty);
     json_t * bseProperty = json_getProperty(json, "BSE"); 
     stateptr->peripheralStateArray[BSE] = (uint8_t) json_getInteger(bseProperty);
-    json_t * hv_vsProperty = json_getProperty(json, "HV_VS");
+    json_t * hv_vsProperty = json_getProperty(json, "HV_VOLTAGE_SENSOR");
     stateptr->peripheralStateArray[HV_VS] = (uint8_t) json_getInteger(hv_vsProperty);
 
     stateptr->peripheralStateArray[TSAL] = 0;
@@ -192,8 +199,9 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
 
     //BMS Tests
-    json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
-    stateptr->peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
+    //Check mode of testboard before setting test cases - Jay Pacamarra >:(
+//    json_t * bmsProperty = json_getProperty(json, "BMS_SLAVES");
+//    stateptr->peripheralStateArray[BMS_SLAVES] = (uint8_t) json_getInteger(bmsProperty);
 
     //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 
@@ -203,17 +211,17 @@ static void setPeripheralTestCases(TestBoardState_t *stateptr, json_t* json){
 
     #ifndef GUI_MODE
 
-    stateptr->peripheralStateArray[APPS]  = 0;
-    stateptr->peripheralStateArray[BSE]   = 0;
-    stateptr->peripheralStateArray[HV_VS] = 0;
-    stateptr->peripheralStateArray[TSAL]  = 0;
-    stateptr->peripheralStateArray[IMD]   = 0;
-    stateptr->peripheralStateArray[LV]    = 0;
+    stateptr->peripheralStateArray[APPS]  = APPS_TEST;
+    stateptr->peripheralStateArray[BSE]   = BSE_TEST;
+    stateptr->peripheralStateArray[HV_VS] = HV_VS_TEST;
+    stateptr->peripheralStateArray[TSAL]  = TSAL_TEST;
+    stateptr->peripheralStateArray[IMD]   = IMD_TEST;
+    stateptr->peripheralStateArray[LV]    = LV_TEST;
 
-    stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = 0;
+    stateptr->peripheralStateArray[VCU_COMMUNICATIONS] = VCU_COMMS_TEST;
 
     //BMS Tests
-    stateptr->peripheralStateArray[BMS_SLAVES] = 0;
+    stateptr->peripheralStateArray[BMS_SLAVES] = SLAVES_TEST;
 
     //stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;
 
@@ -289,45 +297,6 @@ static void initializeVCU(){
 
 }
 
-
-void initializeTimers(){
-
-    xTimerSet(
-                "BSE", // name
-
-                BSE, // peripheral
-
-                bse_timer, // callback function
-
-                0 // ID
-             );
-
-    xTimerSet(
-                "APPS", // name
-
-                APPS, // peripheral
-
-                apps_timer, // callback function
-
-                0 // ID
-             );
-
-    xTimerSet(
-
-                 "HV_VS", // name
-
-                 HV_VS, // peripheral
-
-                 hv_vs_timer, // callback function
-
-                 0 // ID
-             );
-
-
-    //add more peripheral timers here...
-
-
-}
 
 void initializeTestBoard(){
 
