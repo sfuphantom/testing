@@ -12,25 +12,22 @@ import json
 
 from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
 
-
-# Constants to be changed based on Launchpad Settings
-PORT = "COM8"
 BAUDRATE = 9600
 TIMEOUT = 0.1
 
 #Example of Tests to be chosen by UI
-selectedTest_example = [{'Test Name': 'BMS_SLAVES', 
-'Test Case': 'y', 
-'Repeat': None, 
-'Test Index': None, 'Enum': 1}]
+# selectedTest_example = [{'Test Name': 'BMS_SLAVES', 
+# 'Test Case': 'y', 
+# 'Repeat': None, 
+# 'Test Index': None, 'Enum': 1}]
 
 #{'Test Name': 'thermistor_exp', 'Test Case': 'v', 'Repeat': None, 'Test Index': None, 'Enum': 0}]
 
 # Dictionary object of BMS in normal state
 normal_bms = {
     "Mode": "BMS",
-	"BMS/VCU CAN": 0,
-	"Thermistor Expansion": 0,
+	"COMMUNICATIONS": 0,
+	"THERMISTOR_EXPANSION": 0,
 	"BMS_SLAVES": 0,
 	"repeat": 1
 }
@@ -42,7 +39,7 @@ def build_json(selectedTest):
 
     counter = 0
     for x in selectedTest:
-        selectedJson.update({selectedTest_example[counter].get('Test Name'): selectedTest_example[counter].get('Enum')})
+        selectedJson.update({selectedTest_example[counter].get('Test Name'): selectedTest_example[counter].get('enum')})
         counter += 1
     
     jsonStr = json.dumps(selectedJson, indent="\t")

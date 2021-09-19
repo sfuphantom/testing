@@ -319,7 +319,7 @@
     ],
     "BMS": [
         {
-            "BMS/VCU CAN": [
+            "COMMUNICATIONS": [
                 {
                     "Case": "Test 1: Alive Signal",
                     "Repeat": "",
@@ -353,7 +353,7 @@
             ]
         },
         {
-            "Thermistor Expansion": [
+            "THERMISTOR_EXPANSION": [
                 {
                     "Case": "Test 1: Configuration Test",
                     "Repeat": "",
@@ -381,7 +381,7 @@
             ]
         },
         {
-            "BMS Slave Voltages & Temperatures": [
+            "BMS_SLAVES": [
                 {
                     "Case": "Test 1: Normal Slave Operation",
                     "Repeat": "",
