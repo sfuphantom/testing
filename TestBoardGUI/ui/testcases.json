@@ -272,27 +272,32 @@
                 {
                     "Case": "Test 1: Alive Signal",
                     "Repeat": "",
-                    "Description": "Send an intermittent pulse (like a watchdog) to check that the device is functioning with the correct rate" 
+                    "Description": "Send an intermittent pulse (like a watchdog) to check that the device is functioning with the correct rate",
+                    "enum": "0"
                 },
                 {
                     "Case": "Test 2: Dead Signal",
                     "Repeat": "",
-                    "Description": "Send no signal or constant signal (depends on what is defined as dead signal)" 
+                    "Description": "Send no signal or constant signal (depends on what is defined as dead signal)",
+                    "enum": "0"
                 },
                 {
                     "Case": "Test 3: Alive at Wrong Rate",
                     "Repeat": "",
-                    "Description": "Send an intermittent pulse to check that the device is functioning with the wrong rate" 
+                    "Description": "Send an intermittent pulse to check that the device is functioning with the wrong rate",
+                    "enum": "0"
                 },
                 {
                     "Case": "Test 4: No Signal",
                     "Repeat": "",
-                    "Description": "Check how the communication works when other devices don't get a signal" 
+                    "Description": "Check how the communication works when other devices don't get a signal",
+                    "enum": "0"
                 },
                 {
                     "Case": "Test 5: Send Garbage",
                     "Repeat": "",
-                    "Description": "Determine how the FW reacts when noise is sent" 
+                    "Description": "Determine how the FW reacts when noise is sent",
+                    "enum": "0"
                 }
             ]
         },
@@ -301,81 +306,66 @@
                 {
                     "Case": "Test 1: Configuration Test",
                     "Repeat": "",
-                    "Description": "Verify Master (BMS as mibspi3)-Slave (ADC as mibspi1) communication is established." 
+                    "Description": "Verify Master (BMS as mibspi3)-Slave (ADC as mibspi1) communication is established.",
+                    "enum": "0"
                 },
                 {
                     "Case": "Test 2: Simulate and Send Test_Data_Set_1",
                     "Repeat": "",
-                    "Description": "Verify Master's (BMS as mibspi3) receival and response of Slave's (ADC as mibspi1) Test_Data_Set_1" 
+                    "Description": "Verify Master's (BMS as mibspi3) receival and response of Slave's (ADC as mibspi1) Test_Data_Set_1",
+                    "enum": "0"
                 },
                 {
                     "Case": "Test 3: Don't Send Anything",
                     "Repeat": "",
-                    "Description": "" 
+                    "Description": "",
+                    "enum": "0"
                 },
                 {
                     "Case": "Test 4: Send Garbage",
                     "Repeat": "",
-                    "Description": "" 
+                    "Description": "",
+                    "enum": "0"
                 }
             ]
         },
         {
             "BMS Slave Voltages & Temperatures": [
                 {
-                    "Case": "Test 1: Minor Voltage Fault",
+                    "Case": "Test 1: Normal Slave Operation",
                     "Repeat": "",
-                    "Description": "Check BMS's response to a minor voltage fault" 
+                    "Description": "Check for condition of no response, sensor unplugged, etc.",
+                    "enum": "0"
                 },
                 {
-                    "Case": "Test 2: Minor Temperature Fault",
+                    "Case": "Test 1: Over-Voltage Fault",
                     "Repeat": "",
-                    "Description": "Check BMS's response to a minor temperature fault" 
+                    "Description": "Check BMS's response to a minor voltage fault",
+                    "enum": "1"
                 },
                 {
-                    "Case": "Test 3: Major Voltage Fault",
+                    "Case": "Test 2: Under-voltage Fault",
                     "Repeat": "",
-                    "Description": "Check BMS's response to a major voltage fault" 
+                    "Description": "Check BMS's response to a minor temperature fault",
+                    "enum": "2"
                 },
                 {
-                    "Case": "Test 4: Major Temperature Fault",
+                    "Case": "Test 3: Over-Temperature Fault",
                     "Repeat": "",
-                    "Description": "Check BMS's response to a major temperature fault" 
+                    "Description": "Check BMS's response to a major voltage fault",
+                    "enum": "3"
                 },
                 {
-                    "Case": "Test 5: Weird Sensor Readings",
+                    "Case": "Test 4: Under-Temperature Fault",
                     "Repeat": "",
-                    "Description": "Check BMS's response to getting temperature or voltage readings that don't make sense" 
+                    "Description": "Check BMS's response to a major temperature fault",
+                    "enum": "4"
                 },
                 {
                     "Case": "Test 6: Communication Loss",
                     "Repeat": "",
-                    "Description": "Check how BMS reacts to messages timing out repeatedly" 
-                },
-                {
-                    "Case": "Test 7: Garbage over CLI UART",
-                    "Repeat": "",
-                    "Description": "See how BMS reacts when its command line interface is overloaded with garbage" 
-                },
-                {
-                    "Case": "Test 8: Correct Message Overload on CLI UART",
-                    "Repeat": "",
-                    "Description": "See how BMS reacts when it gets a lot of proper CLI commands in a short period of time" 
-                },
-                {
-                    "Case": "Test 9: Balance Test",
-                    "Repeat": "",
-                    "Description": "See if BMS balancing algorithm balances the correct cells and also make sure BMS only balances during charging state" 
-                },
-                {
-                    "Case": "Test 10: State of Charge Test",
-                    "Repeat": "",
-                    "Description": "See if BMS smoothly estimates the state of charge" 
-                },
-                {
-                    "Case": "Test 11: Blown Parallel Fuse Test",
-                    "Repeat": "",
-                    "Description": "See if BMS can detect that a fuse has blown in a parallel stack"
+                    "Description": "Check how BMS reacts to messages timing out repeatedly",
+                    "enum": "5"
                 }
             ]
         }
