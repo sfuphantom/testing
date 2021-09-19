@@ -21,10 +21,18 @@ static uint8_t shutdown_expected; // indicates the expected result from shutdown
 
 static void readShutdownSignal(){
 
+    #ifdef SHUTDOWN_INTERRUPT_DEBUG
+    UARTprintf("Reading shutdown signal...\r\n");
+    #endif
+
     shutdown_signal = gioGetBit( VCU_FLT_PORT, VCU_FLT_PIN );
 }
 
 static void resetShutdownVars(){
+
+    #ifdef SHUTDOWN_INTERRUPT_DEBUG
+    UARTprintf("Resetting shutdown variables...\r\n");
+    #endif
 
     readShutdownSignal();
 
@@ -62,6 +70,10 @@ void initializeShutdownInterrupt(){
 
 uint8_t isShutdownPass(){
 
+    #ifdef SHUTDOWN_INTERRUPT_DEBUG
+    UARTprintf( expected_result ? "Test has passed w.r.t. the shutdown signal!\r\n" : "Shutdown signal is currently stale...\r\n" );
+    #endif
+
     return shutdown_pass;
 }
 
@@ -86,8 +98,11 @@ uint8_t getExpectedShutdownResult(){
 */
 void setShutdownOccurence(bool expected_result){
 
-
     resetShutdownVars();
+
+    #ifdef SHUTDOWN_INTERRUPT_DEBUG
+    UARTprintf( expected_result ? "Now expecting a shutdown to occur...\r\n" : "Now expecting no shutdown to occur...\r\n" );
+    #endif
 
     // Start shutdown timeout
     setTimerID(VALIDATION, 0);
@@ -102,11 +117,13 @@ void setShutdownOccurence(bool expected_result){
 
 void shutdown_timeout_callback(int ID){
 
+    #ifdef SHUTDOWN_INTERRUPT_DEBUG
+    UARTprintf("SHUTDOWN SIGNAL HAS TIMED OUT\r\n");
+    #endif
+
     shutdown_pass = false; // test has FAILED
 
     shutdown_timeout = true;
-
-    UARTprintf("SHUTDOWN SIGNAL HAS TIMED OUT\r\n");
 
     readShutdownSignal();
 
@@ -119,6 +136,10 @@ void shutdown_callback(){
 
     if( shutdown_expected == getShutdownSignal() ){
 
+        #ifdef SHUTDOWN_INTERRUPT_DEBUG
+        UARTprintf("Shutdown signal has arrived as expected! Test has passed w.r.t. the shutdown\r\n");
+        #endif
+
         //TODO: MAKE FUNCTION CALL TO INITIALIZE/RESET BMS AS WELL DEPENDING ON TEST BOARD MODE
 
         initializeVCU(); // this signal was expected; reset the VCU and continue with test run
@@ -126,6 +147,10 @@ void shutdown_callback(){
         shutdown_pass = true; // test has PASSED
 
     }else{
+
+        #ifdef SHUTDOWN_INTERRUPT_DEBUG
+        UARTprintf("An unexpected shutdown signal has been received. Test has now failed w.r.t. the shutdown\r\n");
+        #endif
 
         stopAllTimers(); // signal was unexpected; stop test run and fail test w.r.t. the shutdown signal
 
