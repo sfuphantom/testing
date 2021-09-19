@@ -31,7 +31,7 @@ typedef enum
 } testcases_name;
 
 //function prototypes
-void hv_vs_timer(TestTimer_t test_timer, int ID);
+void hv_vs_sweep_timer(int ID);
 void hv_vs_process(uint8_t state);
 void adcSlaveDataSetup();
 
