@@ -12,9 +12,6 @@ import json
 
 from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
 
-BAUDRATE = 9600
-TIMEOUT = 0.1
-
 #Example of Tests to be chosen by UI
 # selectedTest_example = [{'Test Name': 'BMS_SLAVES', 
 # 'Test Case': 'y', 
@@ -33,79 +30,33 @@ normal_bms = {
 }
 
 # Build Test Information to be Sent to Launchpad
-def build_json(selectedTest):
-    
+def build_json(info):
+
+    selectedTests = info[0]
+    portNumber = info[1]
     selectedJson = copy.deepcopy(normal_bms)
 
     counter = 0
-    for x in selectedTest:
-        selectedJson.update({selectedTest_example[counter].get('Test Name'): selectedTest_example[counter].get('enum')})
+    for x in selectedTests:
+        selectedJson.update({selectedTests[counter].get('Test Name'): selectedTests[counter].get('enum')})
         counter += 1
     
     jsonStr = json.dumps(selectedJson, indent="\t")
+    # used for debugging purposes
+    length = len(jsonStr)
+    bytelength = len(bytes(jsonStr, encoding = 'utf8'))
+    # print(jsonStr)
 
-    return jsonStr
+    launchpad= serial.Serial(port = portNumber, baudrate = 9600, bytesize = serial.EIGHTBITS, stopbits = serial.STOPBITS_TWO, timeout = 10)
+    launchpad.write(bytes("BMS", encoding='utf8'))
+    time.sleep(2)
+    launchpad.write(bytes(jsonStr, encoding='utf8'))
+    result = launchpad.read(size=50)
+    launchpad.close()
 
-# Encode and Send Test Information to Launchpad, Receive Response
-def send_and_receive(selectedJson, serialPort):
+    return result
 
-    # print(bytes(selectedJson, 'utf-8'))
-
-    # Encode Test Information and Send it to Launchpad
-    print(len(bytes(selectedJson, 'utf-8')))
-    serialPort.write(bytes(selectedJson, 'utf-8'))
-
-    # Wait 50 milliseconds for a response
-    time.sleep(.05)
-
-
-    # Read the most recent line of the Serial, return it as bytes
-    receivedData = serialPort.read_until(expected='}')
-    # receivedData = serialPort.read_all()
-
-    return receivedData
-
-# Receive Response from Launchpad containing Test Results
-@Slot(list)
-def main(info):
-    selectedTests = info[0]
-    portNumber = info[1]
-    
-    # Initalize Serial
-    serialPort = serial.Serial(port = portNumber, baudrate = BAUDRATE, timeout = TIMEOUT, stopbits = serial.STOPBITS_TWO)
-
-    # Prepare Test Infomation
-    selectedJson = build_json(selectedTests)
-
-    # Prepare Launchpad to Receive BMS test Information
-    serialPort.write(bytes('BMS', 'utf-8'))
-    time.sleep(1)
-    print(serialPort.read_until(expected='}'))
-    # assert False
-
-    # Repeatedly Send Test Info to Launchpad until Test Results are Received
-    data = ''
-    while data == '':
-        data = send_and_receive(selectedJson, serialPort)
-        #data = send_and_receive(json.dumps(normal_bms, indent="\t"), serialPort)
-    
-    # Close Serial
-    serialPort.close()
-
-    return data
 
 # Test Function for PyTest Use, Passed: Test Results match Normal BMS State, Failed: Test Results do not match Normal BMS State
 def test_bms_json():
-
-    # Compare Test Results to Normal BMS State
-    # assert bytes(json.dumps(normal_bms, indent="\t"), 'utf-8') == main()
-    temp_byte = bytes(json.dumps(normal_bms, indent="\t"), 'utf-8')
-    temp_main = main()
-    # with open("tempB.bin", "wb") as file:
-    #     file.write(temp_byte)
-    # with open("tempM.bin", "wb") as file:
-    #     file.write(temp_main)
-    print(temp_byte)
-    print(temp_main)
-    assert temp_byte == temp_main
-    #assert bytes(json.dumps(normal_bms, indent="\t"), 'utf-8') == main()
+    assert build_json() == True
