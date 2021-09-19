@@ -21,16 +21,37 @@
 
 #define SHUTDOWN_TIMEOUT_PERIOD 5000
 
-bool validateThrottleControls(uint8_t, uint8_t);
+/*
+ * shutdown.c
+ *
+ *  Created on: Sep 18, 2021
+ *      Author: Rafael Guevara
+ */
 
-uint8_t getShutdownSignal(); // getter for shutdown signal
+#include "hwConfig.h"
+#include "common.h"
+#include "Phantom_sci.h"
+#include "shutdown.h"
 
-void setShutdownOccurence(bool); // tells the validation module the type of shutdown signal to expect
+void initializeShutdownInterrupt();
 
-bool getShutdownResult() // getter for shutdown_fail
+/* Getters and Setters */
+
+uint8_t isShutdownPass();
+
+uint8_t isShutdownTimeout();
+
+uint8_t getShutdownSignal();
+
+uint8_t getExpectedShutdownResult();
+
+void setShutdownOccurence(bool);
+
+/* Callback Functions */
 
 void shutdown_timeout_callback(int);
 
+void shutdown_callback();
 
 
 #endif /* PHANTOM_DRIVERS_COMMON_INCLUDE_SHUTDOWN_H_ */
