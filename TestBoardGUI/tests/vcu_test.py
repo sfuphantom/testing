@@ -16,6 +16,9 @@ import copy
 import serial
 import time
 
+from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
+
+
 # example list of what might be received from front end
 selectedTest_example = [{'Test Name': 'APPS', 'Test Case': 'Test 2: 10% Difference', 'Repeat': None, 'Test Index': None, 'Enum': 2}, {'Test Name': 'BSE', 'Test Case': 'Test 3: Open/Short Circuit', 'Repeat': None, 'Test Index': None, 'Enum': 1}]
 
@@ -34,23 +37,31 @@ normal_vcu = {
 
 }
 
-def build_json():
+# @Slot(list)
+def build_json(info):
+
+    selectedTests = info[0]
+    portNumber = info[1]
+
     selectedJson = copy.deepcopy(normal_vcu)
     counter = 0
-    for x in selectedTest_example:
-        selectedJson.update({selectedTest_example[counter].get('Test Name'): selectedTest_example[counter].get('Enum')})
+    print()
+    for x in selectedTests:
+        # print(selectedTests[counter])
+        selectedJson.update({selectedTests[counter].get('Test Name'): int(selectedTests[counter].get('enum'))})
         counter += 1
         
     jsonStr = json.dumps(selectedJson, indent="\t")
-    # print("The length of the string is: " + str(len(jsonStr)))
+    # used for debugging purposes
+    length = len(jsonStr)
+    bytelength = len(bytes(jsonStr, encoding = 'utf8'))
     # print(jsonStr)
 
-    launchpad= serial.Serial(port = 'COM8', baudrate = 9600, stopbits = serial.STOPBITS_TWO) # fix port ID
-    launchpad.write("VCU")
-    time.sleep(8)
-    launchpad.write(jsonStr)
-    launchpad.read() # this will read 1 byte. To read multiple, use read_until()
-    result = launchpad.read()
+    launchpad= serial.Serial(port = portNumber, baudrate = 9600, bytesize = serial.EIGHTBITS, stopbits = serial.STOPBITS_TWO, timeout = 10)
+    launchpad.write(bytes("VCU", encoding='utf8'))
+    time.sleep(2)
+    launchpad.write(bytes(jsonStr, encoding='utf8'))
+    result = launchpad.read(size=50)
     launchpad.close()
 
     return result
@@ -59,5 +70,4 @@ def build_json():
 def test_vcu_json():
     assert build_json() == True
 
-test_vcu_json()
-
+# test_vcu_json()

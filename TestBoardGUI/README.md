@@ -1,8 +1,6 @@
 ### Bash commands for setting up the project:
 
-```
-cd TestBoardGUI
-```
+Note: Stay in testing directory.
 
 #### 1) Create virtual environment
 
@@ -31,19 +29,16 @@ source venv/bin/activate
 #### 3) Install dependencies
 
 ```
-pip install -r requirements.txt
+pip install -r TestBoardGUI/requirements.txt
 ```
 
-```
-pip install pyserial
-```
 
-Steps 1) and 3) are only need to be done once.
+Steps 1) and 3) are only needed to be done once.
 
 ### To run the program:
 
 ```
-python ui/mainwindow.py
+python TestBoardGUI/application.py
 ```
 Make sure the virtual environment is activated.
 
@@ -52,4 +47,17 @@ When finished, to deactivate the environment, simply run:
 ```
 deactivate
 ```
+
+### VSCode set-up for debugging (Optional)
+
+Replace "program" in launch.json with the following line.
+```
+"program": "${workspaceFolder}/TestBoardGUI/application.py",
+```
+
+To debug in virtual environment, add "python.pythonPath" to settings.json.
+```
+"python.pythonPath": "env\\Scripts\\python.exe",
+```
+
 

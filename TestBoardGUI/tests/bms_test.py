@@ -10,6 +10,8 @@ import serial
 import time
 import json
 
+from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
+
 
 # Constants to be changed based on Launchpad Settings
 PORT = "COM8"
@@ -34,11 +36,12 @@ normal_bms = {
 }
 
 # Build Test Information to be Sent to Launchpad
-def build_json():
+def build_json(selectedTest):
+    
     selectedJson = copy.deepcopy(normal_bms)
 
     counter = 0
-    for x in selectedTest_example:
+    for x in selectedTest:
         selectedJson.update({selectedTest_example[counter].get('Test Name'): selectedTest_example[counter].get('Enum')})
         counter += 1
     
@@ -66,13 +69,16 @@ def send_and_receive(selectedJson, serialPort):
     return receivedData
 
 # Receive Response from Launchpad containing Test Results
-def main():
+@Slot(list)
+def main(info):
+    selectedTests = info[0]
+    portNumber = info[1]
     
     # Initalize Serial
-    serialPort = serial.Serial(port = PORT, baudrate = BAUDRATE, timeout = TIMEOUT, stopbits = serial.STOPBITS_TWO)
+    serialPort = serial.Serial(port = portNumber, baudrate = BAUDRATE, timeout = TIMEOUT, stopbits = serial.STOPBITS_TWO)
 
     # Prepare Test Infomation
-    selectedJson = build_json()
+    selectedJson = build_json(selectedTests)
 
     # Prepare Launchpad to Receive BMS test Information
     serialPort.write(bytes('BMS', 'utf-8'))
