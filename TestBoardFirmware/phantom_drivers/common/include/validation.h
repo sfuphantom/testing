@@ -20,7 +20,7 @@
 
 uint8_t is_bms_slave_test_passed(uint8_t test_case);
 
-
+bool validateThrottleControls(uint8_t apps_test, uint8_t bse_test);
 
 
 #endif /* PHANTOM_DRIVERS_COMMON_INCLUDE_VALIDATION_H_ */
