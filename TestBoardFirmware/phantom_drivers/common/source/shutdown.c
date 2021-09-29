@@ -15,7 +15,7 @@ static uint8_t shutdown_pass; // indicates pass or fail w.r.t. the shutdown sign
 
 static uint8_t shutdown_signal; // stores shutdown GPIO value
 
-static uint8_t shutdown_expected; // indicates the expected result from shutdown; set by the user but defaulted to false
+static uint8_t expected_shutdown; // indicates the expected result from shutdown; set by the user but defaulted to false
 
 /* Static Functions */
 
@@ -40,7 +40,7 @@ static void resetShutdownVars(){
 
     shutdown_timeout  = false;
 
-    shutdown_expected = false;
+    expected_shutdown = false;
 }
 
 void initializeShutdownInterrupt(){
@@ -54,7 +54,7 @@ void initializeShutdownInterrupt(){
     //Enable Interrupts
     edgeEnableNotification(VCU_FLT_REG, VCU_FLT_EDGE);
 
-    _enable_IRQ();
+//    _enable_IRQ();
 
     resetShutdownVars();
 }
@@ -71,7 +71,7 @@ void initializeShutdownInterrupt(){
 uint8_t isShutdownPass(){
 
     #ifdef SHUTDOWN_INTERRUPT_DEBUG
-    UARTprintf( expected_result ? "Test has passed w.r.t. the shutdown signal!\r\n" : "Shutdown signal is currently stale...\r\n" );
+//    UARTprintf( shutdown_pass ? "Test has passed w.r.t. the shutdown signal!\r\n" : "Shutdown signal is currently stale...\r\n" );
     #endif
 
     return shutdown_pass;
@@ -107,10 +107,10 @@ void setShutdownOccurence(bool expected_result){
     // Start shutdown timeout
     setTimerID(VALIDATION, 0);
     setTimerCallback(VALIDATION, shutdown_timeout_callback);
-    startTimer(VALIDATION, SHUTDOWN_TIMEOUT_PERIOD);
+    startTimer(VALIDATION, SHUTDOWN_TIMEOUT_PERIOD, true);
 
     // set expected shutdown
-    shutdown_expected = expected_result;
+    expected_shutdown = expected_result;
 }
 
 /* Callback Functions */
@@ -118,7 +118,7 @@ void setShutdownOccurence(bool expected_result){
 void shutdown_timeout_callback(int ID){
 
     #ifdef SHUTDOWN_INTERRUPT_DEBUG
-    UARTprintf("SHUTDOWN SIGNAL HAS TIMED OUT\r\n");
+    UARTprintf("SHUTDOWN SIGNAL HAS TIMED OUT\r\n\n");
     #endif
 
     shutdown_pass = false; // test has FAILED
@@ -134,7 +134,9 @@ void shutdown_callback(){
 
     readShutdownSignal();
 
-    if( shutdown_expected == getShutdownSignal() ){
+
+    //shutdown signal is active low
+    if( expected_shutdown != getShutdownSignal() ){
 
         #ifdef SHUTDOWN_INTERRUPT_DEBUG
         UARTprintf("Shutdown signal has arrived as expected! Test has passed w.r.t. the shutdown\r\n");
@@ -142,9 +144,27 @@ void shutdown_callback(){
 
         //TODO: MAKE FUNCTION CALL TO INITIALIZE/RESET BMS AS WELL DEPENDING ON TEST BOARD MODE
 
-        initializeVCU(); // this signal was expected; reset the VCU and continue with test run
+
+        // this signal was expected; reset the VCU and continue with test run
+
+        /***************** INTIIALIZE VCU ****************/
+
+        //reset VCU state
+        gioSetBit(RESET_PORT, RESET_PIN, 1);
+
+        delayms(500);
+
+        gioSetBit(RESET_PORT, RESET_PIN, 0);
+
+        //put VCU into state running
+        gpio_process(RTD_NORMAL_PROCEDURE);
+
+
+
 
         shutdown_pass = true; // test has PASSED
+
+        stopTimer(VALIDATION);
 
     }else{
 
@@ -157,7 +177,7 @@ void shutdown_callback(){
         shutdown_pass = false;
     }
 
-    setShutdownOcurrence(false); // reset expected result to false state
+    setShutdownOccurence(false); // reset expected result to false state
 }
 
 void edgeNotification(hetBASE_t * hetREG,uint32 edge)
@@ -172,6 +192,95 @@ void edgeNotification(hetBASE_t * hetREG,uint32 edge)
 
 /* USER CODE END */
 }
+
+// Quick Test Functions
+#ifdef SHUTDOWN_INTERRUPT_DEBUG
+
+/* Test Procedure: Don't do anything
+
+*/
+void shutdownStaleTest(){
+
+    UARTprintf("\n\n****** Performing Shutdown Stale Unit Test ******\r\n\n");
+
+
+    // do some test
+
+    setShutdownOccurence(true);
+
+
+    while(isShutdownPass() != true && !timers_complete() ); // wait for result
+
+    // Timer should timeout
+
+
+    delayms(2000);
+
+    UARTprintf( (isShutdownTimeout() && !isShutdownPass()) ? "Stale test passed!\r\n" : "Stale test failed...\r\n");
+
+
+    delayms(5000);
+}
+
+/* Test Procedure: Send a rising edge
+
+*/
+void shutdownUnexpectedTest(){
+
+
+    UARTprintf("\n\n****** Performing Shutdown Unexpected Unit Test ******\r\n\n");
+
+    // do some test
+
+    setShutdownOccurence(true);
+
+
+    while(isShutdownPass() != true && !timers_complete() ); // wait for result
+
+    // Timer should not timeout
+
+
+    delayms(2000);
+
+    UARTprintf( (!isShutdownTimeout() && !isShutdownPass()) ? "Unexpected test passed!\r\n" : "Unexpected test failed...\r\n");
+
+
+
+    delayms(5000);
+
+}
+
+/* Test Procedure: Send a falling edge
+
+*/
+void shutdownExpectedTest(){
+
+
+    UARTprintf("****** Performing Shutdown Expected Unit Test ******\r\n\n");
+
+    // do some test
+
+    setShutdownOccurence(true);
+
+
+    while(isShutdownPass() != true && !timers_complete() ); // wait for result
+
+    // Timer should not timeout
+
+    delayms(2000);
+
+    UARTprintf( (!isShutdownTimeout() && isShutdownPass()) ? "Expected test passed!\r\n" : "Expected test failed...\r\n");
+
+    delayms(5000);
+}
+
+
+
+
+
+
+
+#endif
 
 
 

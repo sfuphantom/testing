@@ -9,7 +9,10 @@
 #define PHANTOM_DRIVERS_COMMON_INCLUDE_SHUTDOWN_H_
 
 #include "hwConfig.h"
+#include "sys_vim.h"
 #include "common.h"
+#include <phantom_drivers/common/include/timer.h>
+#include "gpio_tests.h"
 
 //Halcogen Setup
 //1.Enable HET1 Driver
@@ -33,6 +36,11 @@
 #include "Phantom_sci.h"
 #include "shutdown.h"
 
+#include "gio.h"
+
+#include "het.h"
+
+
 void initializeShutdownInterrupt();
 
 /* Getters and Setters */
@@ -52,6 +60,12 @@ void setShutdownOccurence(bool);
 void shutdown_timeout_callback(int);
 
 void shutdown_callback();
+
+#ifdef SHUTDOWN_INTERRUPT_DEBUG
+void shutdownStaleTest();
+void shutdownExpectedTest();
+void shutdownUnexpectedTest();
+#endif
 
 
 #endif /* PHANTOM_DRIVERS_COMMON_INCLUDE_SHUTDOWN_H_ */
