@@ -11,34 +11,18 @@
 #include "stdint.h"
 
 
-
-//Debug Modes
-//#define GUI_MODE  //runs firmware with GUI. if not defined, firmware will run w/o the GUI
 #define TIMER_DEBUG //print expirations of all active timers
-//#define BMS_DEBUG   //print received signals from Device Under Test; print expected and actual results
-#define VCU_DEBUG   //print received signals from Device Under Test; print expected and actual results
-//#define HV_VS_DEBUG //print calculated values being sent via SPI to the high voltage peripheral
-
-
-//Choose test cases to run, independent of the GUI
-#ifndef GUI_MODE
-
-    #define APPS_TEST      NORMAL_APPS_OFF
-    #define BSE_TEST       BSE_OPEN_CIRCUIT
-
-    #define HV_VS_TEST     0
-    #define TSAL_TEST      0
-    #define IMD_TEST       0
-    #define LV_TEST        0
-    #define VCU_COMMS_TEST 0
-    #define SLAVES_TEST    0
-
-#endif
+#define BMS_DEBUG //print received signals from Device Under Test; print expected and actual results
+#define VCU_DEBUG //print received signals from Device Under Test; print expected and actual results
 
 
 //Common defines
+#define TIMER_DEBUG
+//#define HV_VS_DEBUG
+#define HV_CT_DEBUG
 #define SWEEP_STEP 25
 #define SWEEP_PERIOD 500
+
 
 
 typedef enum
@@ -61,7 +45,8 @@ typedef enum Peripheral
     VCU_COMMUNICATIONS,
     BMS_SLAVES,
     THERMISTOR_EXPANSION,
-    BMS_COMMUNICATIONS
+    BMS_COMMUNICATIONS,
+    HVCT
 } Peripheral;
 
 void delayms(uint16_t ms);
