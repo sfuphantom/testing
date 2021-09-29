@@ -94,6 +94,8 @@ extern void rtiCompare0Interrupt(void);
 extern void het1HighLevelInterrupt(void);
 extern void linHighLevelInterrupt(void);
 extern void phantomInterrupt(void);
+extern void gioLowLevelInterrupt(void);
+extern void het1LowLevelInterrupt(void);
 
 /* USER CODE BEGIN (3) */
 /* USER CODE END */
@@ -281,8 +283,8 @@ typedef struct vim_config_reg
                                     | (uint32)((uint32)0U << 20U)\
                                     | (uint32)((uint32)1U << 21U)\
                                     | (uint32)((uint32)0U << 22U)\
-                                    | (uint32)((uint32)0U << 23U)\
-                                    | (uint32)((uint32)0U << 24U)\
+                                    | (uint32)((uint32)1U << 23U)\
+                                    | (uint32)((uint32)1U << 24U)\
                                     | (uint32)((uint32)0U << 25U)\
                                     | (uint32)((uint32)0U << 26U)\
                                     | (uint32)((uint32)0U << 27U)\
