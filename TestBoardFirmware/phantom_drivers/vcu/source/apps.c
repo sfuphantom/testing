@@ -90,7 +90,7 @@ static void apps_short_circuit()
 
     setTimerCallback(APPS, apps_short_callback);
 
-    startTimer(APPS, SHORT_PERIOD);
+    startTimer(APPS, SHORT_PERIOD, true);
 
     return;
 }
@@ -101,7 +101,7 @@ static void apps_open_circuit()
 
     setTimerCallback(APPS, apps_open_callback);
 
-    startTimer(APPS, OPEN_PERIOD);
+    startTimer(APPS, OPEN_PERIOD, true);
 
     return;
 }
@@ -123,7 +123,7 @@ static void apps_sweep()
 
     setTimerCallback(APPS, apps_sweep_callback);
 
-    startTimer(APPS, SWEEP_PERIOD);
+    startTimer(APPS, SWEEP_PERIOD, true);
 
     return;
 }

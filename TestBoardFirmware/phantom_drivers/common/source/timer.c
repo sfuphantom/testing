@@ -15,7 +15,7 @@ static void executeTimerCallback(Peripheral peripheral_timer){
 
 static uint8_t isExpired(Peripheral peripheral_timer){
 
-    return (ticks % xTimers[peripheral_timer].period  == 0) && (ticks != 0);
+    return ( ( ( (xTimers[peripheral_timer].local_ticks % xTimers[peripheral_timer].period)  == 0) ) && (xTimers[peripheral_timer].local_ticks != 0) );
 }
 
 void rtiNotification(uint32 notification)
@@ -30,9 +30,16 @@ void rtiNotification(uint32 notification)
 
     for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++){
 
-        if( isExpired(peripheral_timer) && !isBlocked(peripheral_timer) ){
-            executeTimerCallback(peripheral_timer);
+        if( !isBlocked(peripheral_timer) ){
+
+            if( isExpired(peripheral_timer) ){
+                executeTimerCallback(peripheral_timer);
+            }
+
+            xTimers[peripheral_timer].local_ticks++;
         }
+
+
     }
 
     ticks++; //will overflow after ~ 49 days...
@@ -69,6 +76,11 @@ int getTimerID(Peripheral peripheral_timer){
 int getTimerPeriod(Peripheral peripheral_timer){
 
     return xTimers[peripheral_timer].period;
+}
+
+uint32_t getTimerETA(Peripheral peripheral_timer){
+
+    return ( (xTimers[peripheral_timer].local_ticks % xTimers[peripheral_timer].period) - (xTimers[peripheral_timer].period) );
 }
 
 bool timers_complete(){
@@ -131,11 +143,18 @@ void stopAllTimers(){
     }
 }
 
-void startTimer(Peripheral peripheral_timer, int period){
+void startTimer(Peripheral peripheral_timer, int period, uint8_t reset){
 
     setTimerPeriod(peripheral_timer, period);
 
     xTimers[peripheral_timer].stop = false;
+
+    xTimers[peripheral_timer].local_ticks = (!reset * xTimers[peripheral_timer].local_ticks ) + (reset * 0);
+
+    if(peripheral_timer == VALIDATION){
+        UARTprintf("SHUTDOWN TIMER STARTED\r\n");
+    }
+
 }
 
 void stopTimer(Peripheral peripheral_timer){
@@ -147,22 +166,25 @@ void stopTimer(Peripheral peripheral_timer){
 
         case APPS:
 
-            UARTprintf("APPS TEST FINISHED!...\r\n\n");
+//            UARTprintf("APPS TEST FINISHED!...\r\n\n");
 
             break;
 
         case BSE:
 
-            UARTprintf("BSE TEST FINISHED!...\r\n\n");
+//            UARTprintf("BSE TEST FINISHED!...\r\n\n");
 
             break;
 
+        case VALIDATION:
+
+            UARTprintf("SHUTDOWN TIMEOUT STOPPED!...\r\n\n");
 
         //add more peripherals for debugging here...
 
         default:
 
-            UARTprintf("SOME TEST FINSIHED!...\r\n\n");
+//            UARTprintf("SOME TEST FINSIHED!...\r\n\n");
 
             break;
 

@@ -37,6 +37,8 @@ typedef struct{
 
     int ID; //peripheral timer ID; can be used to count cycles
 
+    uint32_t local_ticks; //keeps track of the locl time of the peripheral
+
     int period; //peripheral timer period in ms
 
     bool stop; //boolean to start/stop peripheral timer
@@ -52,11 +54,15 @@ static TimerHandle_t xTimers[NUM_TIMERS]; //array of all peripheral software tim
 
 void timerInit();
 
+void initializeTimers();
+
 /* Getters */
 
 int getTimerID(Peripheral);
 
 int getTimerPeriod(Peripheral);
+
+uint32_t getTimerETA(Peripheral);
 
 uint8_t isBlocked(Peripheral);
 
@@ -72,7 +78,7 @@ void stopGlobalTimer();
 
 void stopAllTimers();
 
-void startTimer(Peripheral, int);
+void startTimer(Peripheral, int, uint8_t);
 
 void stopTimer(Peripheral);
 
