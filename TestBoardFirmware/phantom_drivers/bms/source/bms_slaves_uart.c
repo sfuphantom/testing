@@ -10,6 +10,8 @@
 
 #include "bms_slaves_uart.h"
 
+typedef unsigned char BYTE;
+
 static void slaves_uart_init();
 static void normal_slaves_uart();
 static void slaves_uart_undervoltage();
@@ -18,10 +20,21 @@ static void slaves_uart_undertemperature();
 static void slaves_uart_overtemperature();
 static void slaves_uart_no_comms();
 static void slaves_uart_comms_error();
-static void cmd_creator();
+static BYTE cmd_creator();
 
+//configure these in halcogen, some defined in hwConfig.h already
 #define BMS_UART 0 //define which register to communicate with BMS
+#define BMS_FAULT_PORT gioPORTA 
+#define BMS_FAULT_PIN         7 
 #define BMS_TOTAL_TEMP_READINGS 10
+#define UART_TX_PORT hetPORT1
+#define UART_TX_PIN 13
+#define UART_RX_PORT hetPORT1
+#define UART_RX_PIN 6
+#define BMS_VIO 0 //define pin for VIO - is this necessary?
+#define BMS_SLAVE_WAKE 0 //define pin for bms slaves wake
+#define BMSByteArraySize 43
+
 
 typedef struct {
     uint8_t voltage;
@@ -103,12 +116,16 @@ static void slaves_uart_overtemperature(){
 
 static void slaves_uart_no_comms(){
     // no response message - do nothing
+    return;
 }
 
 static void slaves_uart_comms_error(){
     // response message with error in communication protocol - bad CRC, invalid message length, etc
 }
 
-static void cmd_creator(){
+static BYTE cmd_creator(){
+    BYTE cmdarray[BMSByteArraySize]; // 43 is size for a single slave reading
     //  creates string of bits to be sent to the BMS
+    //  length in bytes: 43*1, where data is stored: MultipleSlaveReading data: 1 header, 32x2 cells, 2x16 AUX, 4 dig die, 4 ana die, 2 CRC
+    return cmdarray;
 }
