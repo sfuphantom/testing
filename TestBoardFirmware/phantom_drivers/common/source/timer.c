@@ -80,7 +80,7 @@ int getTimerPeriod(Peripheral peripheral_timer){
 
 uint32_t getTimerETA(Peripheral peripheral_timer){
 
-    return ( (xTimers[peripheral_timer].local_ticks % xTimers[peripheral_timer].period) - (xTimers[peripheral_timer].period) );
+    return ( (xTimers[peripheral_timer].period) - (xTimers[peripheral_timer].local_ticks % xTimers[peripheral_timer].period) );
 }
 
 bool timers_complete(){

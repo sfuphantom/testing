@@ -11,6 +11,7 @@
 #include "het.h"
 #include "common.h"
 #include "string.h"
+#include "shutdown.h"
 
 //Drivers
 #include "bse.h"
@@ -42,9 +43,6 @@ static json_t * JSONHandler(unsigned char *jsonstring);
 static void initializeVCU();
 static void initializeTestBoard();
 
-//Timer functions
-static void initializeTimers();
-
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 
@@ -72,72 +70,79 @@ static Result_t res;
 
     #endif
 
-    bool test_passed = false;
+//    bool test_passed = false;
+//
+//    while(true)
+//    {
+//        //parse JSON and set states
+//        //* test code *//
+//        #ifdef GUI_MODE
+//        setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
+//        #endif
+//
+//        #ifndef GUI_MODE
+//        setPeripheralTestCases(&testBoardState, NULL);
+//        #endif
+//
+//        startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
+//
+//        switch(testBoardState.testMode){
+//
+//            case IDLE:
+//
+//                continue;
+//
+//            case BMS_MODE:
+//
+//                res = bms_mode_process(&testBoardState);
+//
+//                if(res != SUCCESS)
+//                    UARTprintf("Failed to Initialize BMS Test board\n\r");
+//
+//                testBoardState.testMode = IDLE;
+//
+//                break;
+//
+//            case VCU_MODE:
+//
+//                initializeVCU();
+//
+//                vcu_mode_process(&testBoardState);
+//
+//                break;
+//
+//        }//switch case
+//
+////        UARTprintf("{ 1, 1 }") send results to GUI
+//
+//
+//
+//        while(!timers_complete()); //wait for tests to finish
+//
+//        stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
+//
+//        //send a single pass/result to PC (for CLI, uncomment VALID_DEBUG in common.h to display results)
+//
+//        test_passed = validateThrottleControls( testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
+//
+//        //read bms shutdown pin; display results
+//
+////        test_passed = is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
+//
+//        UARTprintf(test_passed ? "{ 1 }" : "{ 0 }"); // send results to GUI
+//
+//
+//
+//        delayms(5000);
+//
+//    }//superloop
 
-    while(true)
-    {
-        //parse JSON and set states
-        //* test code *//
-        #ifdef GUI_MODE
-        setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
-        #endif
+//    stopGlobalTimer();
 
-        #ifndef GUI_MODE
-        setPeripheralTestCases(&testBoardState, NULL);
-        #endif
-
-        startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
-
-        switch(testBoardState.testMode){
-
-            case IDLE:
-
-                continue;
-
-            case BMS_MODE:
-
-                res = bms_mode_process(&testBoardState);
-
-                if(res != SUCCESS)
-                    UARTprintf("Failed to Initialize BMS Test board\n\r");
-
-                testBoardState.testMode = IDLE;
-
-                break;
-
-            case VCU_MODE:
-
-                initializeVCU();
-
-                vcu_mode_process(&testBoardState);
-
-                break;
-
-        }//switch case
-
-//        UARTprintf("{ 1, 1 }") send results to GUI
-
-
-
-        while(!timers_complete()); //wait for tests to finish
-
-        stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
-
-        //send a single pass/result to PC (for CLI, uncomment VALID_DEBUG in common.h to display results)
-
-        test_passed = validateThrottleControls(testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
-
-        //read bms shutdown pin; display results
-
-//        test_passed = is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
-
-        UARTprintf(test_passed ? "{ 1 }" : "{ 0 }"); // send results to GUI
-
-
-
-        delayms(5000);
-
-    }//superloop
+    shutdownStaleTest();
+    shutdownUnexpectedTest();
+    shutdownExpectedTest();
+    while(true);
 
 
 }//main
@@ -293,33 +298,37 @@ static void initializeVCU(){
 void initializeTestBoard(){
 
     //initialization
-        _enable_IRQ();
+    _enable_IRQ();
 
 
-        /* Slave Data */
-        adcSlaveDataSetup();
+    /* Slave Data */
+    adcSlaveDataSetup();
 
 
-        gioInit();
-        gioSetDirection(hetPORT1, 0xFFFFFFFF);
+    gioInit();
+    gioSetDirection(hetPORT1, 0xFFFFFFFF);
 
-        MCP48FV_Init();
+    MCP48FV_Init();
 
-       // sciInit();
-        timerInit();
+    // sciInit();
+    timerInit();
 
-        gpio_init();
-
-
-        adcInit();
+    gpio_init();
 
 
-        res = SUCCESS;
-        //res = MCP48FV_Init();
+    adcInit();
 
-        res = initUARTandModeHandler(&testBoardState);
 
-        initializeTimers();
+    res = SUCCESS;
+    //res = MCP48FV_Init();
+
+    res = initUARTandModeHandler(&testBoardState);
+
+//    initializeTimers();
+
+    initializeShutdownInterrupt();
+
+    startGlobalTimer();
 
 }
 

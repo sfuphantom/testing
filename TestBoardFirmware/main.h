@@ -14,7 +14,7 @@
 
 #include "common.h"
 
-#define NUM_PERIPHERALS 11
+//#define NUM_PERIPHERALS 11
 
 typedef enum
 {

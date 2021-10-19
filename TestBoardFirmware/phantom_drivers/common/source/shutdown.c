@@ -190,6 +190,8 @@ void edgeNotification(hetBASE_t * hetREG,uint32 edge)
         shutdown_callback();
     }
 
+//    readShutdownSignal();
+
 /* USER CODE END */
 }
 
@@ -209,7 +211,10 @@ void shutdownStaleTest(){
     setShutdownOccurence(true);
 
 
-    while(isShutdownPass() != true && !timers_complete() ); // wait for result
+    while(isShutdownPass() != true && !timers_complete() ){
+
+        uint32_t eta = getTimerETA(VALIDATION); // wait for result
+    }
 
     // Timer should timeout
 

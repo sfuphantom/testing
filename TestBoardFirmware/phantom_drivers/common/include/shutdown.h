@@ -19,8 +19,7 @@
 //2.Choose Edge Interrupt to enable and output on specific pin
 //3.Select VIM Channel for either Low/High Priority (same priority as edge interrupt)
 //4.Initialize VIM,GIO, and enableIRQ in the code
-//HET1 interrupt set at both edges; set to high priority
-
+//HET1 interrupt set at both edges; set to high priority with internal pull up resistor
 
 #define SHUTDOWN_TIMEOUT_PERIOD 5000
 
