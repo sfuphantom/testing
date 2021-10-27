@@ -18,11 +18,9 @@ static uint8_t isExpired(Peripheral peripheral_timer){
     return (ticks % xTimers[peripheral_timer].period  == 0) && (ticks != 0);
 }
 
-void rtiNotification(uint32 notification)
-{
+void softwareTimerCallback(){
 
-//    UARTprintf("Global timer expired!\r\n");
-
+    //    UARTprintf("Global timer expired!\r\n");
 
     //check timer expirations
 
@@ -36,15 +34,16 @@ void rtiNotification(uint32 notification)
     }
 
     ticks++; //will overflow after ~ 49 days...
+
 }
 
 void timerInit(){
 
+    #ifndef DEV_ENV
     rtiInit();
-
     rtiEnableNotification(rtiNOTIFICATION_COMPARE0);
-
     _enable_IRQ();
+    #endif
 
     //initialize timers to blocked state
 
@@ -263,6 +262,16 @@ void initializeTimers(){
 
 }
 
+#ifdef DEV_ENV
+// Hardware Functions
 
+void rtiNotification(uint32 notification)
+{
+
+    // should probably add a check to see if the right timer was called but test board only has one active hardware timer atm
+    softwareTimerCallback();
+
+}
+#endif
 
 
