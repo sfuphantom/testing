@@ -16,10 +16,11 @@
 #ifndef TIMERS_TIMERS_H_
 #define TIMERS_TIMERS_H_
 
+#ifndef DEV_ENV
 #include "rti.h"
 #include "common.h"
 #include "Phantom_sci.h"
-
+#endif
 
 #define NUM_TIMERS 10 //each system gets one timer if needed. reduce number of timers later...
 
