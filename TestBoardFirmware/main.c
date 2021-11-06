@@ -128,8 +128,6 @@ int main(void){
 
         UARTprintf(test_passed ? "{ 1 }" : "{ 0 }"); // send results to GUI
 
-
-
         delayms(5000);
 
     }//superloop

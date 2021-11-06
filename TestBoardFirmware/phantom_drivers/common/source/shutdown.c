@@ -44,13 +44,11 @@ static void resetShutdownVars(){
     UARTprintf("Resetting shutdown variables...\r\n");
     #endif
 
-//    readShutdownSignal();
+    shutdown_ptr->pass         = false;
 
-    shutdown_ptr->pass     = false;
+    shutdown_ptr->timeout      = false;
 
-    shutdown_ptr->timeout  = false;
-
-    shutdown_ptr->expected = false;
+    shutdown_ptr->expected     = false;
 
     shutdown_ptr->result_ready = false;
 }
@@ -79,9 +77,6 @@ void initializeShutdownInterrupt(){
 //  0               1        -1
 //  1               0        pass(var)
 //  1               1        pass(var)
-
-//return (!result_ready)*-1 + (result_ready)*pass
-
 int8_t isShutdownPass(){
 
     #ifdef SHUTDOWN_INTERRUPT_DEBUG

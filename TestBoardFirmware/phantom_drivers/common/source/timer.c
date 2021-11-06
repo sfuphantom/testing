@@ -23,8 +23,7 @@ void rtiNotification(uint32 notification)
 
 //    UARTprintf("Global timer expired!\r\n");
 
-
-    //check timer expirations
+    // check timer expirations
 
     Peripheral peripheral_timer;
 
