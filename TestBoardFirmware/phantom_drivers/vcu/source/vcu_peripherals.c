@@ -2,7 +2,7 @@
  * vcu_peripherals.c
  *
  *  Created on: Oct 18, 2021
- *      Author: Rafael
+ *      Author: Rafael Guevara
  */
 
 #include "vcu_peripherals.h"
@@ -10,23 +10,17 @@
 static uint16_t create_apps2_volt(uint16_t, float);
 static uint16_t get_apps_voltage(uint16_t);
 
-void sendAPPSVoltages(uint16_t apps1, uint16_t apps2){
 
-    #ifndef DEV_ENV
+void sendAPPSVoltages(uint16_t apps1_volt, uint16_t apps2_volt){
+
     MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
-    #endif
-
-    #ifdef DEV_ENV
-    printf(apps1, apps2, diff)
-    #endif
-
 }
 
-void sendAPPSdiff(uint16_t apps1, float diff){
+void sendAPPSdiff(uint16_t apps1_volt, float diff){
 
-    sendAPPSVoltages(apps1, create_apps2_volt(apps1, diff) );
-
+    sendAPPSVoltages(apps1_volt, create_apps2_volt(apps1_volt, diff) );
 }
+
 /* APPS HELPER FUNCTIONS */
 
 // difference is the ratio difference between APPS values, 1 meaning 0% difference
