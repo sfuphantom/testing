@@ -11,7 +11,6 @@
 #define APPS1_MIN 150
 #define APPS2_MAX 150
 #define APPS2_MIN 50
-#define DAC_SIZE_APPS 0xFF
 
 // Static function prototypes
 static void normal_apps_on();
@@ -234,10 +233,10 @@ void apps_open_callback(int ID){
 void apps_unit_test(){
 
     int i = 0;
-    for(i = 0; i < APPS_MAX; i+=20){
+    for(i = 0; i < APPS1_MAX; i+=20){
 
-        sendAPPSVoltages(i, i, 1.0)
-        delayms(500)
+        sendAPPSVoltages(i, i);
+        delayms(500);
     }
 
 
