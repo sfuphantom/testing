@@ -19,6 +19,8 @@
 //#define HV_VS_DEBUG //print calculated values being sent via SPI to the high voltage peripheral
 #define SHUTDOWN_INTERRUPT_DEBUG
 
+//#define SHUTDOWN_UNIT_TESTS
+
 
 //Choose test cases to run, independent of the GUI
 #ifndef GUI_MODE

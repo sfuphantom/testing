@@ -48,9 +48,8 @@ static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 
 static Result_t res;
 
- int main(void){
+int main(void){
 
-    
     initializeTestBoard();
 
     #ifdef GUI_MODE
@@ -70,80 +69,72 @@ static Result_t res;
 
     #endif
 
-//    bool test_passed = false;
-//
-//    while(true)
-//    {
-//        //parse JSON and set states
-//        //* test code *//
-//        #ifdef GUI_MODE
-//        setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
-//        #endif
-//
-//        #ifndef GUI_MODE
-//        setPeripheralTestCases(&testBoardState, NULL);
-//        #endif
-//
-//        startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
-//
-//        switch(testBoardState.testMode){
-//
-//            case IDLE:
-//
-//                continue;
-//
-//            case BMS_MODE:
-//
-//                res = bms_mode_process(&testBoardState);
-//
-//                if(res != SUCCESS)
-//                    UARTprintf("Failed to Initialize BMS Test board\n\r");
-//
-//                testBoardState.testMode = IDLE;
-//
-//                break;
-//
-//            case VCU_MODE:
-//
-//                initializeVCU();
-//
-//                vcu_mode_process(&testBoardState);
-//
-//                break;
-//
-//        }//switch case
-//
-////        UARTprintf("{ 1, 1 }") send results to GUI
-//
-//
-//
-//        while(!timers_complete()); //wait for tests to finish
-//
-//        stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
-//
-//        //send a single pass/result to PC (for CLI, uncomment VALID_DEBUG in common.h to display results)
-//
-//        test_passed = validateThrottleControls( testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
-//
-//        //read bms shutdown pin; display results
-//
-////        test_passed = is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
-//
-//        UARTprintf(test_passed ? "{ 1 }" : "{ 0 }"); // send results to GUI
-//
-//
-//
-//        delayms(5000);
-//
-//    }//superloop
+    bool test_passed = false;
 
-//    stopGlobalTimer();
+    while(true)
+    {
+        //parse JSON and set states
+        //* test code *//
+        #ifdef GUI_MODE
+        setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
+        #endif
 
-    shutdownStaleTest();
-    shutdownUnexpectedTest();
-    shutdownExpectedTest();
-    while(true);
+        #ifndef GUI_MODE
+        setPeripheralTestCases(&testBoardState, NULL);
+        #endif
 
+        startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
+
+        switch(testBoardState.testMode){
+
+            case IDLE:
+
+                continue;
+
+            case BMS_MODE:
+
+                res = bms_mode_process(&testBoardState);
+
+                if(res != SUCCESS)
+                    UARTprintf("Failed to Initialize BMS Test board\n\r");
+
+                testBoardState.testMode = IDLE;
+
+                break;
+
+            case VCU_MODE:
+
+                initializeVCU();
+
+                vcu_mode_process(&testBoardState);
+
+                break;
+
+        }//switch case
+
+//        UARTprintf("{ 1, 1 }") send results to GUI
+
+        while(!timers_complete()); //wait for tests to finish
+
+        stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
+
+        //send a single pass/result to PC (for CLI, uncomment VALID_DEBUG in common.h to display results)
+
+        test_passed = validateThrottleControls( testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
+
+        //read bms shutdown pin; display results
+
+//        test_passed = is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
+
+        UARTprintf(test_passed ? "{ 1 }" : "{ 0 }"); // send results to GUI
+
+
+
+        delayms(5000);
+
+    }//superloop
+
+    stopGlobalTimer();
 
 }//main
 
