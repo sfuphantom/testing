@@ -9,13 +9,23 @@
 
 /* Shutdown Variables */
 
-static uint8_t shutdown_timeout; // tells user if timeout has occurred
+typedef struct{
 
-static uint8_t shutdown_pass; // indicates pass or fail w.r.t. the shutdown signal
+    uint8_t timeout; // tells user if timeout has occurred
 
-static uint8_t shutdown_signal; // stores shutdown GPIO value
+    uint8_t pass; // indicates pass or fail w.r.t. the shutdown signal
 
-static uint8_t expected_shutdown; // indicates the expected result from shutdown; set by the user but defaulted to false
+    uint8_t signal; // stores shutdown GPIO value
+
+    uint8_t expected; // indicates the expected result from shutdown; set by the user but defaulted to false
+
+    uint8_t result_ready; // result is valid
+
+}shutdown_vars;
+
+static shutdown_vars shutdown;
+
+static shutdown_vars* shutdown_ptr = &shutdown;
 
 /* Static Functions */
 
@@ -25,7 +35,7 @@ static void readShutdownSignal(){
     UARTprintf("Reading shutdown signal...\r\n");
     #endif
 
-    shutdown_signal = gioGetBit( VCU_FLT_PORT, VCU_FLT_PIN );
+    shutdown_ptr->signal = gioGetBit( VCU_FLT_PORT, VCU_FLT_PIN );
 }
 
 static void resetShutdownVars(){
@@ -34,13 +44,15 @@ static void resetShutdownVars(){
     UARTprintf("Resetting shutdown variables...\r\n");
     #endif
 
-    readShutdownSignal();
+//    readShutdownSignal();
 
-    shutdown_pass     = false;
+    shutdown_ptr->pass     = false;
 
-    shutdown_timeout  = false;
+    shutdown_ptr->timeout  = false;
 
-    expected_shutdown = false;
+    shutdown_ptr->expected = false;
+
+    shutdown_ptr->result_ready = false;
 }
 
 void initializeShutdownInterrupt(){
@@ -62,34 +74,38 @@ void initializeShutdownInterrupt(){
 
 /* Getters and Setters */
 
-// timeout     pass     result
-//  0           0        false (either...interrupt was triggered and for some reason the result was unexpected -> test run is stopped OR nothing has happened yet so the test keeps waiting)
-//  0           1        true  (interrupt was triggered as expected and test can move on)
-//  1           0        test run is already stopped (validation stage will commence and check for timeout or pass)
-//  1           1        test run is already stopped (validation stage will commence and check for timeout or pass)
+// result_ready     pass     result
+//  0               0        -1
+//  0               1        -1
+//  1               0        pass(var)
+//  1               1        pass(var)
 
-uint8_t isShutdownPass(){
+//return (!result_ready)*-1 + (result_ready)*pass
+
+int8_t isShutdownPass(){
 
     #ifdef SHUTDOWN_INTERRUPT_DEBUG
 //    UARTprintf( shutdown_pass ? "Test has passed w.r.t. the shutdown signal!\r\n" : "Shutdown signal is currently stale...\r\n" );
     #endif
 
-    return shutdown_pass;
+    return shutdown_ptr->result_ready ? shutdown_ptr->pass : -1;
 }
 
 uint8_t isShutdownTimeout(){
 
-    return shutdown_timeout;
+    return shutdown_ptr->timeout;
 }
 
 uint8_t getShutdownSignal(){
 
-    return shutdown_signal;
+    uint8_t ret = shutdown_ptr->signal;
+
+    return SHUTDOWN_ACTIVE_LOW ? ret : !ret; // flip the logic if it turns out shutdown signal is active low instead
 }
 
 uint8_t getExpectedShutdownResult(){
 
-    return expected_shutdown;
+    return shutdown_ptr->expected;
 }
 
 /*
@@ -98,19 +114,19 @@ uint8_t getExpectedShutdownResult(){
 */
 void setShutdownOccurence(bool expected_result){
 
-    resetShutdownVars();
-
     #ifdef SHUTDOWN_INTERRUPT_DEBUG
     UARTprintf( expected_result ? "Now expecting a shutdown to occur...\r\n" : "Now expecting no shutdown to occur...\r\n" );
     #endif
+
+    resetShutdownVars();
+
+    // set expected shutdown
+    shutdown_ptr->expected = expected_result;
 
     // Start shutdown timeout
     setTimerID(VALIDATION, 0);
     setTimerCallback(VALIDATION, shutdown_timeout_callback);
     startTimer(VALIDATION, SHUTDOWN_TIMEOUT_PERIOD, true);
-
-    // set expected shutdown
-    expected_shutdown = expected_result;
 }
 
 /* Callback Functions */
@@ -121,22 +137,26 @@ void shutdown_timeout_callback(int ID){
     UARTprintf("SHUTDOWN SIGNAL HAS TIMED OUT\r\n\n");
     #endif
 
-    shutdown_pass = false; // test has FAILED
-
-    shutdown_timeout = true;
+    // test has FAILED via timeout
+    shutdown_ptr->pass         = false;
+    shutdown_ptr->result_ready = true;
+    shutdown_ptr->timeout      = true;
 
     readShutdownSignal();
-
-    stopAllTimers(); // stop test run
+    stopTimer(VALIDATION);
 }
 
 void shutdown_callback(){
 
     readShutdownSignal();
 
+    // prevent overwriting a test result
+    if(shutdown_ptr->result_ready){
+        return;
+    }
 
     //shutdown signal is active low
-    if( expected_shutdown != getShutdownSignal() ){
+    if( shutdown_ptr->expected != getShutdownSignal() ){ //don't overwrite failed result with passed result
 
         #ifdef SHUTDOWN_INTERRUPT_DEBUG
         UARTprintf("Shutdown signal has arrived as expected! Test has passed w.r.t. the shutdown\r\n");
@@ -149,35 +169,38 @@ void shutdown_callback(){
 
         /***************** INTIIALIZE VCU ****************/
 
-        //reset VCU state
-        gioSetBit(RESET_PORT, RESET_PIN, 1);
+//        //reset VCU state
+//        gioSetBit(RESET_PORT, RESET_PIN, 1);
+//
+//        delayms(500);
+//
+//        gioSetBit(RESET_PORT, RESET_PIN, 0);
+//
+//        //put VCU into state running
+//        gpio_process(RTD_NORMAL_PROCEDURE);
 
-        delayms(500);
-
-        gioSetBit(RESET_PORT, RESET_PIN, 0);
-
-        //put VCU into state running
-        gpio_process(RTD_NORMAL_PROCEDURE);
-
-
-
-
-        shutdown_pass = true; // test has PASSED
-
+        // test has PASSED vua an expected signal
+        shutdown_ptr->pass = true;
+        shutdown_ptr->result_ready = true;
         stopTimer(VALIDATION);
 
-    }else{
+    // shutdown signal is active low; if expected (true for shutdown, false for no shutdown) equals the gpio signal test fails
+    }else if( shutdown_ptr->expected == getShutdownSignal() ){
 
         #ifdef SHUTDOWN_INTERRUPT_DEBUG
         UARTprintf("An unexpected shutdown signal has been received. Test has now failed w.r.t. the shutdown\r\n");
         #endif
 
-        stopAllTimers(); // signal was unexpected; stop test run and fail test w.r.t. the shutdown signal
+//        stopAllTimers(); // signal was unexpected; stop test run and fail test w.r.t. the shutdown signal
 
-        shutdown_pass = false;
+        // test has FAILED via unexpected signal
+        shutdown_ptr->pass         = false;
+        shutdown_ptr->result_ready = true;
+        stopTimer(VALIDATION);
+
     }
 
-    setShutdownOccurence(false); // reset expected result to false state
+    shutdown_ptr->expected = false; // reset expected result to false state
 }
 
 void edgeNotification(hetBASE_t * hetREG,uint32 edge)
@@ -195,44 +218,52 @@ void edgeNotification(hetBASE_t * hetREG,uint32 edge)
 /* USER CODE END */
 }
 
-// Quick Test Functions
-#ifdef SHUTDOWN_INTERRUPT_DEBUG
 
-/* Test Procedure: Don't do anything
+/* Quick Unit Tests */
+#ifdef SHUTDOWN_UNIT_TESTS
 
-*/
+/* Test Procedure: Don't do anything */
+
 void shutdownStaleTest(){
 
     UARTprintf("\n\n****** Performing Shutdown Stale Unit Test ******\r\n\n");
 
 
+    uint32_t eta;
     // do some test
 
     setShutdownOccurence(true);
 
 
-    while(isShutdownPass() != true && !timers_complete() ){
+    while(isShutdownPass() == SHUTDOWN_RESULT_INVALID){
 
-        uint32_t eta = getTimerETA(VALIDATION); // wait for result
+        eta = getTimerETA(VALIDATION); // wait for result
     }
 
     // Timer should timeout
 
-
     delayms(2000);
 
-    UARTprintf( (isShutdownTimeout() && !isShutdownPass()) ? "Stale test passed!\r\n" : "Stale test failed...\r\n");
+    uint8_t result = (isShutdownTimeout() && !isShutdownPass());
+
+    if(result == false){
+
+        UARTprintf("Stale test failed...\r\n");
+
+    }else{
+
+        UARTprintf("Stale test passed!\r\n");
+    }
 
 
     delayms(5000);
 }
 
-/* Test Procedure: Send a rising edge
+/* Test Procedure: Send a rising edge but set shutdown occurrence to true, should return a fail */
 
-*/
 void shutdownUnexpectedTest(){
 
-
+    uint32_t eta;
     UARTprintf("\n\n****** Performing Shutdown Unexpected Unit Test ******\r\n\n");
 
     // do some test
@@ -240,26 +271,37 @@ void shutdownUnexpectedTest(){
     setShutdownOccurence(true);
 
 
-    while(isShutdownPass() != true && !timers_complete() ); // wait for result
+    while(isShutdownPass() == SHUTDOWN_RESULT_INVALID){
+
+        eta = getTimerETA(VALIDATION); // wait for result
+    }
 
     // Timer should not timeout
 
-
     delayms(2000);
 
-    UARTprintf( (!isShutdownTimeout() && !isShutdownPass()) ? "Unexpected test passed!\r\n" : "Unexpected test failed...\r\n");
+    uint8_t result = !isShutdownPass();
 
+    if(result == false){
+
+        UARTprintf("Unexpected test failed...\r\n");
+    }else{
+
+        UARTprintf("Unexpected test passed!\r\n");
+    }
 
 
     delayms(5000);
 
 }
 
-/* Test Procedure: Send a falling edge
+/* Test Procedure: Send a falling edge, but set shutdown occurrence to true, should return a true
 
 */
 void shutdownExpectedTest(){
 
+
+    uint32_t eta;
 
     UARTprintf("****** Performing Shutdown Expected Unit Test ******\r\n\n");
 
@@ -267,23 +309,46 @@ void shutdownExpectedTest(){
 
     setShutdownOccurence(true);
 
+    while(isShutdownPass() == SHUTDOWN_RESULT_INVALID){
 
-    while(isShutdownPass() != true && !timers_complete() ); // wait for result
+        eta = getTimerETA(VALIDATION); // wait for result
+    }
 
     // Timer should not timeout
 
     delayms(2000);
 
-    UARTprintf( (!isShutdownTimeout() && isShutdownPass()) ? "Expected test passed!\r\n" : "Expected test failed...\r\n");
+    uint8_t result = isShutdownPass();
+
+
+    if(result == false){
+
+        UARTprintf("Expected test failed...\r\n");
+    }else{
+
+        UARTprintf("Expected test passed!\r\n");
+    }
 
     delayms(5000);
 }
 
+void timeout_test(){
+
+    uint32_t eta;
+
+    setShutdownOccurence(true);
 
 
+    while(true){
 
+        if(isShutdownTimeout()){
 
+            setShutdownOccurence(true);
+        }
 
+        eta = getTimerETA(VALIDATION);
+    }
+}
 
 #endif
 

@@ -13,6 +13,9 @@
 #include "common.h"
 #include <phantom_drivers/common/include/timer.h>
 #include "gpio_tests.h"
+#include "Phantom_sci.h"
+#include "gio.h"
+#include "het.h"
 
 //Halcogen Setup
 //1.Enable HET1 Driver
@@ -23,28 +26,15 @@
 
 #define SHUTDOWN_TIMEOUT_PERIOD 5000
 
-/*
- * shutdown.c
- *
- *  Created on: Sep 18, 2021
- *      Author: Rafael Guevara
- */
+#define SHUTDOWN_RESULT_INVALID -1
 
-#include "hwConfig.h"
-#include "common.h"
-#include "Phantom_sci.h"
-#include "shutdown.h"
-
-#include "gio.h"
-
-#include "het.h"
-
+#define SHUTDOWN_ACTIVE_LOW true // determines logic of test
 
 void initializeShutdownInterrupt();
 
 /* Getters and Setters */
 
-uint8_t isShutdownPass();
+int8_t isShutdownPass();
 
 uint8_t isShutdownTimeout();
 
@@ -60,10 +50,12 @@ void shutdown_timeout_callback(int);
 
 void shutdown_callback();
 
-#ifdef SHUTDOWN_INTERRUPT_DEBUG
+#ifdef SHUTDOWN_UNIT_TESTS
 void shutdownStaleTest();
 void shutdownExpectedTest();
 void shutdownUnexpectedTest();
+void timeout_test();
+
 #endif
 
 
