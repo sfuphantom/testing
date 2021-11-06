@@ -12,7 +12,17 @@
 #include "hwConfig.h"
 #include "MCP48FV_DAC_SPI.h"
 
-void sendAPPSVoltages(uint16_t, uint16_t, float);
+#define APPS1_MAX 440
+#define APPS1_MIN 150
+#define APPS2_MAX 150
+#define APPS2_MIN 50
+
+#define DAC_SIZE_APPS 0xFF
+
+void sendAPPSVoltages(uint16_t, uint16_t);
+
+void sendAPPSdiff(uint16_t, float);
+
 
 
 
