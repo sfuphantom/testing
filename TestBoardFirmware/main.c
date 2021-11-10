@@ -134,12 +134,6 @@ int main(void){
 
         UARTprintf(test_passed ? "{ Pass }" : "{ Fail }"); // send results to GUI
 
-<<<<<<< HEAD
-=======
-        while(true);
-
-
->>>>>>> master
         delayms(5000);
 
     }//superloop

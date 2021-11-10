@@ -24,7 +24,6 @@ void softwareTimerCallback(){
 
     //    UARTprintf("Global timer expired!\r\n");
 
-
     Peripheral peripheral_timer;
 
     for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++){
@@ -34,26 +33,21 @@ void softwareTimerCallback(){
             if( isExpired(peripheral_timer) ){
                 executeTimerCallback(peripheral_timer);
             }
+            xTimers[peripheral_timer].local_ticks++; // will overflow after ~ 49 days...
+        } // execute active timers
 
-            xTimers[peripheral_timer].local_ticks++;
-        }
 
-
-    }
-
-    ticks++; //will overflow after ~ 49 days...
+    } // search for active timers
 
 }
 
 void timerInit(){
 
-    #ifndef DEV_ENV
     rtiInit();
     rtiEnableNotification(rtiNOTIFICATION_COMPARE0);
     _enable_IRQ();
-    #endif
 
-    //initialize timers to blocked state
+    // initialize timers to blocked state
 
     Peripheral peripheral_timer;
 
@@ -87,7 +81,7 @@ bool timers_complete(){
 
     bool timers_complete = true;
 
-    //check all status of all timers
+    // check all status of all timers
     Peripheral peripheral_timer;
 
    for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++){
@@ -95,14 +89,13 @@ bool timers_complete(){
        if( !isBlocked(peripheral_timer) )
            timers_complete = false;
 
-   }//loop through all peripheral timers
-
+   }  // check all status of all timers
 
     #ifdef TIMER_DEBUG
     if(timers_complete) UARTprintf("Tests Completed!\r\n\n");
     #endif
 
-   return timers_complete;
+    return timers_complete;
 
 }
 
@@ -123,7 +116,6 @@ void xTimerSet(char* name, Peripheral peripheral_timer, Callbackfunc callback, i
 
 void startGlobalTimer(){
 
-    ticks = 0;
     rtiStartCounter(rtiCOUNTER_BLOCK0);
 }
 
@@ -220,7 +212,7 @@ unsigned int update_value(Peripheral peripheral, int MIN, int MAX, int STEP, int
 
     unsigned int ret = ( (MAX * is_neg) + (MIN * !is_neg) ) + ( STEP * ID ) ;
 
-    //check ceiling and floor respectively
+    // check ceiling and floor respectively
     if(ret > MAX && is_ceil){
 
         stopTimer(peripheral);
@@ -293,9 +285,7 @@ void initializeTimers(){
 
 }
 
-#ifdef DEV_ENV
 // Hardware Functions
-
 void rtiNotification(uint32 notification)
 {
 
@@ -303,6 +293,6 @@ void rtiNotification(uint32 notification)
     softwareTimerCallback();
 
 }
-#endif
+
 
 

@@ -24,7 +24,6 @@ typedef struct{
 }shutdown_vars;
 
 static shutdown_vars shutdown;
-
 static shutdown_vars* shutdown_ptr = &shutdown;
 
 /* Static Functions */
@@ -164,19 +163,20 @@ void shutdown_callback(){
 
         /***************** INTIIALIZE VCU ****************/
 
-//        //reset VCU state
+//        // reset VCU state
 //        gioSetBit(RESET_PORT, RESET_PIN, 1);
 //
 //        delayms(500);
 //
 //        gioSetBit(RESET_PORT, RESET_PIN, 0);
 //
-//        //put VCU into state running
+//        // put VCU into state running
 //        gpio_process(RTD_NORMAL_PROCEDURE);
 
-        // test has PASSED vua an expected signal
+        // test has PASSED via an expected signal
         shutdown_ptr->pass = true;
         shutdown_ptr->result_ready = true;
+
         stopTimer(VALIDATION);
 
     // shutdown signal is active low; if expected (true for shutdown, false for no shutdown) equals the gpio signal test fails
@@ -186,13 +186,11 @@ void shutdown_callback(){
         UARTprintf("An unexpected shutdown signal has been received. Test has now failed w.r.t. the shutdown\r\n");
         #endif
 
-//        stopAllTimers(); // signal was unexpected; stop test run and fail test w.r.t. the shutdown signal
-
         // test has FAILED via unexpected signal
         shutdown_ptr->pass         = false;
         shutdown_ptr->result_ready = true;
-        stopTimer(VALIDATION);
 
+        stopTimer(VALIDATION);
     }
 
     shutdown_ptr->expected = false; // reset expected result to false state
@@ -207,8 +205,6 @@ void edgeNotification(hetBASE_t * hetREG,uint32 edge)
 
         shutdown_callback();
     }
-
-//    readShutdownSignal();
 
 /* USER CODE END */
 }

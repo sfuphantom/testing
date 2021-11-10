@@ -16,14 +16,11 @@
 #ifndef TIMERS_TIMERS_H_
 #define TIMERS_TIMERS_H_
 
-#ifndef DEV_ENV
 #include "rti.h"
 #include "common.h"
 #include "Phantom_sci.h"
-#endif
 
 #define NUM_TIMERS NUM_PERIPHERALS //each system gets one timer if needed. reduce number of timers later...
-
 
 /* Variables */
 
@@ -45,9 +42,6 @@ typedef struct{
     bool stop; //boolean to start/stop peripheral timer
 
 } TimerHandle_t;
-
-
-static uint32_t ticks; //number of times RTI has expired in ms (will not overflow for ~ 49 days)
 
 static TimerHandle_t xTimers[NUM_TIMERS]; //array of all peripheral software timers
 

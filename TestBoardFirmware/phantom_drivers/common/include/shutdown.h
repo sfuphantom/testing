@@ -48,7 +48,6 @@ void shutdownStaleTest();
 void shutdownExpectedTest();
 void shutdownUnexpectedTest();
 void timeout_test();
-
 #endif
 
 #endif /* PHANTOM_DRIVERS_COMMON_INCLUDE_SHUTDOWN_H_ */
