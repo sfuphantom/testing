@@ -105,7 +105,6 @@ bool timers_complete(){
 
 }
 
-
 /* Setters */
 
 void xTimerSet(char* name, Peripheral peripheral_timer, Callbackfunc callback, int ID){
@@ -119,7 +118,6 @@ void xTimerSet(char* name, Peripheral peripheral_timer, Callbackfunc callback, i
     xTimers[peripheral_timer].name = name;
 
     xTimers[peripheral_timer].callback = callback;
-
 }
 
 void startGlobalTimer(){
