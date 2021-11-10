@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "__locale": "c"
-    }
+    },
+    "python.pythonPath": "env\\Scripts\\python.exe",
 }

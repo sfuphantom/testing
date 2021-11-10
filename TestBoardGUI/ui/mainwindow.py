@@ -2,21 +2,20 @@ import sys
 import os
 import json
 from datetime import date
+import tests.vcu_test as vcu_test
+import tests.bms_test as bms_test
 import serial.tools.list_ports
 
-from PySide2.QtWidgets import (QApplication, QPushButton, QLineEdit,
+from PySide2.QtWidgets import (QMessageBox, QApplication, QHeaderView, QPushButton, QLineEdit,
                                QTabWidget, QTreeWidget, QComboBox,
                                QStackedWidget, QCommandLinkButton,
-                               QStatusBar, QTreeWidgetItem, QAbstractItemView,
-                               QFileDialog)
-from PySide2.QtCore import (QFile, QObject, Signal, Slot, Qt)
+                               QStatusBar, QTreeWidgetItem, QAbstractItemView, QFileDialog)
+from PySide2.QtCore import (QFile, QObject, Slot, Qt)
 from PySide2.QtUiTools import (QUiLoader)
-from PySide2.QtGui import (QBrush, QColor)
 
 
 # Set-up/Connect mainwindow
 class MainWindow(QObject):
-
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
 
@@ -46,18 +45,15 @@ class MainWindow(QObject):
         # ComboBox
         self.deviceComboBox = self.mainwindow.findChild(
             QComboBox, 'deviceSelection')
-        # self.deviceCombobox.currentTextChanged.connect(
-        #     lambda: self._device_selected(self.deviceCombobox.currentIndex()))
-        self.portNumComboBox = self.mainwindow.findChild(
-            QComboBox, 'portNumber')
-
-        self.portNumComboBox.setPlaceholderText('Select')
-        self.portNumComboBox.addItems(self._port_num())
-
-        self.portNumComboBox.currentTextChanged.connect( #creates a signal
-            lambda: self.get_port_num(self.portNumComboBox.currentText()))
         self.deviceComboBox.currentTextChanged.connect(
             lambda: self._device_selected(self.deviceComboBox.currentIndex()))
+
+        self.portNumComboBox = self.mainwindow.findChild(
+            QComboBox, 'portNumber')
+        self.portNumComboBox.setPlaceholderText('Select')
+        self.portNumComboBox.addItems(self._port_num())
+        self.portNumComboBox.currentTextChanged.connect(
+            lambda: self.get_port_num(self.portNumComboBox.currentText()))
 
         # LineEdits
         self.boardName = self.mainwindow.findChild(
@@ -112,7 +108,7 @@ class MainWindow(QObject):
         self.mainwindow.show()
 
     def get_port_num(self, num):
-            self.portnum = num
+        self.portnum = num
 
     # Load ui file
     def _load_ui(self, file):
@@ -139,8 +135,12 @@ class MainWindow(QObject):
 
         # Define selected tree based on selected device
         if self.device == 'VCU':
+            # Clear previously selected tests
+            self.BMSTree.clearSelection()
+            # Define tree
             self.selectedTree = self.VCUTree
         elif self.device == 'BMS':
+            self.VCUTree.clearSelection()
             self.selectedTree = self.BMSTree
 
         # Set tree behaviors
@@ -166,11 +166,6 @@ class MainWindow(QObject):
                 parent.setFlags(parent.flags() & ~Qt.ItemIsSelectable)
                 # Populate children (test cases)
                 for case in test_cases:
-                    # column_0 = case['Case']
-                    # column_1 = case['Repeat']
-                    # column_2 = case['Description']
-                    # column_3 = case['enum']
-                    # child = QTreeWidgetItem([column_0, column_1, column_2, column_3])
                     row = case.values()
                     child = QTreeWidgetItem(list(row))
                     parent.addChild(child)
@@ -178,6 +173,10 @@ class MainWindow(QObject):
                     child.setFlags(child.flags() | Qt.ItemIsEditable
                                    | Qt.ItemIsEnabled | Qt.ItemIsSelectable)
                 self.selectedTree.expandItem(parent)
+        # Resize column
+        header = self.selectedTree.header()
+        header.setSectionResizeMode(QHeaderView.ResizeToContents)
+        header.setStretchLastSection(False)
 
     # Get test attributes from testcases.JSON for selected device
     def _get_json_attributes(self, device: str):
@@ -203,8 +202,6 @@ class MainWindow(QObject):
         test_item['Repeat'] = item.text(1)
         # Edit the following lines to match enum attributes
         test_item['enum'] = item.text(3)
-        test_item['a'] = item.text(4)
-        test_item['b'] = item.text(5)
         return test_item
 
     # Retrieve check-in information
@@ -223,6 +220,7 @@ class MainWindow(QObject):
         self.runPushButton.setEnabled(mode)
         # Disable combobox
         self.deviceComboBox.setEnabled(mode)
+        self.portNumComboBox.setEnabled(mode)
         # Disable calibration test button
         self.calibrationTestButton.setEnabled(mode)
         # Disable all line edits\
@@ -230,6 +228,7 @@ class MainWindow(QObject):
         self.testID.setEnabled(mode)
         self.boardVersion.setEnabled(mode)
         self.teamMember.setEnabled(mode)
+        self.selectedTree.setEnabled(mode)
 
     # Retrieve list of COM ports
     def _port_num (self):
@@ -239,8 +238,26 @@ class MainWindow(QObject):
             port_num.append(element.device)
         return port_num
 
+    # Opens directory storing test results
     def open_directory(self):
         self.dirName = QFileDialog.getExistingDirectory()
+
+    # Send selected tests and port number ot back-end
+    def get_results(self, info: list):
+        if self.device == 'VCU':
+            result = vcu_test.build_json(info)
+        elif self.device == 'BMS':
+            result = bms_test.main(info)
+
+        # Add test status to the selected tests
+        # WIP: change this part after firmware handles
+        # results for individual test case
+        test_results = sorted(self.selectedTests,key = lambda i: i['Test Name'])
+        for test in test_results:
+            test['Status'] = result
+            test['Message'] = 'N/A'
+        
+        return test_results
 
     # Run tests
     @Slot()
@@ -250,19 +267,23 @@ class MainWindow(QObject):
         self.status.showMessage('Tests in progress...')
         # Get selected tests
         self.selectedTests = self._get_selected_tests()
-        print(self.selectedTests)
         # Disable some features while running tests
         self._switch_mode(False)
-        '''
-        Excecute run code here
+        popup = QMessageBox()
+        popup.setIcon(QMessageBox.Warning)
+        popup.setWindowTitle("Test Board GUI")
+        popup.setText('Test in progress. Please wait.')
+        popup.exec_()
+        # Get results from back-end
+        self.testResults = self.get_results([self.selectedTests, self.portnum])
 
-        '''
-        # Temporary assigning results to selected test cases
-        # sort results by their Test Name for heirachical structure
-        results = sorted(self.selectedTests,key = lambda i: i['Test Name'])
-        self.resultsWriter.writeResults(results)
+        # Displya results on GUI
+        self.resultsWriter.writeResults(self.testResults)
+
         # Switch to result page
         self.stackedWidget.setCurrentIndex(1)
+
+        self.status.showMessage('Tests Completed.')
 
     # Cancel tests
     @Slot()
@@ -312,20 +333,18 @@ class ResultsWriter(QObject):
     def get_results_tree(self, tree):
         self.resultsTree = tree
 
-    # Display status as PASS/FAIL in green/red
-    def _fill_status(self, stat: bool, child):
-        status = "PASS" if stat else "FAIL"
-        colour = "#196F3D" if stat else "#FF0000"
-        child.setText(1, status)
-        child.setForeground(1, QBrush(QColor(colour)))
-    
+    def _status_colour(self, stat: str):
+        if "pass" in stat.lower():
+            return "#196F3D"
+        elif "fail" in stat.lower():
+            return "#FF0000"
+            
     def writeResults(self, data: list):
         # This list keeps track of the parents to avoid
         # having multiple parents with the same name
         parents = ['']
         for item in data:
             root = item['Test Name']
-            print(parents[-1])
             # check if a top level has already been added
             if root != parents[-1]:
                 parents.pop()
@@ -335,14 +354,21 @@ class ResultsWriter(QObject):
                 self.resultsTree.addTopLevelItems([parent])
             parent.setFlags(parent.flags() & ~Qt.ItemIsSelectable)
             self.resultsTree.expandItem(parent)
-            column_0 = item['Test Case']
-            child = QTreeWidgetItem([column_0, '',''])
-            # column_2 = item['Message']
-            # child = QTreeWidgetItem([column_0, '', column_2])
-            parent.addChild(child)
-            # self._fill_status(item['Status'], child)
-            child.setFlags(child.flags() & ~Qt.ItemIsSelectable)
 
+            column_0 = item['Test Case']
+            column_1 = item['Status'].decode("utf-8")
+            column_2 = item['Message']
+
+            child = QTreeWidgetItem([column_0, column_1, column_2])            
+            parent.addChild(child)
+            child.setFlags(child.flags() & ~Qt.ItemIsSelectable)
+            colour = self._status_colour(column_1)
+            child.setTextColor(1, colour)
+
+        # Resize column
+        header = self.resultsTree.header()
+        header.setSectionResizeMode(QHeaderView.ResizeToContents)
+        header.setStretchLastSection(False)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
