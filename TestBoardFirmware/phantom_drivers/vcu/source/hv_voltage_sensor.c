@@ -237,7 +237,7 @@ static void hv_vs_sweep()
     setTimerID(HV_VS, 0);
 
     //start timer
-    startTimer(HV_VS, SWEEP_TIMER, SWEEP_PERIOD);
+    startTimer(HV_VS, SWEEP_PERIOD, true);
 }
 
 void hv_vs_sweep_timer(int ID){

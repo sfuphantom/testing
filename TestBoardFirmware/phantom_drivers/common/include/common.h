@@ -12,8 +12,28 @@
 
 
 #define TIMER_DEBUG //print expirations of all active timers
-#define BMS_DEBUG //print received signals from Device Under Test; print expected and actual results
-#define VCU_DEBUG //print received signals from Device Under Test; print expected and actual results
+//#define BMS_DEBUG   //print received signals from Device Under Test; print expected and actual results
+//#define VCU_DEBUG   //print received signals from Device Under Test; print expected and actual results
+//#define HV_VS_DEBUG //print calculated values being sent via SPI to the high voltage peripheral
+#define SHUTDOWN_INTERRUPT_DEBUG
+
+//#define SHUTDOWN_UNIT_TESTS
+
+
+//Choose test cases to run, independent of the GUI
+#ifndef GUI_MODE
+
+    #define APPS_TEST      NORMAL_APPS_OFF
+    #define BSE_TEST       BSE_OPEN_CIRCUIT
+
+    #define HV_VS_TEST     0
+    #define TSAL_TEST      0
+    #define IMD_TEST       0
+    #define LV_TEST        0
+    #define VCU_COMMS_TEST 0
+    #define SLAVES_TEST    0
+
+#endif
 
 
 //Common defines
@@ -31,12 +51,17 @@ typedef enum
   FAIL
 } Result_t;
 
+#define NUM_PERIPHERALS 12
+
 typedef enum Peripheral
 {
     //systems with timers
     APPS = 0,
     BSE,
     GPIO,
+
+    VALIDATION,
+
 
     TSAL,
     IMD,

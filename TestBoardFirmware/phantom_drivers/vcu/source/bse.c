@@ -81,7 +81,8 @@ static void bse_sweep(){
     setTimerID(BSE, 0);
 
     //start timer
-    startTimer(BSE, SWEEP_TIMER, SWEEP_PERIOD);
+    //startTimer(BSE, SWEEP_TIMER, SWEEP_PERIOD);
+    startTimer(BSE, SWEEP_PERIOD, true);
 }
 
 void bse_timer(TestTimer_t test_timer, int ID){
@@ -105,7 +106,7 @@ void bse_timer(TestTimer_t test_timer, int ID){
     MCP48FV_Set_Value_Single(voltage, DAC_SIZE_BSE, VOUT1, 1);
 
     //increment cycle
-    setTimerID( BSE, ++ID );
+    setTimerID( BSE, ++ID );   
 }
 
 /* End of Timer-Related Functions */

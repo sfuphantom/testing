@@ -20,9 +20,7 @@
 #include "common.h"
 #include "Phantom_sci.h"
 
-
-#define NUM_TIMERS 10 //each system gets one timer if needed. reduce number of timers later...
-
+#define NUM_TIMERS NUM_PERIPHERALS //each system gets one timer if needed. reduce number of timers later...
 
 /* Variables */
 
@@ -56,6 +54,8 @@ typedef struct{
 
     int ID; //peripheral timer ID; can be used to count cycles
 
+    uint32_t local_ticks; //keeps track of the locl time of the peripheral
+
     int period; //peripheral timer period in ms
 
     bool stop; //boolean to start/stop peripheral timer
@@ -64,20 +64,21 @@ typedef struct{
 
 } TimerHandle_t;
 
-
-static uint32_t ticks; //number of times RTI has expired in ms (will not overflow for ~ 49 days)
-
 static TimerHandle_t xTimers[NUM_TIMERS]; //array of all peripheral software timers
 
 /* Function Declarations */
 
 void timerInit();
 
+void initializeTimers();
+
 /* Getters */
 
 int getTimerID(Peripheral);
 
 int getTimerPeriod(Peripheral);
+
+uint32_t getTimerETA(Peripheral);
 
 uint8_t isBlocked(Peripheral);
 
@@ -93,7 +94,7 @@ void stopGlobalTimer();
 
 void stopAllTimers();
 
-void startTimer(Peripheral, TestTimer_t, int);
+void startTimer(Peripheral, int, uint8_t);
 
 void stopTimer(Peripheral);
 

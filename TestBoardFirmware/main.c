@@ -11,6 +11,7 @@
 #include "het.h"
 #include "common.h"
 #include "string.h"
+#include "shutdown.h"
 
 //Drivers
 #include "bse.h"
@@ -42,17 +43,13 @@ static json_t * JSONHandler(unsigned char *jsonstring);
 static void initializeVCU();
 static void initializeTestBoard();
 
-//Timer functions
-static void initializeTimers();
-
 // Static global variables
 static TestBoardState_t testBoardState = { IDLE, {0,0,0,0,0,0,0,0,0,0,} };
 
 static Result_t res;
 
- int main(void){
+int main(void){
 
-    
     initializeTestBoard();
 
     #ifdef GUI_MODE
@@ -121,15 +118,13 @@ static Result_t res;
 
 //        UARTprintf("{ 1, 1 }") send results to GUI
 
-
-
         while(!timers_complete()); //wait for tests to finish
 
         stopGlobalTimer(); //potentially needs to remain active for other peripherals, eg CAN communications...expects message every 50 ms?
 
         //send a single pass/result to PC (for CLI, uncomment VALID_DEBUG in common.h to display results)
 
-//        test_passed = validateThrottleControls(testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
+        test_passed = validateThrottleControls( testBoardState.peripheralStateArray[APPS], testBoardState.peripheralStateArray[BSE] );
 
         //read bms shutdown pin; display results
 
@@ -139,13 +134,11 @@ static Result_t res;
 
         UARTprintf(test_passed ? "{ Pass }" : "{ Fail }"); // send results to GUI
 
-        while(true);
-
-
         delayms(5000);
 
     }//superloop
 
+    stopGlobalTimer();
 
 }//main
 
@@ -301,33 +294,37 @@ static void initializeVCU(){
 void initializeTestBoard(){
 
     //initialization
-        _enable_IRQ();
+    _enable_IRQ();
 
 
-        /* Slave Data */
-        adcSlaveDataSetup();
+    /* Slave Data */
+    adcSlaveDataSetup();
 
 
-        gioInit();
-        gioSetDirection(hetPORT1, 0xFFFFFFFF);
+    gioInit();
+    gioSetDirection(hetPORT1, 0xFFFFFFFF);
 
-        MCP48FV_Init();
+    MCP48FV_Init();
 
-       // sciInit();
-        timerInit();
+    // sciInit();
+    timerInit();
 
-        gpio_init();
-
-
-        adcInit();
+    gpio_init();
 
 
-        res = SUCCESS;
-        //res = MCP48FV_Init();
+    adcInit();
 
-        res = initUARTandModeHandler(&testBoardState);
 
-        initializeTimers();
+    res = SUCCESS;
+    //res = MCP48FV_Init();
+
+    res = initUARTandModeHandler(&testBoardState);
+
+//    initializeTimers();
+
+    initializeShutdownInterrupt();
+
+    startGlobalTimer();
 
 }
 

@@ -89,6 +89,7 @@ static void apps_short_circuit()
     //reset timer ID if necessary...
 
     setTimerID(APPS, 0);
+    startTimer(APPS, SHORT_PERIOD, true);
 
     //startTimer(APPS, SHORT_TIMER, SHORT_PERIOD);
     return;
@@ -99,6 +100,7 @@ static void apps_open_circuit()
     //reset timer ID if necessary...
 
     setTimerID(APPS, 0);
+    startTimer(APPS, OPEN_PERIOD, true);
 
     //startTimer(APPS, OPEN_TIMER, OPEN_PERIOD);
     return;
@@ -120,8 +122,9 @@ static void apps_sweep()
     //reset timer ID if necessary...
 
     setTimerID(APPS, 0);
+    startTimer(APPS, SWEEP_PERIOD, true);
 
-    startTimer(APPS, SWEEP_TIMER, SWEEP_PERIOD);
+    //startTimer(APPS, SWEEP_TIMER, SWEEP_PERIOD);
     return;
 }
 
