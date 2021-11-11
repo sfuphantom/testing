@@ -23,6 +23,12 @@
 #define BMS_FAULT_PIN         7 
 #define IMD_FAULT_PIN         6 
 
+
+#define VCU_FLT_REG           hetREG1 //configured in halcogen!
+#define VCU_FLT_PORT          hetPORT1 //configured in halcogen!
+#define VCU_FLT_PIN           15
+#define VCU_FLT_EDGE          0
+
 #define BSPD_PORT             hetPORT1 //configure in halcogen
 #define BSPD_FAULT_PIN        9 
 

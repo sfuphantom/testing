@@ -95,7 +95,7 @@ static void bse_sweep(){
     setTimerCallback(BSE, bse_sweep_timer);
 
     //start timer
-    startTimer(BSE, SWEEP_PERIOD);
+    startTimer(BSE, SWEEP_PERIOD, true);
 }
 
 /* End of Timer-Related Functions */
