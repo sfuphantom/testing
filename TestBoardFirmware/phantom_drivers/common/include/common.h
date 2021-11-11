@@ -37,6 +37,9 @@
 
 
 //Common defines
+#define TIMER_DEBUG
+//#define HV_VS_DEBUG
+#define HV_CT_DEBUG
 #define SWEEP_STEP 25
 #define SWEEP_PERIOD 500
 
@@ -61,7 +64,8 @@ typedef enum Peripheral
     VCU_COMMUNICATIONS,
     BMS_SLAVES,
     THERMISTOR_EXPANSION,
-    BMS_COMMUNICATIONS
+    BMS_COMMUNICATIONS,
+    HVCT
 } Peripheral;
 
 void delayms(uint16_t ms);

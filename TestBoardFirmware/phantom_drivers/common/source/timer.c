@@ -10,7 +10,7 @@
 
 static void executeTimerCallback(Peripheral peripheral_timer){
 
-    xTimers[peripheral_timer].callback( getTimerID(peripheral_timer) );
+    xTimers[peripheral_timer].callback( xTimers[peripheral_timer].timer, getTimerID(peripheral_timer) );
 }
 
 static uint8_t isExpired(Peripheral peripheral_timer){
@@ -109,6 +109,7 @@ void xTimerSet(char* name, Peripheral peripheral_timer, Callbackfunc callback, i
 
     xTimers[peripheral_timer].callback = callback;
 
+    xTimers[peripheral_timer].timer = 0; //default
 }
 
 void startGlobalTimer(){
@@ -131,7 +132,9 @@ void stopAllTimers(){
     }
 }
 
-void startTimer(Peripheral peripheral_timer, int period){
+void startTimer(Peripheral peripheral_timer, TestTimer_t timer, int period){
+
+    xTimers[peripheral_timer].timer = timer;
 
     setTimerPeriod(peripheral_timer, period);
 
@@ -154,6 +157,12 @@ void stopTimer(Peripheral peripheral_timer){
         case BSE:
 
             UARTprintf("BSE TEST FINISHED!...\r\n\n");
+
+            break;
+
+        case HVCT:
+
+            UARTprintf("HVCT TEST FINISHED!...\r\n\n");
 
             break;
 
@@ -183,47 +192,6 @@ void setTimerPeriod(Peripheral peripheral_timer,int period){
     xTimers[peripheral_timer].period = period;
 }
 
-
-void setTimerCallback(Peripheral peripheral_timer, Callbackfunc timer_callback){
-
-    if(timer_callback == NULL){
-
-        UARTprintf("Cannot pass null as a timer callback.\r\n");
-    }
-
-    xTimers[peripheral_timer].callback = timer_callback;
-}
-
-unsigned int update_value(Peripheral peripheral, int MIN, int MAX, int STEP, int ID, bool is_ceil){
-
-    bool is_neg = (STEP < 0);
-
-    unsigned int ret = ( (MAX * is_neg) + (MIN * !is_neg) ) + ( STEP * ID ) ;
-
-    //check ceiling and floor respectively
-    if(ret > MAX && is_ceil){
-
-        stopTimer(peripheral);
-
-        ret = MAX;
-
-    }else if(ret < MIN && !is_ceil){
-
-        stopTimer(peripheral);
-
-        ret = MIN;
-    }
-
-    setTimerID(peripheral, ++ID);
-
-    return ret;
-
-}
-
-void defaultCallback(int ID){
-    return;
-}
-
 void initializeTimers(){
 
     xTimerSet(
@@ -231,7 +199,7 @@ void initializeTimers(){
 
                 BSE, // peripheral
 
-                defaultCallback, // callback function
+                bse_timer, // callback function
 
                 0 // ID
              );
@@ -241,28 +209,34 @@ void initializeTimers(){
 
                 APPS, // peripheral
 
-                defaultCallback, // callback function
+                apps_timer, // callback function
 
                 0 // ID
              );
 
     xTimerSet(
+                "HVCT", // name
+
+                HVCT, // peripheral
+
+                hvct_timer, // callback function
+
+                0 // ID
+            );
+
+    xTimerSet(
+
                  "HV_VS", // name
 
                  HV_VS, // peripheral
 
-                 defaultCallback, // callback function
+                 hv_vs_timer, // callback function
 
                  0 // ID
              );
-
 
 
     //add more peripheral timers here...
 
 
 }
-
-
-
-

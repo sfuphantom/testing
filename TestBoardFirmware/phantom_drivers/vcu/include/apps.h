@@ -24,9 +24,7 @@
 void apps_process(uint8_t state);
 
 //Timer Callback Functions
-void apps_sweep_callback(int);
-void apps_short_callback(int);
-void apps_open_callback(int);
+void apps_timer(TestTimer_t, int);
 
 enum
 {
