@@ -22,6 +22,7 @@
 
 
 void apps_process(uint8_t state);
+void apps_unit_test();
 
 //Timer Callback Functions
 void apps_sweep_callback(int);

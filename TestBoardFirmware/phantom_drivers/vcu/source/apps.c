@@ -236,7 +236,7 @@ void apps_unit_test(){
     for(i = 0; i < APPS1_MAX; i+=20){
 
         sendAPPSVoltages(i, i);
-        delayms(500);
+        delayms(1000);
     }
 
 
