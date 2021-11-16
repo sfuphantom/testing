@@ -11,7 +11,6 @@
 #define APPS1_MIN 150
 #define APPS2_MAX 150
 #define APPS2_MIN 50
-#define DAC_SIZE_APPS 0xFF
 
 // Static function prototypes
 static void normal_apps_on();
@@ -21,8 +20,6 @@ static void apps_open_circuit();
 static void apps_short_circuit();
 static void apps_bse_activated();
 static void apps_sweep();
-uint16_t create_apps2_volt(uint16_t apps1_volt, float difference);
-uint16_t get_apps_voltage(uint16_t dac_val);
 
 //Timer Periods
 #define SHORT_PERIOD 500
@@ -60,7 +57,8 @@ void apps_process(uint8_t state)
 }
 
 static void normal_apps_off(){
-    MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN, DAC_SIZE_APPS, 0);
+
+    sendAPPSVoltages(APPS1_MIN, APPS2_MIN);
     return;
 }
 
@@ -68,18 +66,16 @@ static void normal_apps_on()
 {
     // sets APPS values at midpoint of valid APPS range
     uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
-    uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.0);
 
-    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
+    sendAPPSdiff(apps1_volt, 1.0);
     return;
 }
 
 static void apps_implausibility()
 {
     uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
-    uint16_t apps2_volt = create_apps2_volt(apps1_volt, 1.15);
 
-    MCP48FV_Set_Value_Double(apps1_volt, apps2_volt, DAC_SIZE_APPS, 0);
+    sendAPPSdiff(apps1_volt, 1.15);
 
     return;
 }
@@ -129,16 +125,6 @@ static void apps_sweep()
 }
 
 
-// difference is the ratio difference between APPS values, 1 meaning 0% difference
-uint16_t create_apps2_volt(uint16_t apps1_volt, float difference){
-    uint16_t apps2_volt = (difference*( (double)(apps1_volt-APPS1_MIN)/(APPS1_MAX-APPS1_MIN))*(APPS2_MAX-APPS2_MIN))+APPS2_MIN;
-    return apps2_volt;
-}
-
-uint16_t get_apps_voltage(uint16_t dac_val){
-    return ((dac_val*500000)/(0xFF*1000));
-}
-
 /* Timer-Callback Functions */
 
 void apps_sweep_callback(int ID){
@@ -149,7 +135,8 @@ void apps_sweep_callback(int ID){
 
     voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 50, ID, true);
 
-    MCP48FV_Set_Value_Double(voltage, create_apps2_volt(voltage, 1.00), DAC_SIZE_APPS, 0);
+
+    sendAPPSdiff(voltage, 1.0);
 }
 
 void apps_short_callback(int ID){
@@ -160,11 +147,11 @@ void apps_short_callback(int ID){
 
     voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 20, ID, true);
 
-    if (voltage >= APPS1_MIN)    MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX, DAC_SIZE_APPS, 0); //short APPS1
+    if (voltage >= APPS1_MIN)    sendAPPSVoltages(APPS1_MAX+20, APPS2_MAX); //short APPS1
 
-    if (voltage >= APPS1_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX, APPS2_MAX+20, DAC_SIZE_APPS, 0); //APPS1 shorted to APPS1 normal, APPS2 shorted
+    if (voltage >= APPS1_MAX+20) sendAPPSVoltages(APPS1_MAX, APPS2_MAX+20); //APPS1 shorted to APPS1 normal, APPS2 shorted
 
-    if (voltage >= APPS2_MAX+20) MCP48FV_Set_Value_Double(APPS1_MAX+20, APPS2_MAX+20, DAC_SIZE_APPS, 0); //APPS2 shorted to both shorted
+    if (voltage >= APPS2_MAX+20) sendAPPSVoltages(APPS1_MAX+20, APPS2_MAX+20); //APPS2 shorted to both shorted
 }
 
 void apps_open_callback(int ID){
@@ -175,11 +162,11 @@ void apps_open_callback(int ID){
 
     voltage = update_value(APPS, APPS2_MIN, APPS1_MIN, -20, ID, false);
 
-    if (voltage < APPS1_MIN)     MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN, DAC_SIZE_APPS, 0); //open APPS1
+    if (voltage < APPS1_MIN)     sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN); //open APPS1
 
-    if (voltage <= APPS1_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open APPS2
+    if (voltage <= APPS1_MIN-20) sendAPPSVoltages(APPS1_MIN, APPS2_MIN-20); //open APPS2
 
-    if (voltage <= APPS2_MIN-20) MCP48FV_Set_Value_Double(APPS1_MIN-20, APPS2_MIN-20, DAC_SIZE_APPS, 0); //open both
+    if (voltage <= APPS2_MIN-20) sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN-20); //open both
 }
 
 /* End of Timer-Related Functions */
@@ -242,3 +229,15 @@ void apps_open_callback(int ID){
 
 
            break;*/
+
+void apps_unit_test(){
+
+    int i = 0;
+    for(i = 0; i < APPS1_MAX; i+=20){
+
+        sendAPPSVoltages(i, i);
+        delayms(1000);
+    }
+
+
+}
