@@ -59,6 +59,17 @@ void apps_process(uint8_t state)
 static void normal_apps_off(){
 
     sendAPPSVoltages(APPS1_MIN, APPS2_MIN);
+
+    // set expected result
+    setShutdownOccurence(false);
+
+    int8_t result = isShutdownPass();
+
+    while(result == SHUTDOWN_RESULT_INVALID){
+        result = isShutdownPass();
+    }
+
+    // store into some validation data structure
     return;
 }
 
@@ -68,6 +79,19 @@ static void normal_apps_on()
     uint16_t apps1_volt = ((APPS1_MAX-APPS1_MIN)/2)+APPS1_MIN;
 
     sendAPPSdiff(apps1_volt, 1.0);
+
+    // set expected result
+    setShutdownOccurence(false);
+
+    int8_t result = isShutdownPass();
+
+    while(result == SHUTDOWN_RESULT_INVALID){
+        result = isShutdownPass();
+    }
+
+    // store into some validation data structure
+
+
     return;
 }
 
@@ -77,15 +101,24 @@ static void apps_implausibility()
 
     sendAPPSdiff(apps1_volt, 1.15);
 
+    // set expected result
+    setShutdownOccurence(true); // TODO: ACCORDING TO RULEBOOK YOU JUST HAVE TO STOP COMMANDS TO INVERTER NO SHUTDOWN REQUIRED?
+
+    int8_t result = isShutdownPass();
+
+    while(result == SHUTDOWN_RESULT_INVALID){
+        result = isShutdownPass();
+    }
+
+    // store into some validation data structure
+
     return;
 }
 
 static void apps_short_circuit()
 {
     setTimerID(APPS, 0);
-
     setTimerCallback(APPS, apps_short_callback);
-
     startTimer(APPS, SHORT_PERIOD, true);
 
     return;
@@ -94,9 +127,7 @@ static void apps_short_circuit()
 static void apps_open_circuit()
 {
     setTimerID(APPS, 0);
-
     setTimerCallback(APPS, apps_open_callback);
-
     startTimer(APPS, OPEN_PERIOD, true);
 
     return;
@@ -116,9 +147,7 @@ static void apps_bse_activated()
 static void apps_sweep()
 {
     setTimerID(APPS, 0);
-
     setTimerCallback(APPS, apps_sweep_callback);
-
     startTimer(APPS, SWEEP_PERIOD, true);
 
     return;
@@ -137,6 +166,8 @@ void apps_sweep_callback(int ID){
 
 
     sendAPPSdiff(voltage, 1.0);
+
+    // idk how to validate this one
 }
 
 void apps_short_callback(int ID){
@@ -145,9 +176,21 @@ void apps_short_callback(int ID){
     UARTprintf("Apps short timer expired\n\n\r");
     #endif
 
+    int8_t result = isShutdownPass();
+
+//    if(result == SHUTDOWN_RESULT_INVALID && is_validation){
+//        result = isShutdownPass();
+//        return; // skip updating the value till you've gotten a result!
+//    }
+
+    // store in an array for all three scenarios?
+
+
+    // store into some validation data structure
+
     voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 20, ID, true);
 
-    if (voltage >= APPS1_MIN)    sendAPPSVoltages(APPS1_MAX+20, APPS2_MAX); //short APPS1
+    if (voltage >= APPS1_MIN)    sendAPPSVoltages(APPS1_MAX+20, APPS2_MAX); //short APPS1, after shorting apps1 immediately set is_validation to true?
 
     if (voltage >= APPS1_MAX+20) sendAPPSVoltages(APPS1_MAX, APPS2_MAX+20); //APPS1 shorted to APPS1 normal, APPS2 shorted
 

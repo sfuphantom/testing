@@ -20,6 +20,8 @@
 
 #include "vcu_peripherals.h"
 
+#include "shutdown.h"
+
 
 void apps_process(uint8_t state);
 void apps_unit_test();
