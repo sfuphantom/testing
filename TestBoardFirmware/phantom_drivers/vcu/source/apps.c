@@ -28,6 +28,8 @@ static void apps_sweep();
 
 static int voltage;
 
+static int result;
+
 void apps_process(uint8_t state)
 {
     switch(state)
@@ -63,7 +65,7 @@ static void normal_apps_off(){
     // set expected result
     setShutdownOccurence(false);
 
-    int8_t result = isShutdownPass();
+    result = isShutdownPass();
 
     while(result == SHUTDOWN_RESULT_INVALID){
         result = isShutdownPass();
@@ -83,7 +85,7 @@ static void normal_apps_on()
     // set expected result
     setShutdownOccurence(false);
 
-    int8_t result = isShutdownPass();
+    result = isShutdownPass();
 
     while(result == SHUTDOWN_RESULT_INVALID){
         result = isShutdownPass();
@@ -104,7 +106,7 @@ static void apps_implausibility()
     // set expected result
     setShutdownOccurence(true); // TODO: ACCORDING TO RULEBOOK YOU JUST HAVE TO STOP COMMANDS TO INVERTER NO SHUTDOWN REQUIRED?
 
-    int8_t result = isShutdownPass();
+    result = isShutdownPass();
 
     while(result == SHUTDOWN_RESULT_INVALID){
         result = isShutdownPass();
@@ -162,54 +164,140 @@ void apps_sweep_callback(int ID){
     UARTprintf("Apps sweep timer expired.\n\n\r");
     #endif
 
+    if(ID == 0){
+
+        setShutdownOccurence(false);
+
+    }
+
+
+    uint8_t checkpoint = (ID % 50) ? (ID / 50) : 0; // check every five cycles 
+
+    /* Validation */
+
+    uint8_t res = isShutdownPass();
+
+    if (res == SHUTDOWN_RESULT_INVALID && checkpoint != 0){
+       res = isShutdownPass();
+       return; // skip updating the value till you've gotten a result!
+
+    } else {
+
+        result |= res << checkpoint;
+
+        checkpoint = 0; // reset checkpoint
+    }
+        
+
+    if (checkpoint != 0){
+
+        setShutdownOccurence(false);
+        return; // skip setting a new voltage
+    }
+
+
     voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 50, ID, true);
-
-
     sendAPPSdiff(voltage, 1.0);
+
+    // test run is done
+    if( voltage == APPS1_MAX){
+        result = (result == 0xF << 1 ); // bits 1 to 8 are all set 
+    }
 
     // idk how to validate this one
 }
 
-void apps_short_callback(int ID){
+void apps_short_callback(int state){
 
     #ifdef TIMER_DEBUG
     UARTprintf("Apps short timer expired\n\n\r");
     #endif
 
-    int8_t result = isShutdownPass();
+    /* Validation */
+    int8_t res = isShutdownPass();
 
-//    if(result == SHUTDOWN_RESULT_INVALID && is_validation){
-//        result = isShutdownPass();
-//        return; // skip updating the value till you've gotten a result!
-//    }
+    if (res == SHUTDOWN_RESULT_INVALID && state != 0){
+       res = isShutdownPass();
+       return; // skip updating the value till you've gotten a result!
 
-    // store in an array for all three scenarios?
+    } else {
 
+        result |= res << state;
+        setTimerID( APPS, ++state ); // move to next state
+    }
 
-    // store into some validation data structure
+    /* Simulation  */
+    if (state == 1){
+        
+        sendAPPSVoltages(APPS1_MAX+20, APPS2_MAX); //short APPS1
 
-    voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 20, ID, true);
+        setShutdownOccurence(true);
+    
+    }else if (state == 2) {
 
-    if (voltage >= APPS1_MIN)    sendAPPSVoltages(APPS1_MAX+20, APPS2_MAX); //short APPS1, after shorting apps1 immediately set is_validation to true?
+        sendAPPSVoltages(APPS1_MAX, APPS2_MAX+20); //APPS1 shorted to APPS1 normal, APPS2 shorted
 
-    if (voltage >= APPS1_MAX+20) sendAPPSVoltages(APPS1_MAX, APPS2_MAX+20); //APPS1 shorted to APPS1 normal, APPS2 shorted
+        setShutdownOccurence(true);
 
-    if (voltage >= APPS2_MAX+20) sendAPPSVoltages(APPS1_MAX+20, APPS2_MAX+20); //APPS2 shorted to both shorted
+    }else if (state == 3){
+        
+        sendAPPSVoltages(APPS1_MAX+20, APPS2_MAX+20); //APPS2 shorted to both shorted
+
+        setShutdownOccurence(true);
+        
+    }else if (state == 4){
+        
+        // finalize result and end test 
+        result = (result == 0b1110);
+        stopTimer(APPS);
+    }
+
 }
 
-void apps_open_callback(int ID){
+void apps_open_callback(int state){
 
     #ifdef TIMER_DEBUG
     UARTprintf("Apps open timer expired\n\n\r");
     #endif
 
-    voltage = update_value(APPS, APPS2_MIN, APPS1_MIN, -20, ID, false);
+    /* Validation */
+    int8_t res = isShutdownPass();
 
-    if (voltage < APPS1_MIN)     sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN); //open APPS1
+    if (res == SHUTDOWN_RESULT_INVALID && state != 0){
+       res = isShutdownPass();
+       return; // skip updating the value till you've gotten a result!
 
-    if (voltage <= APPS1_MIN-20) sendAPPSVoltages(APPS1_MIN, APPS2_MIN-20); //open APPS2
+    } else {
 
-    if (voltage <= APPS2_MIN-20) sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN-20); //open both
+        result |= res << state;
+        setTimerID( APPS, ++state ); // move to next state
+    }
+
+    /* Simulation */
+    if (state == 1){
+
+        sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN); //open APPS1
+
+        setShutdownOccurence(true);
+
+    } else if (state == 2){
+    
+        sendAPPSVoltages(APPS1_MIN, APPS2_MIN-20); //open APPS2
+
+        setShutdownOccurence(true);
+
+    } else if (state == 3){
+
+        sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN-20); //open both
+
+        setShutdownOccurence(true);
+
+    } else if (state == 4){
+
+        result = (result == 0b1110);
+        stopTimer(APPS);
+    }
+
 }
 
 /* End of Timer-Related Functions */
