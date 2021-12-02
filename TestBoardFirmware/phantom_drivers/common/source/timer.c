@@ -10,7 +10,7 @@
 
 static void executeTimerCallback(Peripheral peripheral_timer){
 
-    xTimers[peripheral_timer].callback( xTimers[peripheral_timer].timer, getTimerID(peripheral_timer) );
+    xTimers[peripheral_timer].callback( getTimerID(peripheral_timer) );
 }
 
 static uint8_t isExpired(Peripheral peripheral_timer){
@@ -133,6 +133,7 @@ void stopAllTimers(){
     }
 }
 
+//reset is a true/false value
 void startTimer(Peripheral peripheral_timer, int period, uint8_t reset){
 
     setTimerPeriod(peripheral_timer, period);
@@ -163,12 +164,6 @@ void stopTimer(Peripheral peripheral_timer){
         case BSE:
 
 //            UARTprintf("BSE TEST FINISHED!...\r\n\n");
-
-            break;
-
-        case HVCT:
-
-            UARTprintf("HVCT TEST FINISHED!...\r\n\n");
 
             break;
 
@@ -249,7 +244,7 @@ void initializeTimers(){
 
                 BSE, // peripheral
 
-                bse_timer, // callback function
+                defaultCallback, // callback function
 
                 0 // ID
              );
@@ -259,28 +254,17 @@ void initializeTimers(){
 
                 APPS, // peripheral
 
-                apps_timer, // callback function
+                defaultCallback, // callback function
 
                 0 // ID
              );
 
     xTimerSet(
-                "HVCT", // name
-
-                HVCT, // peripheral
-
-                hvct_timer, // callback function
-
-                0 // ID
-            );
-
-    xTimerSet(
-
                  "HV_VS", // name
 
                  HV_VS, // peripheral
 
-                 hv_vs_timer, // callback function
+                 defaultCallback, // callback function
 
                  0 // ID
              );
@@ -296,6 +280,7 @@ void initializeTimers(){
              );
 
 
+
     //add more peripheral timers here...
 
 
@@ -309,6 +294,3 @@ void rtiNotification(uint32 notification)
     softwareTimerCallback();
 
 }
-
-
-

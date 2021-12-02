@@ -264,9 +264,9 @@ static void vcu_mode_process(TestBoardState_t *stateptr)
 
     //eg Constant outputs don't need periodic timers should
 
-    bse_process(stateptr->peripheralStateArray[BSE]);
+    //bse_process(stateptr->peripheralStateArray[BSE]);
 
-    apps_process(stateptr->peripheralStateArray[APPS]);
+    //apps_process(stateptr->peripheralStateArray[APPS]);
 
 
 }
@@ -281,7 +281,7 @@ static void initializeVCU(){
     gioSetBit(RESET_PORT, RESET_PIN, 0);
 
     //put VCU into state running
-    gpio_process(RTD_NORMAL_PROCEDURE);
+    //gpio_process(RTD_NORMAL_PROCEDURE);
 
     //check VCU state
 //    if(!RUNNING)
@@ -309,7 +309,7 @@ void initializeTestBoard(){
     // sciInit();
     timerInit();
 
-    gpio_init();
+    //gpio_init();
 
 
     adcInit();

@@ -35,7 +35,7 @@ static void proportional_apps();
 static void low_apps();
 static void high_apps();
 
-void hvct_timer(TestTimer_t test_timer, int ID);
+//void hvct_timer(TestTimer_t test_timer, int ID);
 void send_hvct_voltage(int voltage);
 
 void hv_ct_process (uint8_t state)
@@ -77,7 +77,7 @@ static void sweep_hv_ct_range()
     //How many cycles timer has gone through
     setTimerID(HVCT, 0);
 
-    startTimer(HVCT, SWEEP_TIMER, SWEEP_PERIOD);
+    startTimer(HVCT, SWEEP_PERIOD, true);
     return;
 
     //test goes from .63V to 4.3V
@@ -88,7 +88,7 @@ static void sweep_hv_ct_range()
 //Test 3
 static void offline_hv_ct()
 {
-    startTimer(HVCT, SWEEP_TIMER, SWEEP_PERIOD);
+    startTimer(HVCT, SWEEP_PERIOD, true);
     MCP48FV_Set_Value_Single(OFFLINE_VOUT, DAC_SIZE_HVCT, VOUT1, 1);
 }
 
@@ -141,13 +141,13 @@ static void high_apps()
 }
 
 //Misc functions
-void hvct_timer(TestTimer_t test_timer, int ID)
+/*void hvct_timer(TestTimer_t test_timer, int ID)
 {
 
     //update_value(HVCT, MIN_VOUT, MAX_VOUT, HVCT_SWEEP_STEP, ID, bool is_ceil)
     //is_ceil is for positive or negative slope
     //doesn't have to be MAX_VOUT or MIN_VOUT. Pass in values based on sweep step
-    switch(test_timer)
+    /*switch(test_timer)
     {
         case SWEEP_TIMER:
 
@@ -170,7 +170,7 @@ void hvct_timer(TestTimer_t test_timer, int ID)
         setTimerID(HVCT, ++ID);
         return;
     }
-}
+}*/
 
 void send_hvct_voltage(int voltage)
 {
