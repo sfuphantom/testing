@@ -22,7 +22,7 @@
 void hv_cs_process(uint8_t state);
 
 //Timer Callback Functions
-//void hvct_timer(TestTimer_t test_timer, int ID);
+void hvct_timer(int ID);
 
 
 enum{

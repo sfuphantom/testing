@@ -35,7 +35,7 @@ static void proportional_apps();
 static void low_apps();
 static void high_apps();
 
-//void hvct_timer(TestTimer_t test_timer, int ID);
+void hvct_timer(int ID);
 void send_hvct_voltage(int voltage);
 
 void hv_ct_process (uint8_t state)
@@ -141,36 +141,14 @@ static void high_apps()
 }
 
 //Misc functions
-/*void hvct_timer(TestTimer_t test_timer, int ID)
+void hvct_timer(int ID)
 {
 
     //update_value(HVCT, MIN_VOUT, MAX_VOUT, HVCT_SWEEP_STEP, ID, bool is_ceil)
     //is_ceil is for positive or negative slope
     //doesn't have to be MAX_VOUT or MIN_VOUT. Pass in values based on sweep step
-    /*switch(test_timer)
-    {
-        case SWEEP_TIMER:
 
-        #ifdef TIMER_DEBUG
-        UARTprintf("HVCT sweep timer expired.\n\n\r");
-        #endif
-
-        int voltage = MIN_VOUT + (HVCT_SWEEP_STEP * ID);
-
-        //STOP CONDITION
-        if(voltage > MAX_VOUT)
-        {
-            stopTimer(HVCT);
-            voltage = MAX_VOUT;
-        }
-
-        MCP48FV_Set_Value_Single(voltage, DAC_SIZE_HVCT, VOUT1, 1);
-
-        //increment cycle
-        setTimerID(HVCT, ++ID);
-        return;
-    }
-}*/
+}
 
 void send_hvct_voltage(int voltage)
 {
