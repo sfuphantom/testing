@@ -26,9 +26,17 @@ static void apps_sweep();
 #define OPEN_PERIOD 500
 #define BSE_ACTIVATED_PERIOD 500
 
-static int voltage;
+typedef struct
+{
+    /* data */
+    uint8_t apps1_volt;
+    uint8_t apps2_volt;
+    uint8_t shutdown_result;
 
-static int result;
+}apps_data;
+
+apps_data test_data;
+apps_data* this = &test_data;
 
 void apps_process(uint8_t state)
 {
@@ -164,27 +172,25 @@ void apps_sweep_callback(int ID){
     UARTprintf("Apps sweep timer expired.\n\n\r");
     #endif
 
-    if(ID == 0){
+    uint8_t checkpoint = (ID % 5); // check every five cycles 
+
+    if(checkpoint == 0){
 
         setShutdownOccurence(false);
 
     }
-
-
-    uint8_t checkpoint = (ID % 50) ? (ID / 50) : 0; // check every five cycles 
-
     /* Validation */
 
     uint8_t res = isShutdownPass();
 
     if (res == SHUTDOWN_RESULT_INVALID && checkpoint != 0){
        res = isShutdownPass();
-       return; // skip updating the value till you've gotten a result!
+    //    return; // skip updating the value till you've gotten a result!
 
     } else {
 
-        result |= res << checkpoint;
-
+        this->shutdown_result |= res << checkpoint;
+        
         checkpoint = 0; // reset checkpoint
     }
         
@@ -196,12 +202,12 @@ void apps_sweep_callback(int ID){
     }
 
 
-    voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 50, ID, true);
+    uint8_t voltage = update_value(APPS, APPS1_MIN, APPS1_MAX, 50, ID, true);
     sendAPPSdiff(voltage, 1.0);
 
     // test run is done
     if( voltage == APPS1_MAX){
-        result = (result == 0xF << 1 ); // bits 1 to 8 are all set 
+        this->shutdown_result = (this->shutdown_result == 0xF >> 1 ); // bits 1 to 8 are all set (0b111111110)
     }
 
     // idk how to validate this one
@@ -222,7 +228,7 @@ void apps_short_callback(int state){
 
     } else {
 
-        result |= res << state;
+        this->shutdown_result |= res << state;
         setTimerID( APPS, ++state ); // move to next state
     }
 
@@ -248,7 +254,7 @@ void apps_short_callback(int state){
     }else if (state == 4){
         
         // finalize result and end test 
-        result = (result == 0b1110);
+        this->shutdown_result = (this->shutdown_result == 0b1110);
         stopTimer(APPS);
     }
 
@@ -269,7 +275,7 @@ void apps_open_callback(int state){
 
     } else {
 
-        result |= res << state;
+        this->shutdown_result |= res << state;
         setTimerID( APPS, ++state ); // move to next state
     }
 
@@ -277,24 +283,21 @@ void apps_open_callback(int state){
     if (state == 1){
 
         sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN); //open APPS1
-
         setShutdownOccurence(true);
 
     } else if (state == 2){
     
         sendAPPSVoltages(APPS1_MIN, APPS2_MIN-20); //open APPS2
-
         setShutdownOccurence(true);
 
     } else if (state == 3){
 
         sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN-20); //open both
-
         setShutdownOccurence(true);
 
     } else if (state == 4){
 
-        result = (result == 0b1110);
+        this->shutdown_result = (this->shutdown_result == 0b1110);
         stopTimer(APPS);
     }
 
