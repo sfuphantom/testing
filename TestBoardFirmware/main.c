@@ -19,6 +19,7 @@
 #include "MCP48FV_DAC_SPI.h"
 #include "timer.h"
 #include "hv_voltage_sensor.h"
+#include "hv_current_sensor.h"
 #include "inverter.h"
 #include "gpio_tests.h"
 
@@ -133,6 +134,14 @@ int main(void){
         test_passed = true;
 
         UARTprintf(test_passed ? "{ Pass }" : "{ Fail }"); // send results to GUI
+
+        //Test hv_ct_current through this. Possibly similar process for hv_ct_voltage?
+        hv_ct_process(NORMAL_HVCT);
+        hv_ct_process(SWEEP_HV_CT_RANGE);
+        hv_ct_process(OFFLINE_HV_CT);
+        hv_ct_process(PROPORTIONAL_APPS);
+        hv_ct_process(LOW_APPS);
+        hv_ct_process(HIGH_APPS);
 
         delayms(5000);
 

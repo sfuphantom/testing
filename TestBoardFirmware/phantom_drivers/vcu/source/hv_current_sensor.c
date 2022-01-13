@@ -104,7 +104,7 @@ static void proportional_apps()
     UARTprintf("Inside proportional apps.\n\n\r");
     #endif
 
-    normal_apps_on();
+    //normal_apps_on();
     send_hvct_voltage(range);
     return;
 }
@@ -120,7 +120,7 @@ static void low_apps()
     UARTprintf("Inside low apps\n\n\r");
     #endif
 
-    normal_apps_on();
+    //normal_apps_on();
     send_hvct_voltage(range);
     return;
 }
@@ -135,7 +135,7 @@ static void high_apps()
     UARTprintf("Inside high apps\n\n\r");
     #endif
 
-    normal_apps_on();
+    //normal_apps_on();
     send_hvct_voltage(range);
     return;
 }
