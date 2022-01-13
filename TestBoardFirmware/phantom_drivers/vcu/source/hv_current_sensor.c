@@ -144,7 +144,12 @@ static void high_apps()
 void hvct_timer(int ID)
 {
 
-    //update_value(HVCT, MIN_VOUT, MAX_VOUT, HVCT_SWEEP_STEP, ID, bool is_ceil)
+    #ifdef HV_CT_DEBUG
+    UARTprintf("Inside hvct timer\n\n\r");
+    #endif
+
+    update_value(HVCT, MIN_VOUT, MAX_VOUT, HVCT_SWEEP_STEP, ID, true);
+
     //is_ceil is for positive or negative slope
     //doesn't have to be MAX_VOUT or MIN_VOUT. Pass in values based on sweep step
 

@@ -15,6 +15,7 @@
 //#define BMS_DEBUG   //print received signals from Device Under Test; print expected and actual results
 //#define VCU_DEBUG   //print received signals from Device Under Test; print expected and actual results
 //#define HV_VS_DEBUG //print calculated values being sent via SPI to the high voltage peripheral
+#define HV_CT_DEBUG //print calculated values for current test
 #define SHUTDOWN_INTERRUPT_DEBUG
 
 //#define SHUTDOWN_UNIT_TESTS
