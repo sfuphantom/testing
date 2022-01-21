@@ -150,18 +150,12 @@ static int twosComplement(int negative_output){
 
 static int getADCdigital(int battery_voltage)
 {
-   int output_voltage;
+   int decimal_output = (int)(8198*(0.010396*battery_voltage - 1.5));
    // convert accumulator voltage to ADC output in 2's complement form
-   if (battery_voltage >144){
-       output_voltage = (int)(((battery_voltage *(4.99/479.99))-1.5)*8.2/2.0475*2047);
-   }
-   else{
-       output_voltage = (int)((1.5-(battery_voltage *(4.99/479.99)))*8.2/(-2.0475)*2048);
-       if(output_voltage<0){
-           output_voltage = twosComplement(output_voltage);
-       }
-   }
-   return output_voltage;
+   if(decimal_output < 0)
+       return twosComplement(decimal_output);
+   else
+       return decimal_output
 }
 
 static void hv_vs_lower_bound()
@@ -172,7 +166,7 @@ static void hv_vs_lower_bound()
     spiSetup(ADC_output);
 
     #ifdef HV_VS_DEBUG
-    UARTprintf("Minimum operating battery voltage level of 168V \n\r");
+    UARTprintf("Minimum operating battery voltage level of 125V \n\r");
     UARTtesting(ADC_output);
     #endif
 }
@@ -184,7 +178,7 @@ static void hv_vs_upper_bound(){
     spiSetup(ADC_output);
 
     #ifdef HV_VS_DEBUG
-    UARTprintf("Maximum operating battery voltage level of 125V \n\r");
+    UARTprintf("Maximum operating battery voltage level of 168V \n\r");
     UARTtesting(ADC_output);
     #endif
 }
@@ -193,7 +187,7 @@ static void hv_vs_out_of_lowerBound()
 {
     //sending ADC output voltage below the lower bound voltage of 125V
     //should send value of 0x0800 to MibSPI3
-    ADC_output = 0x0800;
+    ADC_output = (uint16)getADCdigital(120);//0x0800;
     spiSetup(ADC_output);
 
     #ifdef HV_VS_DEBUG
@@ -206,7 +200,7 @@ static void hv_vs_out_of_upperBound()
 {
     //sending ADC output voltage above the upper bound voltage of 168V
     //should send value of 0x07FF to MibSPI3
-    ADC_output = 0x07FF;
+    ADC_output = 0x07FF; //=2047 -> just over 168V
     spiSetup(ADC_output);
 
     #ifdef HV_VS_DEBUG
@@ -219,7 +213,7 @@ static void hv_vs_at_zero()
 {
     // HV_VS indicate 0 voltage
     // sending ADC output voltage of 0 to MibSPI3
-    ADC_output = 0x0000;
+    ADC_output = getADCdigital(0);//0x0000;
     spiSetup(ADC_output);
 
     #ifdef HV_VS_DEBUG
