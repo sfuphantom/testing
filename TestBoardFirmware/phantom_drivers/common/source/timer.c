@@ -15,38 +15,39 @@ static void executeTimerCallback(Peripheral peripheral_timer){
 
 static uint8_t isExpired(Peripheral peripheral_timer){
 
-    return (ticks % xTimers[peripheral_timer].period  == 0) && (ticks != 0);
+    return ( ( ( (xTimers[peripheral_timer].local_ticks % xTimers[peripheral_timer].period)  == 0) ) && (xTimers[peripheral_timer].local_ticks != 0) );
 }
 
-void rtiNotification(uint32 notification)
-{
+void softwareTimerCallback(){
 
-//    UARTprintf("Global timer expired!\r\n");
+    // check timer expirations
 
-
-    //check timer expirations
+    //    UARTprintf("Global timer expired!\r\n");
 
     Peripheral peripheral_timer;
 
     for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++){
 
-        if( isExpired(peripheral_timer) && !isBlocked(peripheral_timer) ){
-            executeTimerCallback(peripheral_timer);
-        }
-    }
+        if( !isBlocked(peripheral_timer) ){
 
-    ticks++; //will overflow after ~ 49 days...
+            if( isExpired(peripheral_timer) ){
+                executeTimerCallback(peripheral_timer);
+            }
+            xTimers[peripheral_timer].local_ticks++; // will overflow after ~ 49 days...
+        } // execute active timers
+
+
+    } // search for active timers
+
 }
 
 void timerInit(){
 
     rtiInit();
-
     rtiEnableNotification(rtiNOTIFICATION_COMPARE0);
-
     _enable_IRQ();
 
-    //initialize timers to blocked state
+    // initialize timers to blocked state
 
     Peripheral peripheral_timer;
 
@@ -71,11 +72,16 @@ int getTimerPeriod(Peripheral peripheral_timer){
     return xTimers[peripheral_timer].period;
 }
 
+uint32_t getTimerETA(Peripheral peripheral_timer){
+
+    return ( (xTimers[peripheral_timer].period) - (xTimers[peripheral_timer].local_ticks % xTimers[peripheral_timer].period) );
+}
+
 bool timers_complete(){
 
     bool timers_complete = true;
 
-    //check all status of all timers
+    // check all status of all timers
     Peripheral peripheral_timer;
 
    for(peripheral_timer = 0; peripheral_timer < NUM_TIMERS; peripheral_timer++){
@@ -83,17 +89,15 @@ bool timers_complete(){
        if( !isBlocked(peripheral_timer) )
            timers_complete = false;
 
-   }//loop through all peripheral timers
-
+   }  // check all status of all timers
 
     #ifdef TIMER_DEBUG
     if(timers_complete) UARTprintf("Tests Completed!\r\n\n");
     #endif
 
-   return timers_complete;
+    return timers_complete;
 
 }
-
 
 /* Setters */
 
@@ -108,12 +112,10 @@ void xTimerSet(char* name, Peripheral peripheral_timer, Callbackfunc callback, i
     xTimers[peripheral_timer].name = name;
 
     xTimers[peripheral_timer].callback = callback;
-
 }
 
 void startGlobalTimer(){
 
-    ticks = 0;
     rtiStartCounter(rtiCOUNTER_BLOCK0);
 }
 
@@ -131,11 +133,18 @@ void stopAllTimers(){
     }
 }
 
-void startTimer(Peripheral peripheral_timer, int period){
+void startTimer(Peripheral peripheral_timer, int period, uint8_t reset){
 
     setTimerPeriod(peripheral_timer, period);
 
     xTimers[peripheral_timer].stop = false;
+
+    xTimers[peripheral_timer].local_ticks = (!reset * xTimers[peripheral_timer].local_ticks ) + (reset * 0);
+
+    if(peripheral_timer == VALIDATION){
+        UARTprintf("SHUTDOWN TIMER STARTED\r\n");
+    }
+
 }
 
 void stopTimer(Peripheral peripheral_timer){
@@ -147,22 +156,25 @@ void stopTimer(Peripheral peripheral_timer){
 
         case APPS:
 
-            UARTprintf("APPS TEST FINISHED!...\r\n\n");
+//            UARTprintf("APPS TEST FINISHED!...\r\n\n");
 
             break;
 
         case BSE:
 
-            UARTprintf("BSE TEST FINISHED!...\r\n\n");
+//            UARTprintf("BSE TEST FINISHED!...\r\n\n");
 
             break;
 
+        case VALIDATION:
+
+            UARTprintf("SHUTDOWN TIMEOUT STOPPED!...\r\n\n");
 
         //add more peripherals for debugging here...
 
         default:
 
-            UARTprintf("SOME TEST FINSIHED!...\r\n\n");
+//            UARTprintf("SOME TEST FINSIHED!...\r\n\n");
 
             break;
 
@@ -200,7 +212,7 @@ unsigned int update_value(Peripheral peripheral, int MIN, int MAX, int STEP, int
 
     unsigned int ret = ( (MAX * is_neg) + (MIN * !is_neg) ) + ( STEP * ID ) ;
 
-    //check ceiling and floor respectively
+    // check ceiling and floor respectively
     if(ret > MAX && is_ceil){
 
         stopTimer(peripheral);
@@ -256,6 +268,16 @@ void initializeTimers(){
                  0 // ID
              );
 
+    xTimerSet(
+                 "VALIDATION", // name
+
+                 VALIDATION, // peripheral
+
+                 defaultCallback, // callback function
+
+                 0 // ID
+             );
+
 
 
     //add more peripheral timers here...
@@ -263,6 +285,14 @@ void initializeTimers(){
 
 }
 
+// Hardware Functions
+void rtiNotification(uint32 notification)
+{
+
+    // should probably add a check to see if the right timer was called but test board only has one active hardware timer atm
+    softwareTimerCallback();
+
+}
 
 
 
