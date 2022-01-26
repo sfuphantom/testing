@@ -21,6 +21,7 @@ static void slaves_uart_overtemperature();
 static void slaves_uart_no_comms();
 static void slaves_uart_comms_error();
 static BYTE cmd_creator();
+static void makeCRC();
 
 //configure these in halcogen, some defined in hwConfig.h already
 #define BMS_UART 0 //define which register to communicate with BMS
@@ -126,6 +127,12 @@ static void slaves_uart_comms_error(){
 static BYTE cmd_creator(){
     BYTE cmdarray[BMSByteArraySize]; // 43 is size for a single slave reading
     //  creates string of bits to be sent to the BMS
-    //  length in bytes: 43*1, where data is stored: MultipleSlaveReading data: 1 header, 32x2 cells, 2x16 AUX, 4 dig die, 4 ana die, 2 CRC
+    //  length in bytes: 43*1, where data is stored: MultipleSlaveReading data: 1 header, 32x2 cells,[] 2x16 AUX, 4 dig die, 4 ana die], 2 CRC
+    cmdarray[0] = 0b00101010; // frame initialization byte first bit = 0 followed by # bits -1 in response 
+    // cmdarray[last 2 elements] = CRC
     return cmdarray;
+}
+
+static void makeCRC(){
+    
 }

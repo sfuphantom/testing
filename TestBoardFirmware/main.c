@@ -105,8 +105,6 @@ static Result_t res;
                 if(res != SUCCESS)
                     UARTprintf("Failed to Initialize BMS Test board\n\r");
 
-                testBoardState.testMode = IDLE;
-
                 break;
 
             case VCU_MODE:
