@@ -69,7 +69,7 @@ int main(void){
     //++ Added by jay pacamarra for debugging :)
 
     //* test code *//
-//    setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
+    //setPeripheralTestCases(&testBoardState, JSONHandler(UARTBuffer));
 
     #endif
 
@@ -86,6 +86,7 @@ int main(void){
         #ifndef GUI_MODE
         setPeripheralTestCases(&testBoardState, NULL);
         #endif
+
 
         startGlobalTimer(); //potentially needs to be ON for CAN communications...expects message every 50 ms?
 
@@ -131,6 +132,10 @@ int main(void){
 //        test_passed = is_bms_slave_test_passed(testBoardState.peripheralStateArray[BMS_SLAVES]);
 
         test_passed = true;
+
+        int i;
+        for(i = 0; i < 6; i++)
+            hv_vs_process(i);
 
         UARTprintf(test_passed ? "{ Pass }" : "{ Fail }"); // send results to GUI
 

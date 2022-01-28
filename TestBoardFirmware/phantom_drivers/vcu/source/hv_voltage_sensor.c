@@ -3,6 +3,7 @@
  *
  *  Created on: Mar 16, 2021
  *      Author: Ryan Heo
+ *  Modified by: Maroun Rouhana, Jan 2022
  */
 
 #include "sys_common.h"
@@ -14,6 +15,7 @@
 #define TransferGroup0 0
 #define TransferGroup1 1
 #define min_voltage 125
+#define HV_VS_DEBUG 1
 
 uint16 ADC_output;
 
@@ -75,78 +77,16 @@ void hv_vs_process(uint8_t state)
     }
 }
 
-static int twosComplement(int negative_output){
-    negative_output=negative_output*(-1);
-    int carry = 1;
-    int i;
-    int binary[12] ={};
-    binary[0] =1;
-
-    // converting to a binary value in ones complement form
-    for (i=11;negative_output>0;i--){
-        binary[i]=negative_output%2;
-        uint8 v = binary[i];
-        negative_output=negative_output/2;
-
-        if (v == 0){
-            UARTprintf("0");
-        }
-        sciSend(PC_UART,1,&v);
-    }
-    UARTprintf("\n\r");
-
-    // converting to ones'complement
-    for (i=1;i<=11;i++){
-        if (binary[i]==0){
-            binary[i]=1;
-        }
-        else if(binary[i]==1){
-            binary[i]=0;
-        }
-        uint8 v = binary[i];
-        if (v == 0){
-                    UARTprintf("0");
-                }
-                sciSend(PC_UART,1,&v);
-            }
-        UARTprintf("\n\r");
-
-    // converting to twos'complement
-    for (i=11;i>=0;i--){
-        if(binary[i] == 1 && carry == 1){
-            binary[i] = 0;
-        }
-        else if(binary[i] == 0 && carry == 1){
-            binary[i] = 1;
-            carry = 0;
-        }
-        else{
-            binary[i] = binary[i];
-        }
-        uint8 v = binary[i];
-        if (v == 0){
-                UARTprintf("0");
-                            }
-            sciSend(PC_UART,1,&v);
-    }
-    UARTprintf("\n\r");
-
-    // converting back to an unsigned decimal
-    int t = (binary[0]*2048+binary[1]*1024+binary[2]*512+binary[3]*256+binary[4]*128
-            +binary[5]*64+binary[6]*32+binary[7]*16+binary[8]*8+binary[9]*4+
-            binary[10]*2+binary[11]);
-
-    for (i=11;i>=0;i--){
-               uint8 v=(int) ((t >> i) & 1);
-               if (v == 0){
-                   UARTprintf("0");
-               }
-               sciSend(PC_UART,1,&v);
-            }
-            UARTprintf("\n\r");
-
-    return t;
-    }
+static int twosComplement(int n){
+    // take absolute value of negative numbers so that the 2s complement can be found
+    if(n < 0)
+        n *= -1;
+    // XOR all bits -> complement all bits (1s complement)
+    n ^= 0xffffffff;
+    // add 1 to get to 2s complement
+    n++;
+    return n;
+}
 
 static int getADCdigital(int battery_voltage)
 {
@@ -155,7 +95,23 @@ static int getADCdigital(int battery_voltage)
    if(decimal_output < 0)
        return twosComplement(decimal_output);
    else
-       return decimal_output
+       return decimal_output;
+}
+
+static void printInt16HEX(uint16 n){
+    char arr[4];
+    arr[0] = n / 4096;
+    arr[1] = (n - arr[0]*4096) / 256;
+    arr[2] = (n - arr[0]*4096 - arr[1]*256) / 16;
+    arr[3] = n - arr[0]*4096 - arr[1]*256 - arr[2]*16;
+    int i;
+    for(i = 0; i < 4; i++){
+        if(arr[i] > 9)
+            arr[i] += 'A' - 10;
+        else
+            arr[i] += '0';
+    }
+    UARTprintf("\r\nADC out: 0x%c%c%c%c\r\n", arr[0], arr[1], arr[2], arr[3]);
 }
 
 static void hv_vs_lower_bound()
@@ -167,6 +123,7 @@ static void hv_vs_lower_bound()
 
     #ifdef HV_VS_DEBUG
     UARTprintf("Minimum operating battery voltage level of 125V \n\r");
+    printInt16HEX(ADC_output);
     UARTtesting(ADC_output);
     #endif
 }
@@ -179,19 +136,20 @@ static void hv_vs_upper_bound(){
 
     #ifdef HV_VS_DEBUG
     UARTprintf("Maximum operating battery voltage level of 168V \n\r");
+    printInt16HEX(ADC_output);
     UARTtesting(ADC_output);
     #endif
 }
 
 static void hv_vs_out_of_lowerBound()
 {
-    //sending ADC output voltage below the lower bound voltage of 125V
-    //should send value of 0x0800 to MibSPI3
-    ADC_output = (uint16)getADCdigital(120);//0x0800;
+    //sending ADC output voltage below the lower bound voltage of 125V (120V)
+    ADC_output = (uint16)getADCdigital(120);
     spiSetup(ADC_output);
 
     #ifdef HV_VS_DEBUG
     UARTprintf("out of lower bound voltage level \n\r");
+    printInt16HEX(ADC_output);
     UARTtesting(ADC_output);
     #endif
 }
@@ -205,6 +163,7 @@ static void hv_vs_out_of_upperBound()
 
     #ifdef HV_VS_DEBUG
     UARTprintf("out of upper bound voltage level \n\r");
+    printInt16HEX(ADC_output);
     UARTtesting(ADC_output);
     #endif
 }
@@ -213,11 +172,12 @@ static void hv_vs_at_zero()
 {
     // HV_VS indicate 0 voltage
     // sending ADC output voltage of 0 to MibSPI3
-    ADC_output = getADCdigital(0);//0x0000;
+    ADC_output = 0x0000;
     spiSetup(ADC_output);
 
     #ifdef HV_VS_DEBUG
     UARTprintf("0V voltage level \n\r");
+    printInt16HEX(ADC_output);
     UARTtesting(ADC_output);
     #endif
 }
@@ -262,7 +222,7 @@ void hv_vs_sweep_timer(int ID){
 static void UARTtesting(uint16 test_value)
 {
     // function for checking values to be sent using UART communication.
-    int i;
+    /*int i;
     for (i=15;i>=0;i--){
         uint8 v=(int) ((test_value >> i) & 1);
         if (v == 0){
@@ -270,7 +230,7 @@ static void UARTtesting(uint16 test_value)
         }
         sciSend(PC_UART,1,&v);
     }
-    UARTprintf("\n\r");
+    UARTprintf("\n\r");*/
 }
 #endif
 
