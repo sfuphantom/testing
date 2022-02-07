@@ -136,9 +136,9 @@ int main(void){
         UARTprintf(test_passed ? "{ Pass }" : "{ Fail }"); // send results to GUI
 
         //Test hv_ct_current through this. Possibly similar process for hv_ct_voltage?
-        hv_ct_process(NORMAL_HVCT);
-        hv_ct_process(SWEEP_HV_CT_RANGE);
-        hv_ct_process(OFFLINE_HV_CT);
+        //hv_ct_process(NORMAL_HVCT);
+        //hv_ct_process(SWEEP_HV_CT_RANGE);
+        //hv_ct_process(OFFLINE_HV_CT);
         hv_ct_process(PROPORTIONAL_APPS);
         hv_ct_process(LOW_APPS);
         hv_ct_process(HIGH_APPS);
@@ -156,8 +156,6 @@ static Result_t initUARTandModeHandler(TestBoardState_t *stateptr)
     sciInit(); // replace with UARTInit() to set baudrate
     sciSetBaudrate(PC_UART, 9600);
    // sciEnableNotification(PC_UART, SCI_RX_INT);
-
-    UARTprintf("hello world\n\r");
 
     stateptr->peripheralStateArray[BMS_SLAVES] = 0;
     stateptr->peripheralStateArray[THERMISTOR_EXPANSION] = 0;

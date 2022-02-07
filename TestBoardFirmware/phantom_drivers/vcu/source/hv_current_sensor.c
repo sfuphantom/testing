@@ -95,48 +95,61 @@ static void offline_hv_ct()
 //Test 4
 static void proportional_apps()
 {
+    //normal_apps_on();
+    //send_hvct_voltage(middle of range);
+
+    //May need conversion function to test against APPS signal (check the APPS MIN AND MAX VALUES)
+    //Good first test is try to get 1:1 mapping between APPS signals and HVCT
     //Function sending mid-range values
-    int voltage = (MAX_VOUT-MIN_VOUT)/2;
-    int range = MIN_VOUT + voltage;
+    int voltage = ((MAX_VOUT-MIN_VOUT)/2) + MIN_VOUT;    //1.87 NOT 187 V
+    //int throttle = 390 * apps_percent_avg + 60;
+
 
     //Use HV_CT debug instead of timer_debug
     #ifdef HV_CT_DEBUG
     UARTprintf("Inside proportional apps.\n\n\r");
+    UARTprintf("Voltage is %i\n\n\r", voltage);
     #endif
 
     //normal_apps_on();
-    send_hvct_voltage(range);
+    send_hvct_voltage(voltage);
     return;
 }
 
 //Test 5
 static void low_apps()
 {
+    //normal_apps_on();
+    //send_hvct_voltage(middle of range*1.2);
+
     //For foot pedal sensors
-    int voltage = (MAX_VOUT-MIN_VOUT)/2;
-    int range = (MIN_VOUT + voltage)*1.2;
+    int voltage = (((MAX_VOUT-MIN_VOUT)/2) + MIN_VOUT) * 0.8;
 
     #ifdef HV_CT_DEBUG
     UARTprintf("Inside low apps\n\n\r");
+    UARTprintf("Voltage is %i\n\n\r", voltage);
     #endif
 
     //normal_apps_on();
-    send_hvct_voltage(range);
+    send_hvct_voltage(voltage);
     return;
 }
 
 //Test 6
 static void high_apps()
 {
-    int voltage = (MAX_VOUT-MIN_VOUT)/2;
-    int range = (MIN_VOUT + voltage)*0.8;
+    //normal_apps_on();
+    //send_hvct_voltage(middle of range*0.8);
+
+    int voltage = (((MAX_VOUT-MIN_VOUT)/2) + MIN_VOUT) * 1.2;
 
     #ifdef HV_CT_DEBUG
     UARTprintf("Inside high apps\n\n\r");
+    UARTprintf("Voltage is %i\n\n\r", voltage);
     #endif
 
     //normal_apps_on();
-    send_hvct_voltage(range);
+    send_hvct_voltage(voltage);
     return;
 }
 
