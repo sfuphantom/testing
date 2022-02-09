@@ -16,7 +16,8 @@
 
 #define HVCT_SWEEP_STEP 1 //Voltage step 1 -> 0.01 volts
 
-/*
+
+/*Don't uncomment. Gives error of redefinition in CCS
 enum operation 
 {  
     NORMAL_HVCT, //sends a HVCT corresponding to 100A
@@ -95,8 +96,9 @@ static void offline_hv_ct()
 //Test 4
 static void proportional_apps()
 {
-    //normal_apps_on();
-    //send_hvct_voltage(middle of range);
+    //Original test comments
+    /*normal_apps_on();
+    send_hvct_voltage(middle of range);*/
 
     //May need conversion function to test against APPS signal (check the APPS MIN AND MAX VALUES)
     //Good first test is try to get 1:1 mapping between APPS signals and HVCT
@@ -111,6 +113,7 @@ static void proportional_apps()
     UARTprintf("Voltage is %i\n\n\r", voltage);
     #endif
 
+    //For all other tests as well, leave normal_apps_on commented until function works
     //normal_apps_on();
     send_hvct_voltage(voltage);
     return;
@@ -119,10 +122,13 @@ static void proportional_apps()
 //Test 5
 static void low_apps()
 {
-    //normal_apps_on();
-    //send_hvct_voltage(middle of range*1.2);
+    //Original comments
+    /*normal_apps_on();
+    send_hvct_voltage(middle of range*1.2);*/
 
     //For foot pedal sensors
+    /*Changed the scale factor from 120% to 80% because low_apps output voltage was higher than
+    output voltage from high_apps*/
     int voltage = (((MAX_VOUT-MIN_VOUT)/2) + MIN_VOUT) * 0.8;
 
     #ifdef HV_CT_DEBUG
@@ -138,9 +144,11 @@ static void low_apps()
 //Test 6
 static void high_apps()
 {
-    //normal_apps_on();
-    //send_hvct_voltage(middle of range*0.8);
+    //Original comments
+    /*normal_apps_on();
+    send_hvct_voltage(middle of range*0.8);*/
 
+    //high_apps output voltage was lower than low_apps hence the increase in scaling factor
     int voltage = (((MAX_VOUT-MIN_VOUT)/2) + MIN_VOUT) * 1.2;
 
     #ifdef HV_CT_DEBUG
