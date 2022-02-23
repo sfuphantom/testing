@@ -7,11 +7,6 @@
 
 #include "apps.h"
 
-#define APPS1_MAX 440
-#define APPS1_MIN 150
-#define APPS2_MAX 150
-#define APPS2_MIN 50
-
 // Static function prototypes
 static void normal_apps_on();
 static void normal_apps_off();
@@ -33,7 +28,7 @@ typedef struct
     uint8_t apps2_volt;
     uint8_t shutdown_result;
 
-}apps_data;
+} apps_data;
 
 apps_data test_data;
 apps_data* this = &test_data;
@@ -80,6 +75,8 @@ static void normal_apps_off(){
     }
 
     // store into some validation data structure
+    this->shutdown_result = result;
+
     return;
 }
 
@@ -100,7 +97,7 @@ static void normal_apps_on()
     }
 
     // store into some validation data structure
-
+    this->shutdown_result = result;
 
     return;
 }
@@ -121,6 +118,7 @@ static void apps_implausibility()
     }
 
     // store into some validation data structure
+    this->shutdown_result = result;
 
     return;
 }
@@ -179,6 +177,7 @@ void apps_sweep_callback(int ID){
         setShutdownOccurence(false);
 
     }
+
     /* Validation */
 
     uint8_t res = isShutdownPass();
@@ -239,19 +238,19 @@ void apps_short_callback(int state){
 
         setShutdownOccurence(true);
     
-    }else if (state == 2) {
+    } else if (state == 2) {
 
         sendAPPSVoltages(APPS1_MAX, APPS2_MAX+20); //APPS1 shorted to APPS1 normal, APPS2 shorted
 
         setShutdownOccurence(true);
 
-    }else if (state == 3){
+    } else if (state == 3){
         
         sendAPPSVoltages(APPS1_MAX+20, APPS2_MAX+20); //APPS2 shorted to both shorted
 
         setShutdownOccurence(true);
         
-    }else if (state == 4){
+    } else if (state == 4){
         
         // finalize result and end test 
         this->shutdown_result = (this->shutdown_result == 0b1110);
@@ -280,22 +279,22 @@ void apps_open_callback(int state){
     }
 
     /* Simulation */
-    if (state == 1){
+    if (state == 1) {
 
-        sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN); //open APPS1
+        sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN); // open APPS1
         setShutdownOccurence(true);
 
-    } else if (state == 2){
+    } else if (state == 2) {
     
-        sendAPPSVoltages(APPS1_MIN, APPS2_MIN-20); //open APPS2
+        sendAPPSVoltages(APPS1_MIN, APPS2_MIN-20); // open APPS2
         setShutdownOccurence(true);
 
-    } else if (state == 3){
+    } else if (state == 3) {
 
-        sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN-20); //open both
+        sendAPPSVoltages(APPS1_MIN-20, APPS2_MIN-20); // open both
         setShutdownOccurence(true);
 
-    } else if (state == 4){
+    } else if (state == 4) {
 
         this->shutdown_result = (this->shutdown_result == 0b1110);
         stopTimer(APPS);

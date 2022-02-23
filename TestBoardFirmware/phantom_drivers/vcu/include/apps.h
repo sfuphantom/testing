@@ -9,19 +9,12 @@
 #define PHANTOM_DRIVERS_INCLUDE_APPS_H_
 
 #include "stdint.h"
-
 #include "timer.h"
-
 #include "common.h"
-
 #include "Phantom_sci.h"
-
 #include "bse.h"
-
 #include "vcu_peripherals.h"
-
 #include "shutdown.h"
-
 
 void apps_process(uint8_t state);
 void apps_unit_test();
