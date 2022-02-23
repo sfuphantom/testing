@@ -7,10 +7,11 @@
 
 #include "apps.h"
 
-#define APPS1_MAX 440
-#define APPS1_MIN 150
-#define APPS2_MAX 150
-#define APPS2_MIN 50
+#define APPS1_MAX 4400
+#define APPS1_MIN 1500
+#define APPS2_MAX 1500
+#define APPS2_MIN 500
+#define DAC_SIZE_APPS 0xFF
 
 // Static function prototypes
 static void normal_apps_on();

@@ -24,20 +24,26 @@ bool MCP48FV_Init(){
     return true;
 }
 
+uint32_t voltstep_calc(uint16_t voltage, uint16_t dacsize){
+
+    uint32_t enableBitPercent= (voltage*1000)/(DAC_HIGHEST_VOLTAGE*1000);
+    uint32_t steps = (enableBitPercent*dacsize)/1000;
+
+    return steps;
+}
+
 /*  Main DAC controllers, configure to set output voltage(s) from 0-5VDC
- *  Example Use: targetVoltage = 500 for 5.00V, 251 = 2.51V
+ *  Example Use: targetVoltage = 5000 for 5.00V, 2510 = 2.51V
 */
 bool MCP48FV_Set_Value_Double(uint16_t targetVoltage1, uint16_t targetVoltage2, uint16_t dac_size, uint32_t transfer_group){
 
-    targetVoltage1 = (targetVoltage1>496) ? 496 : targetVoltage1;
-    targetVoltage2 = (targetVoltage2>496) ? 496 : targetVoltage2;
+    targetVoltage1 = (targetVoltage1>4960) ? 4960 : targetVoltage1;
+    targetVoltage2 = (targetVoltage2>4960) ? 4960 : targetVoltage2;
 
-    uint32_t enableBitPercent1= ((targetVoltage1)*1000)/(DAC_HIGHEST_VOLTAGE*100);
-    uint32_t dacData1= (enableBitPercent1*dac_size)/1000;
+    uint32_t dacData1= voltstep_calc(targetVoltage1, dac_size);
     MCP48FV_Write(cmdCreator(DAC0_REGISTER_ADDRESS, DAC_WRITE_CMD, CMDERR, dacData1), transfer_group);
 
-    uint32_t enableBitPercent2= ((targetVoltage2)*1000)/(DAC_HIGHEST_VOLTAGE*100);
-    uint32_t dacData2= (enableBitPercent2*dac_size)/1000;
+    uint32_t dacData2= voltstep_calc(targetVoltage2, dac_size);
     MCP48FV_Write(cmdCreator(DAC1_REGISTER_ADDRESS, DAC_WRITE_CMD, CMDERR, dacData2), transfer_group);
 
     return true;
@@ -45,10 +51,9 @@ bool MCP48FV_Set_Value_Double(uint16_t targetVoltage1, uint16_t targetVoltage2, 
 
 bool MCP48FV_Set_Value_Single(uint16_t targetVoltage, uint16_t dac_size, uint8_t dacVout, uint32_t transfer_group){
 
-    targetVoltage = (targetVoltage>496) ? 496 : targetVoltage;
+    targetVoltage = (targetVoltage>4960) ? 4960 : targetVoltage;
 
-    uint32_t enableBitPercent= ((targetVoltage)*1000)/(DAC_HIGHEST_VOLTAGE*100);
-    uint32_t dacData= (enableBitPercent*dac_size)/1000;
+    uint32_t dacData= voltstep_calc(targetVoltage, dac_size);
 
     MCP48FV_Write(cmdCreator(dacVout, DAC_WRITE_CMD, CMDERR, dacData), transfer_group);
 
