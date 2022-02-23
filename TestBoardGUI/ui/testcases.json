@@ -12,31 +12,25 @@
                     "Case": "Test 2: Power Rail Undervoltage",
                     "Repeat": "",
                     "Description": "Check how FW reacts to receiving not enough voltage",
-                    "enum": "0"
+                    "enum": "1"
                 },
                 {
                     "Case": "Test 3:  Power Rail Overvoltage",
                     "Repeat": "",
                     "Description": "Check how FW reacts to receiving too much voltage", 
-                    "enum": "0"
+                    "enum": "2"
                 },
                 {
                     "Case": "Test 4: Power Draw Test",
                     "Repeat": "",
                     "Description": "Read input current of VCU", 
-                    "enum": "0"
+                    "enum": "3"
                 },
                 {
                     "Case": "Test 5: High Current Signal",
                     "Repeat": "",
                     "Description": "Check case for when devices being powered by the VCU shorts", 
-                    "enum": "0"
-                },
-                {
-                    "Case": "Test 6: Sustained High Current",
-                    "Repeat": "",
-                    "Description": "Check case when LV system draws and unexpected amount of power", 
-                    "enum": "0"
+                    "enum": "4"
                 }
             ]
         },
@@ -73,7 +67,7 @@
                     "enum": "4"
                 },
                 {
-                    "Case": "Test 6: 25% Pedal Travel + Brakes",
+                    "Case": "Test 6: BSE Activated",
                     "Repeat": "",
                     "Description": "If brakes activated & APPS shows more than 25% travel, must shut down ***must be demonstrated when motor controller is under load***",
                     "enum": "5"
@@ -82,29 +76,23 @@
                     "Case": "Test 7: Sweep Test",
                     "Repeat": "",
                     "Description": "Check signals throughout range", 
-                    "enum": "8"
-                },
-                {
-                    "Case": "Test 8: Integration Test",
-                    "Repeat": "",
-                    "Description": "If APPS signal aligns with VCU reading", 
-                    "enum": "0"
+                    "enum": "6"
                 }
             ]
         },
         {
             "BSE": [
                 {
-                    "Case": "Test 1: Normal Braking - Off",
-                    "Repeat": "",
-                    "Description": "Ensure normal operation handled correctly",
-                    "enum": "0"
-                },
-                {
-                    "Case": "Test 2: Normal Braking - On",
+                    "Case": "Test 1: Normal Braking - On",
                     "Repeat": "",
                     "Description": "Ensure normal operation handled correctly",
                     "enum": "1"
+                },
+                {
+                    "Case": "Test 2: Normal Braking - Off",
+                    "Repeat": "",
+                    "Description": "Ensure normal operation handled correctly",
+                    "enum": "0"
                 },
                 {
                     "Case": "Test 3: Open Circuit",
@@ -129,98 +117,52 @@
                     "Repeat": "",
                     "Description": "Check signals throughout normal range",
                     "enum": "5"
-                },
-                {
-                    "Case": "Test 7: Integration Test",
-                    "Repeat": "",
-                    "Description": "Check if BSE signal measured by VCU matches",
-                    "enum": "0"
                 }
             ]
-        },
-        {
-            "TSAL": [
-                {
-                    "Case": "Test 1: <3.3 V Output",
-                    "Repeat": "",
-                    "Description": "See how the VCU will interpret this less than expected signal",
-                    "enum": "0"
-                },
-                {
-                    "Case": "Test 2: >3.3 V Output",
-                    "Repeat": "",
-                    "Description": "See how the VCU will interpret this greater than expected signal",
-                    "enum": "0"
-                },
-                {
-                    "Case": "Test 3: 3.3 V Input with BMS ",
-                    "Repeat": "",
-                    "Description": "Input the expected signal but with BMS faults",
-                    "enum": "0"
-                },
-                {
-                    "Case": "Test 4: Pulsing Input",
-                    "Repeat": "",
-                    "Description": "Find frequency where the VCU does not work properly",
-                    "enum": "0"
-                },
-                {
-                    "Case": "Test 5: Test Accumulator Manage System",
-                    "Repeat": "",
-                    "Description": "See if the AMS is active when the TSAL is active (EV.6.1.1). Input expected signal (3.3V)",
-                    "enum": "0"
-                },
-                {
-                    "Case": "Test 6: No TSAL, No Brakes",
-                    "Repeat": "",
-                    "Description": "See if the VCU ever tells the brakes to go off while the TSAL is inactive (EV.8.2.9)",
-                    "enum": "0"
-                }
-            ]
-        },
+        },  
         {
             "IMD": [
                 {
-                    "Case": "Test 1: Generate Various Frequency Outputs",
+                    "Case": "Test 1: Normal Operation",
                     "Repeat": "",
-                    "Description": "To test the IMD State recognition on the VCU",
+                    "Description": "Duty Cycle set to 5-10% expected frequency is 10Hz",
                     "enum": "0"
                 },
                 {
-                    "Case": "Test 2: Generate Various Duty Cycle Outputs",
+                    "Case": "Test 2: Low Isolation Fault",
                     "Repeat": "",
-                    "Description": "To test the Isolation State recognition on the VCU",
-                    "enum": "0"
+                    "Description": "IMD state is Normal_25 or Isolation_Failure when Duty Cycle is 90-95%",
+                    "enum": "1"
                 },
                 {
-                    "Case": "Test 3: Random Combinations of Frequencies and Duty Cycles",
+                    "Case": "Test 3: Short Circuit Fault",
                     "Repeat": "",
-                    "Description": "Send a random combination of frequencies and duty cycles to test the IMD & Isolation State recognition on the VCU",
-                    "enum": "0"
+                    "Description": "0% Duty Cycle / 0Hz",
+                    "enum": "2"
                 },
                 {
-                    "Case": "Test 4: Send 0Hz and 100Hz",
+                    "Case": "Test 4: Device Error Fault",
                     "Repeat": "",
-                    "Description": "To test how the VCU reacts to frequencies which are out of range",
-                    "enum": "0"
+                    "Description": "IMD state is Device_Error when Duty Cycle is 47-53% (40Hz)",
+                    "enum": "3"
                 },
                 {
-                    "Case": "Test 5: Change Duty Cycles & Frequency on the Fly",
+                    "Case": "Test 5: Bad Info Fault",
                     "Repeat": "",
-                    "Description": "To test if the VCU updates the IMD states on the fly", 
-                    "enum": "0"
+                    "Description": "Test if frequency is outside 10-50Hz", 
+                    "enum": "4"
                 },
                 {
-                    "Case": "Test 6: Send 0% Duty Cycle and 100% Duty Cycle",
+                    "Case": "Test 6: Undefined Error",
                     "Repeat": "",
-                    "Description": "", 
-                    "enum": "0"
+                    "Description": "Frequency within 10-50Hz but Duty Cycle reading inaccurate", 
+                    "enum": "5"
                 },
                 {
-                    "Case": "Test 7: Don't Send Anything ",
+                    "Case": "Test 7: Garbage Data Fault",
                     "Repeat": "",
-                    "Description": "", 
-                    "enum": "0"
+                    "Description": "Duty Cycle is outside of range (below 5% or above 95%)", 
+                    "enum": "6"
                 }
             ]
         },
@@ -267,52 +209,40 @@
         {
             "HV_CURRENT_SENSOR": [
                 {
-                    "Case": "Test 1: CT Signal at 0A (2.5V)",
+                    "Case": "Test 1: Normal Operation",
                     "Repeat": "",
                     "Description": "To check if VCU identifies the correct current level and state",
                     "enum": "0"
                 },
                 {
-                    "Case": "Test 2: CT Signal Shorted to GND",
+                    "Case": "Test 2: Sweep Test",
                     "Repeat": "",
-                    "Description": "To check if VCU identifies the correct current level and state",
-                    "enum": "0"
+                    "Description": "Sweeps through normal range of values",
+                    "enum": "1"
                 },
                 {
-                    "Case": "Test 3: CT Signal Shorted to 5V",
+                    "Case": "Test 3: Offline (Unplugged)",
                     "Repeat": "",
                     "Description": "To check if VCU identifies the correct current level and state", 
-                    "enum": "0"
+                    "enum": "2"
                 },
                 {
-                    "Case": "Test 4: CT Signal Unplugged",
-                    "Repeat": "",
-                    "Description": "To check if VCU identifies the correct current level and state", 
-                    "enum": "0"
-                },
-                {
-                    "Case": "Test 5: CT Signal at 50A, 100A, 150A, 200A (& negative values)",
+                    "Case": "Test 4: Proportional APPS",
                     "Repeat": "",
                     "Description": "", 
-                    "enum": "0"
+                    "enum": "3"
                 },
                 {
-                    "Case": "Test 6: CT Signal at Overcurrent for Different Amounts of Time",
+                    "Case": "Test 5: APPS - Lower Bound",
                     "Repeat": "",
                     "Description": "", 
-                    "enum": "0"
+                    "enum": "4"
                 },
                 {
-                    "Case": "Test 7: CT Signal at Negative Current, Undercurrent Faults",
+                    "Case": "Test 6: APPS - Upper Bound",
                     "Repeat": "",
                     "Description": "", 
-                    "enum": "0"
-                },
-                {
-                    "Case": "Test 8: Send Positive Current without Throttling the APPS",
-                    "Repeat": "",
-                    "Description": "", 
-                    "enum": "0"
+                    "enum": "5"
                 }
             ]
         }
@@ -321,132 +251,84 @@
         {
             "BMS/VCU CAN": [
                 {
-                    "Case": "Test 1: Alive Signal",
+                    "Case": "Test 1: Alive Signal (Normal Operation)",
                     "Repeat": "",
                     "Description": "Send an intermittent pulse (like a watchdog) to check that the device is functioning with the correct rate",
                     "enum": "0"
                 },
                 {
-                    "Case": "Test 2: Dead Signal",
+                    "Case": "Test 2: Dead Signal (Communication Lost)",
                     "Repeat": "",
                     "Description": "Send no signal or constant signal (depends on what is defined as dead signal)",
-                    "enum": "0" 
-                },
-                {
-                    "Case": "Test 3: Alive at Wrong Rate",
-                    "Repeat": "",
-                    "Description": "Send an intermittent pulse to check that the device is functioning with the wrong rate",
-                    "enum": "0" 
-                },
-                {
-                    "Case": "Test 4: No Signal",
-                    "Repeat": "",
-                    "Description": "Check how the communication works when other devices don't get a signal",
-                    "enum": "0" 
-                },
-                {
-                    "Case": "Test 5: Send Garbage",
-                    "Repeat": "",
-                    "Description": "Determine how the FW reacts when noise is sent",
-                    "enum": "0" 
+                    "enum": "1" 
                 }
             ]
         },
         {
             "Thermistor Expansion": [
                 {
-                    "Case": "Test 1: Configuration Test",
+                    "Case": "Test 1: Normal Thermistor Operation",
                     "Repeat": "",
-                    "Description": "Verify Master (BMS as mibspi3)-Slave (ADC as mibspi1) communication is established.",
+                    "Description": "Measure temperature in normal range",
                     "enum": "0" 
                 },
                 {
-                    "Case": "Test 2: Simulate and Send Test_Data_Set_1",
+                    "Case": "Test 2: Temperature Fault",
                     "Repeat": "",
-                    "Description": "Verify Master's (BMS as mibspi3) receival and response of Slave's (ADC as mibspi1) Test_Data_Set_1",
-                    "enum": "0" 
-                },
-                {
-                    "Case": "Test 3: Don't Send Anything",
-                    "Repeat": "",
-                    "Description": "",
-                    "enum": "0" 
-                },
-                {
-                    "Case": "Test 4: Send Garbage",
-                    "Repeat": "",
-                    "Description": "",
-                    "enum": "0" 
+                    "Description": "Verify fault detection",
+                    "enum": "1" 
                 }
             ]
         },
         {
             "BMS Slave Voltages & Temperatures": [
                 {
-                    "Case": "Test 1: Minor Voltage Fault",
+                    "Case": "Test 1: Normal Operation",
                     "Repeat": "",
-                    "Description": "Check BMS's response to a minor voltage fault",
+                    "Description": "Check BMS's response to normal values",
                     "enum": "0" 
                 },
                 {
-                    "Case": "Test 2: Minor Temperature Fault",
+                    "Case": "Test 2: Over Voltage Fault",
                     "Repeat": "",
-                    "Description": "Check BMS's response to a minor temperature fault",
-                    "enum": "0" 
+                    "Description": "Check BMS's response to an overvoltage fault",
+                    "enum": "1" 
                 },
                 {
-                    "Case": "Test 3: Major Voltage Fault",
+                    "Case": "Test 3: Under Voltage Fault",
                     "Repeat": "",
-                    "Description": "Check BMS's response to a major voltage fault",
-                    "enum": "0" 
+                    "Description": "Check BMS's response to an undervoltage fault",
+                    "enum": "2" 
                 },
                 {
-                    "Case": "Test 4: Major Temperature Fault",
+                    "Case": "Test 4: Over Temperature Fault",
                     "Repeat": "",
-                    "Description": "Check BMS's response to a major temperature fault",
-                    "enum": "0" 
+                    "Description": "Check BMS's response to an overtemperature fault",
+                    "enum": "3" 
                 },
                 {
-                    "Case": "Test 5: Weird Sensor Readings",
+                    "Case": "Test 5: Under Temperature Fault",
                     "Repeat": "",
-                    "Description": "Check BMS's response to getting temperature or voltage readings that don't make sense",
-                    "enum": "0" 
+                    "Description": "Check BMS's response to an undertemperature fault",
+                    "enum": "4" 
                 },
                 {
-                    "Case": "Test 6: Communication Loss",
+                    "Case": "Test 6: Weird Sensor Readings (Voltage)",
+                    "Repeat": "",
+                    "Description": "See how BMS reacts to voltage sensor values that don't make sense",
+                    "enum": "5" 
+                },
+                {
+                    "Case": "Test 7: Weird Sensor Readings (Temperature)",
+                    "Repeat": "",
+                    "Description": "See how BMS reacts to temperature sensor values that don't make sense",
+                    "enum": "6" 
+                },
+                {
+                    "Case": "Test 8: Communication Loss",
                     "Repeat": "",
                     "Description": "Check how BMS reacts to messages timing out repeatedly",
-                    "enum": "0" 
-                },
-                {
-                    "Case": "Test 7: Garbage over CLI UART",
-                    "Repeat": "",
-                    "Description": "See how BMS reacts when its command line interface is overloaded with garbage",
-                    "enum": "0" 
-                },
-                {
-                    "Case": "Test 8: Correct Message Overload on CLI UART",
-                    "Repeat": "",
-                    "Description": "See how BMS reacts when it gets a lot of proper CLI commands in a short period of time",
-                    "enum": "0" 
-                },
-                {
-                    "Case": "Test 9: Balance Test",
-                    "Repeat": "",
-                    "Description": "See if BMS balancing algorithm balances the correct cells and also make sure BMS only balances during charging state",
-                    "enum": "0" 
-                },
-                {
-                    "Case": "Test 10: State of Charge Test",
-                    "Repeat": "",
-                    "Description": "See if BMS smoothly estimates the state of charge",
-                    "enum": "0" 
-                },
-                {
-                    "Case": "Test 11: Blown Parallel Fuse Test",
-                    "Repeat": "",
-                    "Description": "See if BMS can detect that a fuse has blown in a parallel stack",
-                    "enum": "0"
+                    "enum": "7" 
                 }
             ]
         }
