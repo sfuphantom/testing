@@ -65,10 +65,10 @@ static void normal_apps_off(){
 
     sendAPPSVoltages(APPS1_MIN, APPS2_MIN);
 
-    // set expected result
+    // set expected int8_t result
     setShutdownOccurence(false);
 
-    uint8_t result = isShutdownPass();
+    int8_t result = isShutdownPass();
 
     while(result == SHUTDOWN_RESULT_INVALID){
         result = isShutdownPass();
@@ -90,7 +90,7 @@ static void normal_apps_on()
     // set expected result
     setShutdownOccurence(false);
 
-    uint8_t result = isShutdownPass();
+    int8_t result = isShutdownPass();
 
     while(result == SHUTDOWN_RESULT_INVALID){
         result = isShutdownPass();
@@ -111,7 +111,7 @@ static void apps_implausibility()
     // set expected result
     setShutdownOccurence(true); // TODO: ACCORDING TO RULEBOOK YOU JUST HAVE TO STOP COMMANDS TO INVERTER NO SHUTDOWN REQUIRED?
 
-    uint8_t result = isShutdownPass();
+    int8_t result = isShutdownPass();
 
     while(result == SHUTDOWN_RESULT_INVALID){
         result = isShutdownPass();
