@@ -247,7 +247,7 @@ class MainWindow(QObject):
         if self.device == 'VCU':
             result = vcu_test.build_json(info)
         elif self.device == 'BMS':
-            result = bms_test.main(info)
+            result = bms_test.build_json(info)
 
         # Add test status to the selected tests
         # WIP: change this part after firmware handles
